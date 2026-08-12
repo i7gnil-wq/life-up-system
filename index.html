@@ -1027,7 +1027,7 @@
     { key:'lit',     name:'أدبي' },
     { key:'fin',     name:'مالي' },
   ];
-  const SKILL_STAGES = [24, 72, 100];
+  const SKILL_STAGES = [24, 72, 100, 1000];
   const SKILL_HOUR_XP = 250;
 
   function ensureSkills(){
@@ -1038,10 +1038,10 @@
   const COIN_PER_XP = 100; // 100 XP = 1 coin, XP balance itself is never reduced
   const STORE_COOLDOWN_MS = 40000; // 40s between purchases
   const STORE_ITEMS = [
-    { key:'ent15', name:'15 دقيقة ترفيه', cost:10 },
-    { key:'ent30', name:'30 دقيقة ترفيه', cost:15 },
-    { key:'ent45', name:'45 دقيقة ترفيه', cost:20 },
-    { key:'ent60', name:'ساعة ترفيه',      cost:30 },
+    { key:'ent15', name:'15 دقيقة ترفيه', cost:15 },
+    { key:'ent30', name:'30 دقيقة ترفيه', cost:30 },
+    { key:'ent45', name:'45 دقيقة ترفيه', cost:45 },
+    { key:'ent60', name:'ساعة ترفيه',      cost:60 },
   ];
   function ensureStore(){
     if(typeof state.coinsSpent !== 'number') state.coinsSpent = 0;
@@ -1453,7 +1453,8 @@
     const catName = skillCatName(s.category);
     const stagesHtml = SKILL_STAGES.map(th => {
       const reached = s.hours >= th;
-      return `<div class="skill-stage ${reached?'reached':''}"><span class="s-dot"></span><span class="s-lbl">${th} س</span></div>`;
+      const lbl = th === 1000 ? 'الاحتراف' : `${th} س`;
+      return `<div class="skill-stage ${reached?'reached':''}"><span class="s-dot"></span><span class="s-lbl">${lbl}</span></div>`;
     }).join('');
     return `
     <div class="skill-card" data-skill="${s.id}">
@@ -1634,7 +1635,7 @@
         ${achievementShieldSvg()}
         <div class="ach-shield-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#5c3400" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg></div>
       </div>
-      <div class="ach-badge-name">تغلَّبَ على ${escapeHtml(a.syndromeName)}</div>
+      <div class="ach-badge-name">${a.type === 'skill-pro' ? `احتراف "${escapeHtml(a.skillName)}"` : a.type === 'skill' ? `أتقن "${escapeHtml(a.skillName)}"` : `تغلَّبَ على ${escapeHtml(a.syndromeName)}`}</div>
       <div class="ach-badge-date">${dateStr}</div>
     </div>`;
   }
@@ -2154,6 +2155,26 @@
     if(!skill) return;
 
     skill.hours = Math.round((skill.hours + n) * 100) / 100;
+    if(skill.hours >= 100 && !skill.masteryAwarded){
+      skill.masteryAwarded = true;
+      ensureAchievements();
+      state.achievements.push({
+        id: 'ach' + Date.now() + '_' + (taskCounter++),
+        type: 'skill',
+        skillName: skill.name,
+        ts: Date.now()
+      });
+    }
+    if(skill.hours >= 1000 && !skill.proAwarded){
+      skill.proAwarded = true;
+      ensureAchievements();
+      state.achievements.push({
+        id: 'ach' + Date.now() + '_' + (taskCounter++),
+        type: 'skill-pro',
+        skillName: skill.name,
+        ts: Date.now()
+      });
+    }
     const xpGain = Math.round(n * SKILL_HOUR_XP);
     state.xp += xpGain;
     state.tasks.push({
