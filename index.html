@@ -141,7 +141,7 @@
   .logout-btn.danger-link{color:var(--amber);}
 
   #app{position:relative;}
-  .timer-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:7px;}
+  .timer-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;}
   .timer-opt{background:rgba(255,255,255,0.03);border:1px solid var(--line);border-radius:9px;padding:9px 4px;text-align:center;color:var(--muted);font-family:'Cairo';font-size:11px;font-weight:800;cursor:pointer;}
   .timer-opt.selected{border-color:var(--cyan);color:var(--cyan);background:rgba(52,232,138,0.1);box-shadow:0 0 0 2px rgba(52,232,138,0.08);}
   .task-timer{font-family:'Cairo';font-size:10px;color:var(--amber);margin-top:4px;}
@@ -1015,6 +1015,7 @@
         <div class="timer-opt" data-minutes="15">15 دقيقة</div>
         <div class="timer-opt" data-minutes="20">20 دقيقة</div>
         <div class="timer-opt" data-minutes="25">25 دقيقة</div>
+        <div class="timer-opt" data-minutes="60">1 ساعة</div>
       </div>
       <div class="field-err" id="task-timer-err">اختر مدة المؤقت.</div>
     </div>
@@ -1058,10 +1059,13 @@
       <div class="field-err" id="penalty-reason-err">اكتب سبب العقوبة.</div>
     </div>
     <div class="field penalty-task-field">
-      <label class="penalty-task-toggle">مهمة عقاب <span style="color:var(--amber)">(إجباري)</span></label>
-      <input type="text" id="penalty-task-input" class="penalty-task-input" maxlength="120" placeholder="مثال: تنظيف الغرفة بالكامل">
-      <div class="penalty-task-hint">إذا أتممتها يُسترجع الخصم الذي حصل بسبب هذه العقوبة. إذا لم تتمها يبقى الخصم كما هو.</div>
-      <div class="field-err" id="penalty-task-err">اكتب مهمة العقاب.</div>
+      <label class="penalty-task-toggle">
+        <input type="checkbox" id="penalty-task-enabled">
+        إضافة مهمة عقاب <span style="color:var(--muted)">(اختياري)</span>
+      </label>
+      <input type="text" id="penalty-task-input" class="penalty-task-input" maxlength="120" placeholder="مثال: تنظيف الغرفة بالكامل" style="display:none;">
+      <div class="penalty-task-hint">إذا أضفت مهمة وأتممتها يُسترجع الخصم الذي حصل بسبب هذه العقوبة. يمكنك تنفيذ العقوبة بدون إضافة مهمة.</div>
+      <div class="field-err" id="penalty-task-err">اكتب مهمة العقاب أو ألغِ خيار إضافة مهمة العقاب.</div>
     </div>
     <div class="field">
       <label>مقدار الخصم</label>
@@ -1409,7 +1413,7 @@
     if(!Array.isArray(state.habits)) state.habits = [];
     state.habits.forEach(h => { if(!Array.isArray(h.subtasks)) h.subtasks=[]; });
   }
-  function timerLabel(min){ return min ? `${min} دقيقة` : 'بدون مؤقت'; }
+  function timerLabel(min){ if(!min) return 'بدون مؤقت'; return Number(min)===60 ? '1 ساعة' : `${min} دقيقة`; }
   function freshTaskFromTemplate(t){
     const now = Date.now();
     const mins = Number(t.timerMinutes) || 5;
@@ -1418,7 +1422,9 @@
   function registerShortfallPenalty(task){
     if(task.shortfallPenaltyApplied) return;
     if(!state.penalties) state.penalties=[];
-    const amount=250, deductedAmount=Math.min(state.xp, amount);
+    // عند انتهاء الوقت، يُخصم من XP نفس المقدار الذي كانت المهمة ستضيفه عند إنجازها.
+    const amount=Math.max(0, Number(task.xp)||0);
+    const deductedAmount=Math.min(state.xp, amount);
     state.xp=Math.max(0,state.xp-deductedAmount);
     state.penalties.push({id:'pen'+Date.now()+'_'+(taskCounter++),name:'تقصير',amount,deductedAmount,reason:`انتهاء مؤقت المهمة: ${task.name}`,ts:Date.now(),restored:false,shortfall:true,taskId:task.id});
     task.shortfallPenaltyApplied=true;
@@ -2735,6 +2741,8 @@
   function openPenaltyModal(){
     document.getElementById('penalty-reason').value='';
     document.getElementById('penalty-task-input').value='';
+    document.getElementById('penalty-task-enabled').checked=false;
+    document.getElementById('penalty-task-input').style.display='none';
     document.getElementById('penalty-reason-err').style.display='none';
     document.getElementById('penalty-task-err').style.display='none';
     selectedPenalty = null;
@@ -2744,6 +2752,13 @@
   }
   function closePenaltyModal(){ penaltyOverlay.classList.remove('show'); }
 
+  document.getElementById('penalty-task-enabled').addEventListener('change', (e) => {
+    const input = document.getElementById('penalty-task-input');
+    input.style.display = e.target.checked ? 'block' : 'none';
+    document.getElementById('penalty-task-err').style.display='none';
+    if(e.target.checked) input.focus();
+  });
+
   document.getElementById('open-penalty-btn').addEventListener('click', openPenaltyModal);
   document.getElementById('cancel-penalty-btn').addEventListener('click', closePenaltyModal);
   penaltyOverlay.addEventListener('click', (e) => { if(e.target === penaltyOverlay) closePenaltyModal(); });
@@ -2751,12 +2766,13 @@
 
   document.getElementById('confirm-penalty-btn').addEventListener('click', async () => {
     if(!selectedPenalty){ document.getElementById('penalty-err').style.display='block'; return; }
+    const penaltyTaskEnabled = document.getElementById('penalty-task-enabled').checked;
     const penaltyTaskName = document.getElementById('penalty-task-input').value.trim();
     const reason = document.getElementById('penalty-reason').value.trim();
     let ok = true;
     if(!reason){ document.getElementById('penalty-reason-err').style.display='block'; ok=false; }
-    if(!penaltyTaskName){ document.getElementById('penalty-task-err').style.display='block'; ok=false; }
-    if((state.pending || []).length >= MAX_QUEUE){
+    if(penaltyTaskEnabled && !penaltyTaskName){ document.getElementById('penalty-task-err').style.display='block'; ok=false; }
+    if(penaltyTaskEnabled && (state.pending || []).length >= MAX_QUEUE){
       document.getElementById('penalty-task-err').textContent='قائمة المهام ممتلئة. احذف أو أنجز مهمة أولًا.';
       document.getElementById('penalty-task-err').style.display='block';
       ok=false;
@@ -2770,7 +2786,7 @@
     state.penalties.push(penalty);
     state.xp = Math.max(0, state.xp - deductedAmount);
 
-    {
+    if(penaltyTaskEnabled){
       if(!state.pending) state.pending = [];
       state.pending.push({
         id:'t' + Date.now() + '_' + (taskCounter++),
