@@ -18,7 +18,7 @@
     --amber:#ffb648;
     --text:#eaf5ef;
     --muted:#7c9a8a;
-    --danger:#ff5d7a;
+    --danger:#e8c62f;
     --radius:16px;
   }
   *{box-sizing:border-box; margin:0; padding:0;}
@@ -140,6 +140,23 @@
   .logout-btn{background:transparent; border:none; color:var(--muted); cursor:pointer; font-size:11px; text-decoration:underline; font-family:'Tajawal';}
   .logout-btn.danger-link{color:var(--amber);}
 
+  #app{position:relative;}
+  .timer-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:7px;}
+  .timer-opt{background:rgba(255,255,255,0.03);border:1px solid var(--line);border-radius:9px;padding:9px 4px;text-align:center;color:var(--muted);font-family:'Cairo';font-size:11px;font-weight:800;cursor:pointer;}
+  .timer-opt.selected{border-color:var(--cyan);color:var(--cyan);background:rgba(52,232,138,0.1);box-shadow:0 0 0 2px rgba(52,232,138,0.08);}
+  .task-timer{font-family:'Cairo';font-size:10px;color:var(--amber);margin-top:4px;}
+  .habit-item{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 4px;border-bottom:1px solid var(--line);}
+  .habit-item:last-child{border-bottom:none;}
+  .habit-item .info{min-width:0;}
+  .habit-item .name{font-weight:800;font-size:13px;}
+  .habit-item .meta{color:var(--muted);font-size:10.5px;margin-top:3px;line-height:1.6;}
+  .habit-actions{display:flex;gap:6px;flex-shrink:0;}
+  .habit-actions .btn{padding:7px 9px;font-size:11px;}
+  .btn-edit{background:rgba(255,255,255,0.04);border:1px solid var(--line);color:var(--text);}
+  .btn-delete{background:linear-gradient(90deg,#f5d84a,#e8c62f);border:1px solid #e8c62f;color:#111;}
+  .btn-renew{background:linear-gradient(90deg,#f5d84a,#e8c62f);border:1px solid #e8c62f;color:#111;}
+  .task-timer-expired{color:var(--danger);}
+
   .grid{
     display:grid;
     grid-template-columns: 1.05fr 1.15fr 1.05fr;
@@ -243,6 +260,10 @@
   .queue-cap{color:var(--muted); font-size:12px; font-weight:600;}
   .queue-desc{color:var(--muted); font-size:12px; margin:-8px 0 14px; line-height:1.6;}
   .log-empty{color:var(--muted); font-size:13px; text-align:center; padding:30px 10px;}
+  .log-head{display:flex;align-items:center;justify-content:space-between;gap:10px;}
+  .task-log-history-btn{background:rgba(255,255,255,0.04);border:1px solid var(--line);color:var(--muted);border-radius:7px;padding:4px 9px;font-family:inherit;font-size:10.5px;cursor:pointer;line-height:1.2;}
+  .task-log-history-btn:hover{color:var(--text);border-color:var(--cyan);}
+  .history-count{color:var(--muted);font-size:10.5px;margin-bottom:10px;}
   .queue-item{
     display:flex; align-items:center; justify-content:space-between; gap:12px;
     padding:13px 4px; border-bottom:1px solid var(--line);
@@ -311,10 +332,38 @@
   .diff-opt.special.selected{border-color:var(--amber); background:rgba(255,182,72,0.16); box-shadow:0 0 20px -6px rgba(255,182,72,0.5);}
   #penalty-grid .diff-opt .xp{color:var(--amber);}
   #penalty-grid .diff-opt.selected{border-color:var(--amber); background:rgba(255,182,72,0.12); box-shadow:0 0 20px -6px rgba(255,182,72,0.5);}
+  .penalty-task-field{background:rgba(255,182,72,0.035);border:1px dashed rgba(255,182,72,0.28);border-radius:11px;padding:10px 12px;margin-bottom:14px;}
+  .penalty-task-toggle{display:block;font-size:12.5px;font-weight:700;margin-bottom:10px;}
+  .penalty-task-toggle input{accent-color:var(--amber);width:16px;height:16px;}
+  .penalty-task-input{display:block;width:100%;background:rgba(255,255,255,0.03);border:1px solid var(--line);border-radius:9px;padding:10px 12px;color:var(--text);font-family:inherit;font-size:12.5px;outline:none;margin-top:8px;}
+  .penalty-task-input.show{display:block;}
+  .penalty-task-input:focus{border-color:var(--amber);box-shadow:0 0 0 3px rgba(255,182,72,0.12);}
+  .penalty-task-hint{font-size:10.5px;color:var(--muted);margin-top:6px;line-height:1.5;}
   .modal-actions{display:flex; gap:10px; margin-top:20px;}
   .modal-actions .btn-ghost{flex:1; background:transparent; border:1px solid var(--line); color:var(--muted);}
   .modal-actions .btn-primary{flex:2;}
   .field-err{color:var(--danger); font-size:11.5px; margin-top:6px; display:none;}
+  .subtasks-field{
+    background:rgba(52,232,138,0.025); border:1px dashed rgba(52,232,138,0.18);
+    border-radius:11px; padding:10px 12px;
+  }
+  .subtask-input{
+    width:100%; background:rgba(255,255,255,0.03); border:1px solid var(--line); border-radius:9px;
+    padding:10px 12px; color:var(--text); font-family:inherit; font-size:12.5px; outline:none; margin-top:7px;
+  }
+  .subtask-add-btn{
+    width:100%; margin-top:8px; padding:8px 10px; font-size:11px;
+  }
+  .subtask-input:focus{border-color:var(--cyan); box-shadow:0 0 0 3px var(--cyan-dim);}
+  .queue-subtasks{display:flex;flex-direction:column;gap:5px;margin-top:7px;}
+  .queue-subtask{display:flex;align-items:center;gap:7px;color:var(--muted);font-size:11.5px;}
+  .queue-subtask input{appearance:none;-webkit-appearance:none;width:16px;height:16px;flex-shrink:0;border-radius:4px;border:1.5px solid rgba(220,255,234,0.75);background:rgba(238,255,245,0.16);cursor:pointer;position:relative;transition:.12s ease;}
+  .queue-subtask input:checked{background:#eafff1;border-color:#eafff1;}
+  .queue-subtask input:checked::after{content:"✓";position:absolute;inset:0;display:grid;place-items:center;color:#164d2b;font-size:12px;font-weight:900;}
+  .queue-subtask.done span{text-decoration:line-through;opacity:.65;}
+  .queue-progress{font-family:'Cairo';font-size:10px;color:var(--cyan);margin-top:5px;}
+  .queue-item.has-subtasks{align-items:flex-start;}
+  .queue-item .btn-complete:disabled{opacity:.4;cursor:not-allowed;}
 
   /* tracks */
   .tracks-grid{display:grid; grid-template-columns:repeat(3, 1fr); gap:10px;}
@@ -511,14 +560,46 @@
   .syn-task-row:last-child{margin-bottom:0;}
   .syn-check{width:20px; height:20px; flex-shrink:0; border-radius:50%; border:2px solid var(--line);
     background:transparent; cursor:pointer; position:relative; transition:border-color .12s, background .12s;}
-  .syn-check.checked{border-color:var(--cyan); background:var(--cyan);}
+  .syn-check.checked{border-color:#eafff1; background:#eafff1;}
   .syn-check.checked::after{content:"✓"; position:absolute; inset:0; display:flex; align-items:center;
-    justify-content:center; font-size:12px; color:#062414; font-weight:900;}
+    justify-content:center; font-size:12px; color:#164d2b; font-weight:900;}
   .syn-task-name{flex:1; font-size:13.5px; font-weight:600;}
   .syn-task-row.done .syn-task-name{color:var(--muted); text-decoration:line-through;}
   .syn-del{background:transparent; border:none; color:var(--muted); font-size:17px; cursor:pointer; line-height:1;
     padding:2px 4px; flex-shrink:0;}
   .syn-del:hover{color:var(--amber);}
+  /* project step timeline */
+  .project-steps-list{position:relative;display:flex;flex-direction:column;gap:0;padding:8px 4px 8px 0;}
+  .project-steps-list::before{content:"";position:absolute;right:19px;top:18px;bottom:18px;width:2px;border-radius:4px;background:rgba(140,190,165,.10);transition:.25s ease;}
+  .project-steps-list:has(.project-step.done)::before{background:linear-gradient(180deg,rgba(52,232,138,.5),rgba(168,230,58,.28));box-shadow:0 0 7px rgba(52,232,138,.35),0 0 16px rgba(52,232,138,.16);}
+  .project-step{position:relative;display:grid;grid-template-columns:42px 1fr 50px;gap:10px;align-items:start;padding:10px 0 18px;min-width:0;direction:ltr;}
+  .project-step:last-child{padding-bottom:6px;}
+  .project-step-station{width:34px;height:34px;border-radius:50%;border:1px solid rgba(140,190,165,.3);background:linear-gradient(145deg,#101a15,#0b120f);display:grid;place-items:center;z-index:1;justify-self:end;transition:.25s ease;box-shadow:0 0 0 3px rgba(5,10,8,.9);font-size:0;cursor:default;padding:0;}
+  .project-step-station::after{content:"";display:none;}
+  .project-step.done .project-step-station{border-color:#bff8d3;background:linear-gradient(145deg,#eafff1,#b9f4cc);box-shadow:0 0 0 3px rgba(52,232,138,.08),0 0 11px rgba(234,255,241,.9),0 0 22px rgba(52,232,138,.5);}
+  .project-step-content{min-width:0;}
+  .project-step-head{display:flex;align-items:center;justify-content:space-between;gap:8px;}
+  .project-step-name{font-weight:800;font-size:13.5px;}
+  .project-step.done .project-step-name{color:var(--cyan);}
+  .project-step-meta{font-size:10px;color:var(--muted);margin-top:2px;}
+  .project-step-xp{width:48px;height:42px;border-radius:11px;display:grid;place-items:center;flex-shrink:0;font-family:'Cairo';font-weight:900;font-size:10.5px;color:#111;background:#fff;border:1px solid rgba(255,255,255,.9);box-shadow:0 2px 8px rgba(0,0,0,.12);transition:.25s ease;cursor:pointer;padding:0;justify-self:start;direction:rtl;}
+  .project-step.done .project-step-xp{color:#111;background:#fff;border-color:#fff;box-shadow:0 2px 8px rgba(0,0,0,.12);}
+  .project-step-xp:disabled{opacity:.55;cursor:not-allowed;color:#111;background:#fff;}
+  .project-step-tasks{margin-top:9px;display:flex;flex-direction:column;gap:6px;}
+  .project-step-task{display:flex;align-items:center;gap:8px;padding:7px 9px;border:1px solid var(--line);border-radius:9px;background:rgba(255,255,255,.025);}
+  .project-step-task.done{opacity:.65;}
+  .project-step-task .task-check{width:18px;height:18px;border-radius:5px;border:1.5px solid rgba(220,255,234,.7);background:rgba(238,255,245,.1);cursor:pointer;position:relative;flex-shrink:0;}
+  .project-step-task.done .task-check{background:#eafff1;border-color:#eafff1;}
+  .project-step-task.done .task-check::after{content:"✓";position:absolute;inset:0;display:grid;place-items:center;color:#164d2b;font-size:11px;font-weight:900;}
+  .project-step-task .task-name{flex:1;min-width:0;font-size:11.5px;font-weight:600;}
+  .project-step-task.done .task-name{text-decoration:line-through;color:var(--muted);}
+  .project-step-task .task-xp{font-family:'Cairo';font-weight:900;font-size:10px;color:var(--cyan);white-space:nowrap;}
+  .project-step-add-task{width:100%;margin-top:7px;padding:7px 9px;font-size:10.5px;}
+  .project-step-add-task[disabled]{opacity:.4;cursor:not-allowed;}
+  .project-step-lock{font-size:10px;color:var(--muted);margin-top:7px;}
+  .project-step-delete{background:transparent;border:none;color:var(--muted);font-size:16px;cursor:pointer;padding:2px 4px;}
+  .project-step-delete:hover{color:var(--amber);}
+  .project-add-mini[data-project-add-step]{margin-bottom:8px;}
   .project-card{background:rgba(255,255,255,0.02); border:1px solid var(--line); border-radius:14px; padding:16px; margin-bottom:14px;}
   .project-card:last-child{margin-bottom:0;}
   .project-top{display:flex; align-items:flex-start; gap:10px; margin-bottom:10px;}
@@ -802,10 +883,22 @@
   <!-- task log -->
   <div class="panel log-panel">
     <div class="corner tl"></div><div class="corner br"></div>
-    <div class="panel-title"><span class="bar"></span> سجل المهام المنجزة</div>
+    <div class="panel-title log-head"><span><span class="bar"></span> سجل المهام المنجزة</span><button class="task-log-history-btn" id="open-task-history-btn" type="button">السجل</button></div>
     <div id="log-list"><div class="log-empty">لا توجد مهام منجزة بعد.</div></div>
   </div>
   </div><!-- /dashboard-view -->
+
+  <!-- ================= HABITS VIEW ================= -->
+  <div id="habits-view" style="display:none;">
+    <button class="btn btn-ghost back-btn" id="habits-back-btn">→ رجوع للوحة الرئيسية</button>
+    <div class="panel log-panel">
+      <div class="corner tl"></div><div class="corner br"></div>
+      <div class="panel-title"><span class="bar"></span> العادات</div>
+      <p class="queue-desc">احفظ مهامك المتكررة بكل خصائصها، ثم جدّد إدراجها في المهام اليومية بضغطة واحدة. العادات غير محدودة.</p>
+      <button class="btn add-task-btn" id="open-habit-btn" style="margin-bottom:14px;">+ إضافة عادة</button>
+      <div id="habits-list"><div class="log-empty">لا توجد عادات بعد — أضف أول عادة.</div></div>
+    </div>
+  </div>
 
   <!-- ================= SKILLS VIEW ================= -->
   <div id="skills-view" style="display:none;">
@@ -844,7 +937,7 @@
     <div class="panel log-panel">
       <div class="corner tl"></div><div class="corner br"></div>
       <div class="panel-title"><span class="bar"></span> المشاريع</div>
-      <p class="queue-desc">حدّد هدف المشروع وخطواته، وأضف حتى 3 مهام يومية نشطة له — كل خطوة = 250 XP، وكل مهمة تختار لها مستوى: 50 / 100 / 250 XP.</p>
+      <p class="queue-desc">حدّد هدف المشروع وابنِ خط سيره خطوةً خطوة — لكل خطوة مهامها الخاصة، ولا يمكنك إضافة مهام الخطوة التالية حتى تُتمّ الخطوة الحالية.</p>
       <button class="btn add-task-btn" id="open-project-btn" style="margin-bottom:14px;"><svg class="icon-inline" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg> إضافة مشروع</button>
       <div id="projects-list"><div class="log-empty">لا توجد مشاريع بعد — أضف أول مشروع.</div></div>
     </div>
@@ -880,26 +973,52 @@
 <!-- ================= MODAL ================= -->
 <div class="modal-overlay" id="modal-overlay">
   <div class="modal">
-    <h2>إدراج مهمة جديدة</h2>
+      <h2>إدراج مهمة جديدة</h2>
     <p class="sub">اختر صعوبة المهمة لتحديد الخبرة (XP) التي ستحصل عليها عند إنجازها.</p>
     <div class="field">
       <label>اسم المهمة</label>
       <input type="text" id="task-name" placeholder="مثال: قراءة 20 صفحة">
       <div class="field-err" id="task-name-err">اكتب اسم المهمة.</div>
     </div>
+    <div class="field subtasks-field">
+      <label style="display:flex;align-items:center;justify-content:space-between;gap:10px;">
+        <span>المهام الفرعية (اختياري)</span>
+        <span id="subtasks-count-label" style="font-size:10.5px;color:var(--muted);">0 / 3</span>
+      </label>
+      <div id="subtasks-fields">
+        <input type="text" class="subtask-input" id="subtask-1" maxlength="120" placeholder="مهمة فرعية 1 (اختياري)">
+        <div id="subtask-extra-fields" style="display:none;">
+          <input type="text" class="subtask-input" id="subtask-2" maxlength="120" placeholder="مهمة فرعية 2 (اختياري)">
+          <input type="text" class="subtask-input" id="subtask-3" maxlength="120" placeholder="مهمة فرعية 3 (اختياري)">
+        </div>
+        <button type="button" class="btn btn-ghost subtask-add-btn" id="add-subtask-btn">+ إضافة مهمة فرعية</button>
+        <div style="font-size:10.5px;color:var(--muted);margin-top:6px;line-height:1.5;">يمكنك تركها فارغة، أو إضافة حتى 3 مهام فرعية. عند وجودها، لا تكتمل المهمة الرئيسية إلا بعد إكمالها كلها.</div>
+      </div>
+    </div>
     <div class="field">
       <label>الوصف (اختياري)</label>
       <textarea id="task-desc" placeholder="تفاصيل إضافية عن المهمة..."></textarea>
     </div>
     <div class="field">
-      <label>المسار (التصنيف)</label>
-      <div class="diff-grid" id="track-select-grid"></div>
-      <div class="field-err" id="track-select-err">اختر مسار المهمة.</div>
+      <label>المؤقت <span style="color:var(--danger);">(إجباري)</span></label>
+      <div class="timer-grid" id="task-timer-grid">
+        <div class="timer-opt" data-minutes="5">5 دقائق</div>
+        <div class="timer-opt" data-minutes="10">10 دقائق</div>
+        <div class="timer-opt" data-minutes="15">15 دقيقة</div>
+        <div class="timer-opt" data-minutes="20">20 دقيقة</div>
+        <div class="timer-opt" data-minutes="25">25 دقيقة</div>
+      </div>
+      <div class="field-err" id="task-timer-err">اختر مدة المؤقت.</div>
     </div>
     <div class="field">
       <label>درجة الصعوبة</label>
       <div class="diff-grid" id="diff-grid"></div>
       <div class="field-err" id="diff-err">اختر درجة الصعوبة.</div>
+    </div>
+    <div class="field">
+      <label>المسار (التصنيف)</label>
+      <div class="diff-grid" id="track-select-grid"></div>
+      <div class="field-err" id="track-select-err">اختر مسار المهمة.</div>
     </div>
     <div class="modal-actions">
       <button class="btn btn-ghost" id="cancel-modal-btn">إلغاء</button>
@@ -926,8 +1045,15 @@
     <h2>تسجيل عقوبة</h2>
     <p class="sub">اختر مقدار الخصم من رصيدك — يُستخدم عند الإخلال بمهمة أو التزام حددته لنفسك.</p>
     <div class="field">
-      <label>السبب (اختياري)</label>
+      <label>السبب <span style="color:var(--amber)">(إجباري)</span></label>
       <textarea id="penalty-reason" placeholder="مثال: تأخرت عن موعد النوم..."></textarea>
+      <div class="field-err" id="penalty-reason-err">اكتب سبب العقوبة.</div>
+    </div>
+    <div class="field penalty-task-field">
+      <label class="penalty-task-toggle">مهمة عقاب <span style="color:var(--amber)">(إجباري)</span></label>
+      <input type="text" id="penalty-task-input" class="penalty-task-input" maxlength="120" placeholder="مثال: تنظيف الغرفة بالكامل">
+      <div class="penalty-task-hint">إذا أتممتها يُسترجع الخصم الذي حصل بسبب هذه العقوبة. إذا لم تتمها يبقى الخصم كما هو.</div>
+      <div class="field-err" id="penalty-task-err">اكتب مهمة العقاب.</div>
     </div>
     <div class="field">
       <label>مقدار الخصم</label>
@@ -1057,7 +1183,7 @@
 <div class="modal-overlay" id="project-overlay">
   <div class="modal">
     <h2>إضافة مشروع جديد</h2>
-    <p class="sub">حدّد اسم المشروع وهدفه — بعدها تقدر تضيف خطواته ومهامه اليومية.</p>
+    <p class="sub">حدّد اسم المشروع وهدفه — بعدها ابنِ له خط سير من خطوات، ولكل خطوة مهامها الخاصة.</p>
     <div class="field">
       <label>اسم المشروع</label>
       <input type="text" id="project-name" placeholder="مثال: إطلاق مشروعي الخاص">
@@ -1095,8 +1221,8 @@
 <!-- ================= ADD PROJECT TASK ================= -->
 <div class="modal-overlay" id="project-task-overlay">
   <div class="modal">
-    <h2>إضافة مهمة يومية<span id="project-task-target-name"></span></h2>
-    <p class="sub">حد أقصى 3 مهام نشطة لكل مشروع — اختر مستوى المهمة لتحديد الـXP.</p>
+    <h2>إضافة مهمة للخطوة<span id="project-task-target-name"></span></h2>
+    <p class="sub">أضف مهمة لهذه الخطوة — لا يمكن إضافة مهام الخطوة التالية حتى إتمام الخطوة الحالية.</p>
     <div class="field">
       <label>اسم المهمة</label>
       <input type="text" id="project-task-name" placeholder="مثال: كتابة صفحة من الخطة">
@@ -1122,6 +1248,18 @@
     <div class="modal-actions">
       <button class="btn btn-ghost" id="cancel-project-complete-btn">تراجع</button>
       <button class="btn btn-primary" id="confirm-project-complete-btn">تأكيد الإتمام</button>
+    </div>
+  </div>
+</div>
+
+<!-- ================= TASK HISTORY ================= -->
+<div class="modal-overlay" id="task-history-overlay">
+  <div class="modal">
+    <h2>السجل</h2>
+    <p class="sub">آخر 50 مهمة منجزة فقط. المهام الأقدم تُحذف من السجل، لكن الـXP الذي حصلت عليه يبقى محفوظًا.</p>
+    <div id="task-history-list"><div class="log-empty">لا توجد مهام منجزة بعد.</div></div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" id="close-task-history-btn" style="flex:1;">إغلاق</button>
     </div>
   </div>
 </div>
@@ -1172,7 +1310,11 @@
   let state = null; // {name, code, xp, tasks:[], pending:[]}
   let selectedDiff = null;
   let selectedTrack = null;
+  let selectedTimer = null;
   let selectedPenalty = null;
+  let taskModalMode = 'daily';
+  let editingTaskId = null;
+  let editingHabitId = null;
   let taskCounter = 1;
 
   const ICON_BOLT = '<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M13 2 4 14h6l-1 8 9-12h-6l1-8z"/></svg>';
@@ -1250,17 +1392,79 @@
     { key:'p250', name:'مستوى 3', xp:250 },
   ];
   const PROJECT_MAX_TASKS = 3;
-  const PROJECT_STEP_XP = 250; // XP reward for completing each project step
+  const PROJECT_STEP_XP = 500; // XP reward for completing each project step
   const PROJECT_CHART_COLORS = ['#34e88a', '#ffb648', '#5ec8ff', '#ff5d7a', '#a8e63a', '#c58aff', '#ff9f4a', '#3ad6c9'];
   function ensureAchievements(){
     if(!state.achievements) state.achievements = [];
   }
+  function ensureHabits(){
+    if(!Array.isArray(state.habits)) state.habits = [];
+    state.habits.forEach(h => { if(!Array.isArray(h.subtasks)) h.subtasks=[]; });
+  }
+  function timerLabel(min){ return min ? `${min} دقيقة` : 'بدون مؤقت'; }
+  function freshTaskFromTemplate(t){
+    const now = Date.now();
+    const mins = Number(t.timerMinutes) || 5;
+    return { ...JSON.parse(JSON.stringify(t)), id:'t'+now+'_'+(taskCounter++), createdTs:now, startedTs:now, deadlineTs:now + mins*60000, subtasks:(t.subtasks||[]).map(st => ({...st, id:'st'+now+'_'+(taskCounter++), done:false})) };
+  }
+  function registerShortfallPenalty(task){
+    if(task.shortfallPenaltyApplied) return;
+    if(!state.penalties) state.penalties=[];
+    const amount=250, deductedAmount=Math.min(state.xp, amount);
+    state.xp=Math.max(0,state.xp-deductedAmount);
+    state.penalties.push({id:'pen'+Date.now()+'_'+(taskCounter++),name:'تقصير',amount,deductedAmount,reason:`انتهاء مؤقت المهمة: ${task.name}`,ts:Date.now(),restored:false,shortfall:true,taskId:task.id});
+    task.shortfallPenaltyApplied=true;
+  }
+  async function expireTimedTask(task){
+    registerShortfallPenalty(task);
+    state.pending = (state.pending||[]).filter(t=>t.id!==task.id);
+    await saveState();
+    render();
+  }
+  async function checkTaskTimers(){
+    if(!state || !Array.isArray(state.pending)) return;
+    const now=Date.now();
+    const expired=state.pending.filter(t=>t.deadlineTs && now>=t.deadlineTs);
+    for(const task of expired) await expireTimedTask(task);
+  }
+  function ensureTaskLog(){
+    if(!Array.isArray(state.taskLog)) state.taskLog = [];
+    // Migrate existing completed-task records once, while keeping state.tasks intact
+    // so XP, statistics, tracks, and other totals are never lost.
+    if(!state.taskLogInitialized){
+      state.taskLog = (state.tasks || []).slice(-50).map(t => ({...t}));
+      state.taskLogInitialized = true;
+    }
+    if(state.taskLog.length > 50) state.taskLog = state.taskLog.slice(-50);
+  }
+  function recordTask(task){
+    if(!state.tasks) state.tasks = [];
+    if(!Array.isArray(state.taskLog)) state.taskLog = [];
+    state.tasks.push(task);
+    state.taskLog.push({...task});
+    if(state.taskLog.length > 50) state.taskLog = state.taskLog.slice(-50);
+  }
+  function removeTaskLogById(id){
+    if(!Array.isArray(state.taskLog)) return;
+    state.taskLog = state.taskLog.filter(t => t.id !== id);
+  }
+
   function ensureProjects(){
     if(!state.projects) state.projects = [];
     state.projects.forEach(p => {
       if(!p.steps) p.steps = [];
-      if(!p.tasks) p.tasks = [];
       if(!p.goal) p.goal = '';
+      p.steps.forEach(st => {
+        if(!Array.isArray(st.tasks)) st.tasks = [];
+        if(typeof st.done !== 'boolean') st.done = false;
+      });
+      // Migrate old project-level daily tasks into the first step so no saved work is lost.
+      if(Array.isArray(p.tasks) && p.tasks.length){
+        if(p.steps.length){
+          p.steps[0].tasks = [...p.tasks, ...p.steps[0].tasks];
+        }
+        delete p.tasks;
+      }
     });
   }
   function ensureSyndromes(){
@@ -1515,30 +1719,42 @@
         queueEl.innerHTML = pending.map(t => {
           const isSpecial = t.diffKey === 'pivot';
           return `
-          <div class="queue-item">
+          ${(() => {
+            const sts = Array.isArray(t.subtasks) ? t.subtasks : [];
+            const doneCount = sts.filter(st => st.done).length;
+            const hasSubtasks = sts.length > 0;
+            return `
+          <div class="queue-item ${hasSubtasks ? 'has-subtasks' : ''}">
             <div class="left">
               <div class="diff-chip" style="color:${isSpecial ? '#ffb648' : '#34e88a'}; border:1px solid ${isSpecial ? 'rgba(255,182,72,0.4)' : 'rgba(52,232,138,0.3)'};">${isSpecial ? ICON_BOLT : '+'+t.xp}</div>
               <div class="info">
-                <div class="t">${escapeHtml(t.name)}</div>
-                <div class="d">${t.trackName ? escapeHtml(t.trackName) + ' · ' : ''}${escapeHtml(t.desc || t.diffName)}</div>
+                <div class="t">${escapeHtml(t.name)}${t.penaltyTask ? ' <span style="color:var(--amber);font-size:10px;font-family:Cairo;">· مهمة عقاب</span>' : ''}</div>
+                <div class="d">${t.penaltyTask ? 'إتمامها يسترجع خصم العقوبة' : (t.trackName ? escapeHtml(t.trackName) + ' · ' : '') + escapeHtml(t.desc || t.diffName)}</div>
+                ${t.deadlineTs ? `<div class="task-timer" data-timer-id="${t.id}">⏱ ${timerLabel(t.timerMinutes)} · <span>${formatRemaining(t.deadlineTs)}</span></div>` : ''}
+                ${hasSubtasks ? `<div class="queue-progress">${doneCount}/${sts.length} مهام فرعية</div><div class="queue-subtasks">${sts.map((st,i) => `<label class="queue-subtask ${st.done ? 'done' : ''}"><input type="checkbox" data-subtask="${t.id}" data-subindex="${i}" ${st.done ? 'checked' : ''}><span>${escapeHtml(st.text)}</span></label>`).join('')}</div>` : ''}
               </div>
             </div>
             <div class="actions">
-              <button class="btn btn-complete" data-complete="${t.id}">إنجاز</button>
+              <button class="btn btn-complete" data-complete="${t.id}" ${hasSubtasks && doneCount < sts.length ? 'disabled title="أكمل المهام الفرعية أولًا"' : ''}>إنجاز</button>
+              ${!t.penaltyTask ? `<button class="btn btn-edit" data-edit-task="${t.id}">تعديل</button>` : ''}
               <button class="btn btn-cancel" data-cancel="${t.id}">حذف</button>
             </div>
           </div>`;
+          })()}`;
         }).join('');
       }
     }
 
-    // log — merge completed tasks and penalties, newest first
+    // log — show at most 10 recent entries; the separate history keeps the latest 50 tasks
+    ensureTaskLog();
+    ensureHabits();
+    renderHabits();
     const logEl = document.getElementById('log-list');
     const penalties = state.penalties || [];
     const combined = [
-      ...state.tasks.map(t => ({ type:'task', ts:t.ts, name:t.name, sub:(t.trackName ? t.trackName + ' · ' : '') + (t.desc || t.diffName), amount:t.xp, special: t.diffKey === 'pivot' })),
-      ...penalties.map(p => ({ type:'penalty', ts:p.ts, name:p.name, sub:p.reason || 'عقوبة', amount:p.amount, special:false })),
-    ].sort((a,b) => b.ts - a.ts);
+      ...state.taskLog.map(t => ({ type:'task', ts:t.ts, name:t.name, sub:(t.trackName ? t.trackName + ' · ' : '') + (t.desc || t.diffName), amount:t.xp, special: t.diffKey === 'pivot' })),
+      ...penalties.map(p => ({ type:'penalty', ts:p.ts, name:p.name, sub:(p.restored ? 'تم استرجاع الخصم' : (p.reason || 'عقوبة')), amount:(p.deductedAmount ?? p.amount), special:false, restored:!!p.restored })),
+    ].sort((a,b) => b.ts - a.ts).slice(0,10);
 
     if(!combined.length){
       logEl.innerHTML = '<div class="log-empty">لا توجد حركات بعد — ابدأ بإضافة أول مهمة لك.</div>';
@@ -1547,9 +1763,9 @@
         const d = new Date(item.ts);
         const timeStr = d.toLocaleDateString('ar', {day:'numeric', month:'short'}) + ' · ' + d.toLocaleTimeString('ar', {hour:'2-digit', minute:'2-digit'});
         const isPenalty = item.type === 'penalty';
-        const chip = isPenalty ? '−'+item.amount : (item.special ? ICON_BOLT : '+'+item.amount);
-        const chipColor = isPenalty ? '#ff5d7a' : (item.special ? '#ffb648' : '#34e88a');
-        const chipBorder = isPenalty ? 'rgba(255,93,122,0.4)' : (item.special ? 'rgba(255,182,72,0.4)' : 'rgba(52,232,138,0.3)');
+        const chip = isPenalty ? (item.restored ? '✓' : '−'+item.amount) : (item.special ? ICON_BOLT : '+'+item.amount);
+        const chipColor = isPenalty ? (item.restored ? '#34e88a' : '#ff5d7a') : (item.special ? '#ffb648' : '#34e88a');
+        const chipBorder = isPenalty ? (item.restored ? 'rgba(52,232,138,0.4)' : 'rgba(232,198,47,0.4)') : (item.special ? 'rgba(255,182,72,0.4)' : 'rgba(52,232,138,0.3)');
         return `
         <div class="log-item">
           <div class="left">
@@ -1560,12 +1776,19 @@
             </div>
           </div>
           <div class="meta">
-            <div class="xp" style="${isPenalty ? 'color:#ff5d7a' : ''}">${isPenalty ? '−' : '+'}${item.amount} XP</div>
+            <div class="xp" style="${isPenalty ? (item.restored ? 'color:#34e88a' : 'color:#ff5d7a') : ''}">${isPenalty ? (item.restored ? '+' : '−') : '+'}${item.amount} XP${isPenalty && item.restored ? ' مسترجع' : ''}</div>
             <div class="time">${timeStr}</div>
           </div>
         </div>`;
       }).join('');
     }
+  }
+
+  function formatRemaining(deadlineTs){
+    const ms=Math.max(0, deadlineTs-Date.now());
+    const total=Math.ceil(ms/1000);
+    const m=Math.floor(total/60), sec=total%60;
+    return `${m}:${String(sec).padStart(2,'0')}`;
   }
 
   function escapeHtml(s){
@@ -1831,60 +2054,59 @@
   }
 
   // ---------- projects ----------
-  function projectStepRowHtml(projectId, step){
+  function projectStepTaskHtml(projectId, stepId, task){
     return `
-    <div class="syn-task-row ${step.done ? 'done' : ''}" data-project-step="${step.id}">
-      <button class="syn-check ${step.done ? 'checked' : ''}" type="button" data-project-step-toggle="${step.id}" data-project-id="${projectId}" aria-label="تمّت الخطوة"></button>
-      <div class="syn-task-name">${escapeHtml(step.text)}</div>
-      <div class="diff-chip" style="color:#34e88a; border:1px solid rgba(52,232,138,0.3);">+${PROJECT_STEP_XP}</div>
-      <button class="syn-del" type="button" data-project-step-del="${step.id}" data-project-id="${projectId}" aria-label="حذف">×</button>
-    </div>`;
+      <div class="project-step-task ${task.done ? 'done' : ''}">
+        <button class="task-check" type="button" data-project-task-toggle="${task.id}" data-project-id="${projectId}" data-project-step-id="${stepId}" aria-label="إتمام المهمة"></button>
+        <div class="task-name">${escapeHtml(task.name)}</div>
+        <div class="task-xp">+${task.xp} XP</div>
+        <button class="project-step-delete" type="button" data-project-task-del="${task.id}" data-project-id="${projectId}" data-project-step-id="${stepId}" aria-label="حذف المهمة">×</button>
+      </div>`;
   }
 
-  function projectTaskItemHtml(projectId, task){
+  function projectStepRowHtml(projectId, step, index, steps){
+    const prev = index > 0 ? steps[index - 1] : null;
+    const unlocked = !prev || prev.done;
+    const tasks = Array.isArray(step.tasks) ? step.tasks : [];
+    const allTasksDone = tasks.length > 0 && tasks.every(t => t.done);
+    const canComplete = tasks.length === 0 || allTasksDone;
+    const taskHtml = tasks.length
+      ? tasks.map(t => projectStepTaskHtml(projectId, step.id, t)).join('')
+      : '<div class="log-empty" style="padding:8px 4px;font-size:11px;">لا توجد مهام لهذه الخطوة بعد.</div>';
     return `
-    <div class="queue-item">
-      <div class="left">
-        <div class="diff-chip" style="color:#34e88a; border:1px solid rgba(52,232,138,0.3);">+${task.xp}</div>
-        <div class="info">
-          <div class="t">${escapeHtml(task.name)}</div>
-          <div class="d">${escapeHtml(task.levelName)}</div>
+      <div class="project-step ${step.done ? 'done' : ''} ${unlocked ? 'unlocked' : 'locked'}" data-project-step="${step.id}">
+        <button class="project-step-xp" type="button" data-project-step-toggle="${step.id}" data-project-id="${projectId}" ${canComplete && unlocked ? '' : 'disabled'} aria-label="${step.done ? 'إلغاء إتمام المحطة' : 'إتمام المحطة'}">+${PROJECT_STEP_XP}<br><span style="font-size:8px;font-weight:600;">XP</span></button>
+        <div class="project-step-content" style="direction:rtl;">
+          <div class="project-step-head">
+            <div>
+              <div class="project-step-name">${escapeHtml(step.text)}</div>
+              <div class="project-step-meta">${step.done ? 'تم إتمام المحطة' : (unlocked ? 'المحطة الحالية' : 'مقفلة حتى إتمام المحطة السابقة')}</div>
+            </div>
+            <button class="project-step-delete" type="button" data-project-step-del="${step.id}" data-project-id="${projectId}" aria-label="حذف الخطوة">×</button>
+          </div>
+          <div class="project-step-tasks">${taskHtml}</div>
+          ${!step.done && unlocked ? `<button class="btn btn-ghost project-step-add-task" type="button" data-project-add-task="${projectId}" data-project-step-id="${step.id}">+ إضافة مهمة لهذه الخطوة</button>` : ''}
+          ${!unlocked ? '<div class="project-step-lock">ملاحظة: أكمل المحطة السابقة أولًا لإضافة مهام هذه الخطوة.</div>' : ''}
+          ${!step.done && unlocked && tasks.length > 0 && !allTasksDone ? '<div class="project-step-lock">أكمل جميع مهام هذه الخطوة لتفعيل محطة الإتمام.</div>' : ''}
         </div>
-      </div>
-      <div class="actions">
-        <button class="btn btn-complete" data-project-task-complete="${task.id}" data-project-id="${projectId}">إنجاز</button>
-        <button class="btn btn-cancel" data-project-task-cancel="${task.id}" data-project-id="${projectId}">حذف</button>
-      </div>
-    </div>`;
+        <div class="project-step-station" aria-hidden="true"></div>
+      </div>`;
   }
 
   function projectCardHtml(p){
     const stepsHtml = !p.steps.length
       ? '<div class="log-empty">لا توجد خطوات بعد.</div>'
-      : p.steps.map(st => projectStepRowHtml(p.id, st)).join('');
-    const tasksHtml = !p.tasks.length
-      ? '<div class="log-empty">لا توجد مهام يومية بعد.</div>'
-      : p.tasks.map(tk => projectTaskItemHtml(p.id, tk)).join('');
-    const taskBtnDisabled = p.tasks.length >= PROJECT_MAX_TASKS;
+      : p.steps.map((st,i) => projectStepRowHtml(p.id, st, i, p.steps)).join('');
     return `
     <div class="project-card" data-project="${p.id}">
       <div class="project-top">
-        <div>
-          <div class="project-name">${escapeHtml(p.name)}</div>
-        </div>
+        <div><div class="project-name">${escapeHtml(p.name)}</div></div>
         <button class="project-del" type="button" data-project-del="${p.id}" aria-label="حذف المشروع">×</button>
       </div>
-
       ${p.goal ? `<div class="project-goal-box"><span class="g-lbl">الهدف</span>${escapeHtml(p.goal)}</div>` : ''}
-
-      <div class="project-section-title">الخطوات</div>
-      <button class="project-add-mini" type="button" data-project-add-step="${p.id}">+ إضافة خطوة</button>
+      <div class="project-section-title">خط سير المشروع</div>
+      <button class="project-add-mini" type="button" data-project-add-step="${p.id}">+ إضافة محطة جديدة</button>
       <div class="project-steps-list">${stepsHtml}</div>
-
-      <div class="project-section-title">المهام اليومية <span class="queue-cap">(${p.tasks.length}/${PROJECT_MAX_TASKS})</span></div>
-      <button class="project-add-mini" type="button" data-project-add-task="${p.id}" ${taskBtnDisabled ? 'disabled' : ''}>+ إضافة مهمة يومية</button>
-      <div class="project-tasks-list">${tasksHtml}</div>
-
       <button class="btn add-task-btn" type="button" data-project-complete="${p.id}" style="margin-top:14px; background:linear-gradient(90deg, var(--violet), #7ecc22);">
         <svg class="icon-inline" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg>
         إتمام المشروع
@@ -1910,7 +2132,7 @@
     const projects = state.projects;
     if(!projects.length){
       chartEl.innerHTML = '';
-      legendEl.innerHTML = '<div class="log-empty">أضف مشروعًا وابدأ تسجيل مهامه اليومية ليظهر مخطط تقدّمه هنا.</div>';
+      legendEl.innerHTML = '<div class="log-empty">أضف مشروعًا وابدأ إتمام خطواته ومهامه ليظهر مخطط تقدّمه هنا.</div>';
       return;
     }
 
@@ -2034,6 +2256,39 @@
     if(e.target === achievementsOverlay) achievementsOverlay.classList.remove('show');
   });
 
+  // ---------- completed-task history ----------
+  const taskHistoryOverlay = document.getElementById('task-history-overlay');
+  const taskHistoryList = document.getElementById('task-history-list');
+  function renderTaskHistory(){
+    ensureTaskLog();
+    const items = [...state.taskLog].sort((a,b) => b.ts - a.ts);
+    if(!items.length){
+      taskHistoryList.innerHTML = '<div class="log-empty">لا توجد مهام منجزة بعد.</div>';
+      return;
+    }
+    taskHistoryList.innerHTML = `<div class="history-count">${items.length} / 50 مهمة محفوظة في السجل</div>` + items.map(item => {
+      const d = new Date(item.ts);
+      const timeStr = d.toLocaleDateString('ar', {day:'numeric', month:'short'}) + ' · ' + d.toLocaleTimeString('ar', {hour:'2-digit', minute:'2-digit'});
+      const special = item.diffKey === 'pivot';
+      const chip = special ? ICON_BOLT : (item.xp >= 0 ? '+'+item.xp : '−'+Math.abs(item.xp));
+      const chipColor = special ? '#ffb648' : (item.xp >= 0 ? '#34e88a' : '#ff5d7a');
+      const chipBorder = special ? 'rgba(255,182,72,0.4)' : (item.xp >= 0 ? 'rgba(52,232,138,0.3)' : 'rgba(232,198,47,0.4)');
+      return `<div class="log-item">
+        <div class="left">
+          <div class="diff-chip" style="color:${chipColor}; border:1px solid ${chipBorder};">${chip}</div>
+          <div class="info"><div class="t">${escapeHtml(item.name)}</div><div class="d">${escapeHtml((item.trackName ? item.trackName + ' · ' : '') + (item.desc || item.diffName || ''))}</div></div>
+        </div>
+        <div class="meta"><div class="xp" style="${item.xp < 0 ? 'color:#ff5d7a' : ''}">${item.xp >= 0 ? '+' : '−'}${Math.abs(item.xp)} XP</div><div class="time">${timeStr}</div></div>
+      </div>`;
+    }).join('');
+  }
+  document.getElementById('open-task-history-btn').addEventListener('click', () => {
+    renderTaskHistory();
+    taskHistoryOverlay.classList.add('show');
+  });
+  document.getElementById('close-task-history-btn').addEventListener('click', () => taskHistoryOverlay.classList.remove('show'));
+  taskHistoryOverlay.addEventListener('click', (e) => { if(e.target === taskHistoryOverlay) taskHistoryOverlay.classList.remove('show'); });
+
   // ---------- luxury store ----------
   function storeItemHtml(item, coins, cooldown){
     const affordable = coins >= item.cost;
@@ -2087,6 +2342,9 @@
   });
   // tick the cooldown countdown every second while the store view is visible
   setInterval(() => {
+    if(state){ checkTaskTimers();
+      document.querySelectorAll('[data-timer-id]').forEach(el=>{ const t=state.pending?.find(x=>x.id===el.dataset.timerId); if(t && t.deadlineTs){ const span=el.querySelector('span'); if(span) span.textContent=formatRemaining(t.deadlineTs); if(Date.now()>=t.deadlineTs) el.classList.add('task-timer-expired'); }});
+    }
     const sv = document.getElementById('store-view');
     if(sv && sv.style.display !== 'none' && state) renderStore();
   }, 1000);
@@ -2116,7 +2374,7 @@
     err.style.display='none';
 
     const newCode = code();
-    state = { name, code:newCode, xp:0, tasks:[], pending:[], penalties:[], skills:[], syndromes:[], achievements:[], coinsSpent:0, purchases:[], lastPurchaseTs:0 };
+    state = { name, code:newCode, xp:0, tasks:[], pending:[], penalties:[], skills:[], syndromes:[], achievements:[], habits:[], coinsSpent:0, purchases:[], lastPurchaseTs:0 };
     ensureSkills();
     ensureSyndromes();
     await saveState();
@@ -2139,8 +2397,10 @@
       if(!state.pending) state.pending = [];
       if(!state.tasks) state.tasks = [];
       if(!state.penalties) state.penalties = [];
+      state.penalties.forEach(p => { if(typeof p.restored !== 'boolean') p.restored = false; if(typeof p.deductedAmount !== 'number') p.deductedAmount = p.amount; });
       ensureSkills();
       ensureSyndromes();
+      ensureHabits();
       err.style.display='none';
       enterApp();
     }catch(e){
@@ -2200,68 +2460,188 @@
   }
   buildTrackSelectGrid();
 
-  function openModal(){
+  const timerGrid = document.getElementById('task-timer-grid');
+  timerGrid.querySelectorAll('.timer-opt').forEach(el => el.addEventListener('click', () => {
+    timerGrid.querySelectorAll('.timer-opt').forEach(o=>o.classList.remove('selected'));
+    el.classList.add('selected');
+    selectedTimer = Number(el.dataset.minutes);
+    document.getElementById('task-timer-err').style.display='none';
+  }));
+
+  function resetTaskModal(){
     document.getElementById('task-name').value='';
     document.getElementById('task-desc').value='';
-    selectedDiff = null;
-    selectedTrack = null;
-    diffGrid.querySelectorAll('.diff-opt').forEach(o => o.classList.remove('selected'));
-    trackSelectGrid.querySelectorAll('.diff-opt').forEach(o => o.classList.remove('selected'));
-    document.getElementById('task-name-err').style.display='none';
-    document.getElementById('diff-err').style.display='none';
-    document.getElementById('track-select-err').style.display='none';
-    overlay.classList.add('show');
+    ['subtask-1','subtask-2','subtask-3'].forEach(id => document.getElementById(id).value='');
+    document.getElementById('subtask-extra-fields').style.display='none';
+    document.getElementById('subtask-3').style.display='block';
+    document.getElementById('add-subtask-btn').style.display='block';
+    document.getElementById('add-subtask-btn').textContent='+ إضافة مهمة فرعية';
+    document.getElementById('subtasks-count-label').textContent='0 / 3';
+    selectedDiff=null; selectedTrack=null; selectedTimer=null;
+    diffGrid.querySelectorAll('.diff-opt').forEach(o=>o.classList.remove('selected'));
+    trackSelectGrid.querySelectorAll('.diff-opt').forEach(o=>o.classList.remove('selected'));
+    timerGrid.querySelectorAll('.timer-opt').forEach(o=>o.classList.remove('selected'));
+    ['task-name-err','diff-err','track-select-err','task-timer-err'].forEach(id=>document.getElementById(id).style.display='none');
   }
-  function closeModal(){ overlay.classList.remove('show'); }
+  function fillTaskModal(task, mode){
+    resetTaskModal();
+    taskModalMode=mode;
+    document.getElementById('task-name').value=task.name||'';
+    document.getElementById('task-desc').value=task.desc||'';
+    (task.subtasks||[]).slice(0,3).forEach((st,i)=>{document.getElementById('subtask-'+(i+1)).value=st.text||'';});
+    if((task.subtasks||[]).length>1){document.getElementById('subtask-extra-fields').style.display='block';}
+    if((task.subtasks||[]).length>2){document.getElementById('subtask-3').style.display='block';document.getElementById('add-subtask-btn').style.display='none';}
+    selectedDiff=task.diffKey||null; selectedTrack=task.trackKey||null; selectedTimer=Number(task.timerMinutes)||null;
+    if(selectedDiff) diffGrid.querySelector(`[data-key="${selectedDiff}"]`)?.classList.add('selected');
+    if(selectedTrack) trackSelectGrid.querySelector(`[data-key="${selectedTrack}"]`)?.classList.add('selected');
+    if(selectedTimer) timerGrid.querySelector(`[data-minutes="${selectedTimer}"]`)?.classList.add('selected');
+    document.querySelector('#modal-overlay h2').textContent = mode==='habit' ? 'إضافة عادة جديدة' : (mode==='editHabit' ? 'تعديل العادة' : (mode==='editTask' ? 'تعديل المهمة' : 'إدراج مهمة جديدة'));
+    document.getElementById('confirm-task-btn').textContent = mode==='habit' || mode==='editHabit' ? 'حفظ العادة' : (mode==='editTask' ? 'حفظ التعديل' : 'إضافة إلى القائمة');
+    document.getElementById('modal-overlay').classList.add('show');
+  }
+  function openModal(){ resetTaskModal(); taskModalMode='daily'; editingTaskId=null; editingHabitId=null; document.querySelector('#modal-overlay h2').textContent='إدراج مهمة جديدة'; document.getElementById('confirm-task-btn').textContent='إضافة إلى القائمة'; document.getElementById('modal-overlay').classList.add('show'); }
+  function closeModal(){ document.getElementById('modal-overlay').classList.remove('show'); }
 
-  const openModalBtnEl = document.getElementById('open-modal-btn');
-  if(openModalBtnEl) openModalBtnEl.addEventListener('click', () => openModal());
-  document.getElementById('cancel-modal-btn').addEventListener('click', closeModal);
-  overlay.addEventListener('click', (e) => { if(e.target === overlay) closeModal(); });
+  document.getElementById('add-subtask-btn').addEventListener('click', () => {
+    const extra=document.getElementById('subtask-extra-fields'), s2=document.getElementById('subtask-2'), s3=document.getElementById('subtask-3');
+    if(extra.style.display==='none'){ extra.style.display='block'; s3.style.display='none'; document.getElementById('add-subtask-btn').textContent='+ إضافة المهمة الفرعية الثالثة'; document.getElementById('subtasks-count-label').textContent='1–2 / 3'; s2.focus(); }
+    else if(s3.style.display==='none'){ s3.style.display='block'; document.getElementById('add-subtask-btn').style.display='none'; document.getElementById('subtasks-count-label').textContent='حتى 3'; s3.focus(); }
+  });
+
+  const openModalBtnEl=document.getElementById('open-modal-btn');
+  if(openModalBtnEl) openModalBtnEl.addEventListener('click',()=>openModal());
+  document.getElementById('cancel-modal-btn').addEventListener('click',closeModal);
+  document.getElementById('modal-overlay').addEventListener('click',e=>{if(e.target===document.getElementById('modal-overlay')) closeModal();});
 
   document.getElementById('confirm-task-btn').addEventListener('click', async () => {
-    if(!state.pending) state.pending = [];
-    if(state.pending.length >= MAX_QUEUE) return;
-
-    const name = document.getElementById('task-name').value.trim();
-    const desc = document.getElementById('task-desc').value.trim();
-    let ok = true;
-    if(!name){ document.getElementById('task-name-err').style.display='block'; ok=false; }
-    if(!selectedTrack){ document.getElementById('track-select-err').style.display='block'; ok=false; }
-    if(!selectedDiff){ document.getElementById('diff-err').style.display='block'; ok=false; }
+    const name=document.getElementById('task-name').value.trim();
+    const desc=document.getElementById('task-desc').value.trim();
+    const subtasks=['subtask-1','subtask-2','subtask-3'].map(id=>document.getElementById(id).value.trim()).filter(Boolean).map(text=>({id:'st'+Date.now()+'_'+(taskCounter++),text,done:false}));
+    let ok=true;
+    if(!name){document.getElementById('task-name-err').style.display='block';ok=false;}
+    if(!selectedTrack){document.getElementById('track-select-err').style.display='block';ok=false;}
+    if(!selectedDiff){document.getElementById('diff-err').style.display='block';ok=false;}
+    if(!selectedTimer){document.getElementById('task-timer-err').style.display='block';ok=false;}
     if(!ok) return;
-
-    const diffObj = selectedDiff === SPECIAL.key ? SPECIAL : DIFFS.find(d => d.key === selectedDiff);
-    const trackObj = TRACKS.find(t => t.key === selectedTrack);
-    const task = {
-      id: 't' + Date.now() + '_' + (taskCounter++),
-      name, desc, xp: diffObj.xp, diffKey: diffObj.key, diffName: diffObj.name,
-      trackKey: trackObj.key, trackName: trackObj.name, createdTs: Date.now()
-    };
-    state.pending.push(task);
-    await saveState();
-    render();
-    closeModal();
+    const diffObj=selectedDiff===SPECIAL.key?SPECIAL:DIFFS.find(d=>d.key===selectedDiff);
+    const trackObj=TRACKS.find(t=>t.key===selectedTrack);
+    if(taskModalMode==='daily'){
+      if((state.pending||[]).length>=MAX_QUEUE) return;
+      const now=Date.now();
+      state.pending.push({id:'t'+now+'_'+(taskCounter++),name,desc,xp:diffObj.xp,diffKey:diffObj.key,diffName:diffObj.name,trackKey:trackObj.key,trackName:trackObj.name,createdTs:now,startedTs:now,deadlineTs:now+selectedTimer*60000,timerMinutes:selectedTimer,subtasks});
+    } else if(taskModalMode==='habit'){
+      ensureHabits();
+      state.habits.push({id:'h'+Date.now()+'_'+(taskCounter++),name,desc,xp:diffObj.xp,diffKey:diffObj.key,diffName:diffObj.name,trackKey:trackObj.key,trackName:trackObj.name,timerMinutes:selectedTimer,subtasks,createdTs:Date.now()});
+    } else if(taskModalMode==='editHabit'){
+      const h=state.habits.find(x=>x.id===editingHabitId);
+      if(h){Object.assign(h,{name,desc,xp:diffObj.xp,diffKey:diffObj.key,diffName:diffObj.name,trackKey:trackObj.key,trackName:trackObj.name,timerMinutes:selectedTimer,subtasks});}
+    } else if(taskModalMode==='editTask'){
+      const t=state.pending.find(x=>x.id===editingTaskId);
+      if(t){Object.assign(t,{name,desc,xp:diffObj.xp,diffKey:diffObj.key,diffName:diffObj.name,trackKey:trackObj.key,trackName:trackObj.name,timerMinutes:selectedTimer,subtasks,startedTs:Date.now(),deadlineTs:Date.now()+selectedTimer*60000});}
+    }
+    await saveState(); render(); closeModal();
   });
 
   // ---------- queue: complete / cancel (event delegation) ----------
+  async function completePendingTask(task){
+    if(task.penaltyTask && task.penaltyId){
+      const penalty = (state.penalties || []).find(p => p.id === task.penaltyId);
+      if(penalty && !penalty.restored){
+        const restoreAmount = penalty.deductedAmount ?? penalty.amount;
+        state.xp += restoreAmount;
+        penalty.restored = true;
+        penalty.restoredTs = Date.now();
+      }
+      task.ts = Date.now();
+      task.restoredPenalty = true;
+      recordTask(task);
+      return;
+    }
+    task.ts = Date.now();
+    recordTask(task);
+    state.xp += task.xp;
+  }
+
   const queueListEl = document.getElementById('queue-list');
   if(queueListEl) queueListEl.addEventListener('click', async (e) => {
+    const subtaskInput = e.target.closest('[data-subtask]');
+    if(subtaskInput){
+      const taskId = subtaskInput.dataset.subtask;
+      const subIndex = Number(subtaskInput.dataset.subindex);
+      const task = state.pending.find(t => t.id === taskId);
+      if(!task || !Array.isArray(task.subtasks) || !task.subtasks[subIndex]) return;
+      task.subtasks[subIndex].done = subtaskInput.checked;
+      const allDone = task.subtasks.length > 0 && task.subtasks.every(st => st.done);
+      if(allDone){
+        const idx = state.pending.findIndex(t => t.id === taskId);
+        if(idx !== -1){
+          const [completedTask] = state.pending.splice(idx, 1);
+          await completePendingTask(completedTask);
+        }
+      }
+      await saveState();
+      render();
+      return;
+    }
+
     const completeId = e.target.dataset.complete;
     const cancelId = e.target.dataset.cancel;
+    const editId = e.target.dataset.editTask;
+    if(editId){
+      const task=state.pending.find(t=>t.id===editId);
+      if(task){ editingTaskId=editId; fillTaskModal(task,'editTask'); }
+      return;
+    }
     if(completeId){
       const idx = state.pending.findIndex(t => t.id === completeId);
       if(idx === -1) return;
       const [task] = state.pending.splice(idx, 1);
-      task.ts = Date.now();
-      state.tasks.push(task);
-      state.xp += task.xp;
+      if(task.deadlineTs && Date.now() >= task.deadlineTs){
+        registerShortfallPenalty(task);
+      } else {
+        await completePendingTask(task);
+      }
       await saveState();
       render();
     } else if(cancelId){
       state.pending = state.pending.filter(t => t.id !== cancelId);
       await saveState();
       render();
+    }
+  });
+
+  // ---------- habits view ----------
+  const habitsView=document.getElementById('habits-view');
+  const habitsList=document.getElementById('habits-list');
+  function habitHtml(h){
+    const subs=(h.subtasks||[]).length ? ` · ${(h.subtasks||[]).length} مهام فرعية` : '';
+    return `<div class="habit-item">
+      <div class="info"><div class="name">${escapeHtml(h.name)}</div><div class="meta">${escapeHtml(h.trackName||'')} · ${escapeHtml(h.diffName||'')} · +${h.xp} XP · ${timerLabel(h.timerMinutes)}${subs}</div>${h.desc?`<div class="meta">${escapeHtml(h.desc)}</div>`:''}</div>
+      <div class="habit-actions"><button class="btn btn-renew" data-renew-habit="${h.id}">تجديد</button><button class="btn btn-edit" data-edit-habit="${h.id}">تعديل</button><button class="btn btn-delete" data-delete-habit="${h.id}">حذف</button></div>
+    </div>`;
+  }
+  function renderHabits(){
+    if(!habitsList || !state) return;
+    ensureHabits();
+    habitsList.innerHTML=state.habits.length ? state.habits.map(habitHtml).join('') : '<div class="log-empty">لا توجد عادات بعد — أضف أول عادة.</div>';
+  }
+  function openHabitsView(){ dashboardView.style.display='none'; habitsView.style.display='block'; render(); }
+  function closeHabitsView(){ habitsView.style.display='none'; dashboardView.style.display='block'; render(); }
+  document.getElementById('habits-back-btn').addEventListener('click',closeHabitsView);
+  document.getElementById('open-habit-btn').addEventListener('click',()=>{taskModalMode='habit'; editingHabitId=null; resetTaskModal(); document.querySelector('#modal-overlay h2').textContent='إضافة عادة جديدة'; document.getElementById('confirm-task-btn').textContent='حفظ العادة'; document.getElementById('modal-overlay').classList.add('show');});
+  habitsList.addEventListener('click',async e=>{
+    const renew=e.target.closest('[data-renew-habit]');
+    const edit=e.target.closest('[data-edit-habit]');
+    const del=e.target.closest('[data-delete-habit]');
+    if(renew){
+      if((state.pending||[]).length>=MAX_QUEUE) return;
+      const h=state.habits.find(x=>x.id===renew.dataset.renewHabit);
+      if(h){ state.pending.push(freshTaskFromTemplate(h)); await saveState(); render(); }
+    } else if(edit){
+      const h=state.habits.find(x=>x.id===edit.dataset.editHabit);
+      if(h){ editingHabitId=h.id; fillTaskModal(h,'editHabit'); }
+    } else if(del){
+      state.habits=state.habits.filter(x=>x.id!==del.dataset.deleteHabit); await saveState(); render();
     }
   });
 
@@ -2344,6 +2724,9 @@
 
   function openPenaltyModal(){
     document.getElementById('penalty-reason').value='';
+    document.getElementById('penalty-task-input').value='';
+    document.getElementById('penalty-reason-err').style.display='none';
+    document.getElementById('penalty-task-err').style.display='none';
     selectedPenalty = null;
     penaltyGrid.querySelectorAll('.diff-opt').forEach(o => o.classList.remove('selected'));
     document.getElementById('penalty-err').style.display='none';
@@ -2355,13 +2738,37 @@
   document.getElementById('cancel-penalty-btn').addEventListener('click', closePenaltyModal);
   penaltyOverlay.addEventListener('click', (e) => { if(e.target === penaltyOverlay) closePenaltyModal(); });
 
+
   document.getElementById('confirm-penalty-btn').addEventListener('click', async () => {
     if(!selectedPenalty){ document.getElementById('penalty-err').style.display='block'; return; }
+    const penaltyTaskName = document.getElementById('penalty-task-input').value.trim();
     const reason = document.getElementById('penalty-reason').value.trim();
+    let ok = true;
+    if(!reason){ document.getElementById('penalty-reason-err').style.display='block'; ok=false; }
+    if(!penaltyTaskName){ document.getElementById('penalty-task-err').style.display='block'; ok=false; }
+    if((state.pending || []).length >= MAX_QUEUE){
+      document.getElementById('penalty-task-err').textContent='قائمة المهام ممتلئة. احذف أو أنجز مهمة أولًا.';
+      document.getElementById('penalty-task-err').style.display='block';
+      ok=false;
+    }
+    if(!ok) return;
     const pObj = PENALTIES.find(p => p.key === selectedPenalty);
+    const deductedAmount = Math.min(state.xp, pObj.amount);
+    const penaltyId = 'pen' + Date.now() + '_' + (taskCounter++);
     if(!state.penalties) state.penalties = [];
-    state.penalties.push({ name: pObj.name, amount: pObj.amount, reason, ts: Date.now() });
-    state.xp = Math.max(0, state.xp - pObj.amount);
+    const penalty = { id:penaltyId, name:pObj.name, amount:pObj.amount, deductedAmount, reason, ts:Date.now(), restored:false };
+    state.penalties.push(penalty);
+    state.xp = Math.max(0, state.xp - deductedAmount);
+
+    {
+      if(!state.pending) state.pending = [];
+      state.pending.push({
+        id:'t' + Date.now() + '_' + (taskCounter++),
+        name:penaltyTaskName, desc:'مهمة عقاب مرتبطة بعقوبة: ' + pObj.name,
+        xp:0, diffKey:'penalty', diffName:'مهمة عقاب', trackKey:'', trackName:'',
+        createdTs:Date.now(), subtasks:[], penaltyTask:true, penaltyId:penaltyId
+      });
+    }
     await saveState();
     render();
     closePenaltyModal();
@@ -2474,7 +2881,7 @@
     }
     const xpGain = Math.round(n * SKILL_HOUR_XP);
     state.xp += xpGain;
-    state.tasks.push({
+    recordTask({
       id: 't' + Date.now() + '_' + (taskCounter++),
       name: `تسجيل ساعات: ${skill.name}`,
       desc: `${n} ساعة · ${skillCatName(skill.category)}`,
@@ -2502,7 +2909,7 @@
 
     const xpLoss = Math.round(removed * SKILL_HOUR_XP);
     state.xp = Math.max(0, state.xp - xpLoss);
-    state.tasks.push({
+    recordTask({
       id: 't' + Date.now() + '_' + (taskCounter++),
       name: `إنقاص ساعات: ${skill.name}`,
       desc: `${removed} ساعة · ${skillCatName(skill.category)}`,
@@ -2537,7 +2944,7 @@
     ensureProjects();
     state.projects.push({
       id: 'pr' + Date.now() + '_' + (taskCounter++),
-      name, goal, steps: [], tasks: [], createdTs: Date.now()
+      name, goal, steps: [], createdTs: Date.now()
     });
     render();
     closeProjectModal();
@@ -2570,10 +2977,11 @@
     saveState();
   });
 
-  // add daily task modal (level grid: 50 / 100 / 250 XP)
+  // add task to a specific project step
   const projectTaskOverlay = document.getElementById('project-task-overlay');
   const projectTaskLevelGrid = document.getElementById('project-task-level-grid');
   let projectTaskTargetId = null;
+  let projectTaskTargetStepId = null;
   let selectedProjectLevel = null;
 
   function buildProjectTaskLevelGrid(){
@@ -2593,19 +3001,24 @@
   }
   buildProjectTaskLevelGrid();
 
-  function openProjectTaskModal(projectId){
+  function openProjectTaskModal(projectId, stepId){
     const p = (state.projects || []).find(pp => pp.id === projectId);
-    if(!p || p.tasks.length >= PROJECT_MAX_TASKS) return;
+    const stepIndex = p ? p.steps.findIndex(s => s.id === stepId) : -1;
+    if(!p || stepIndex < 0) return;
+    if(stepIndex > 0 && !p.steps[stepIndex - 1].done) return;
+    const step = p.steps[stepIndex];
+    if(step.done) return;
     projectTaskTargetId = projectId;
+    projectTaskTargetStepId = stepId;
     selectedProjectLevel = null;
     projectTaskLevelGrid.querySelectorAll('.diff-opt').forEach(o => o.classList.remove('selected'));
-    document.getElementById('project-task-target-name').textContent = p ? ' — ' + p.name : '';
+    document.getElementById('project-task-target-name').textContent = ` — ${p.name} · ${step.text}`;
     document.getElementById('project-task-name').value = '';
     document.getElementById('project-task-name-err').style.display = 'none';
     document.getElementById('project-task-level-err').style.display = 'none';
     projectTaskOverlay.classList.add('show');
   }
-  function closeProjectTaskModal(){ projectTaskOverlay.classList.remove('show'); }
+  function closeProjectTaskModal(){ projectTaskOverlay.classList.remove('show'); projectTaskTargetId = null; projectTaskTargetStepId = null; }
   document.getElementById('cancel-project-task-btn').addEventListener('click', closeProjectTaskModal);
   projectTaskOverlay.addEventListener('click', (e) => { if(e.target === projectTaskOverlay) closeProjectTaskModal(); });
 
@@ -2616,12 +3029,12 @@
     if(!selectedProjectLevel){ document.getElementById('project-task-level-err').style.display = 'block'; ok = false; }
     if(!ok) return;
     const p = (state.projects || []).find(pp => pp.id === projectTaskTargetId);
-    if(!p || p.tasks.length >= PROJECT_MAX_TASKS) return;
+    const step = p && p.steps.find(s => s.id === projectTaskTargetStepId);
+    const stepIndex = p ? p.steps.findIndex(s => s.id === projectTaskTargetStepId) : -1;
+    if(!p || !step || step.done || (stepIndex > 0 && !p.steps[stepIndex - 1].done)) return;
     const lvl = PROJECT_LEVELS.find(l => l.key === selectedProjectLevel);
-    p.tasks.push({
-      id: 'prt' + Date.now() + '_' + (taskCounter++),
-      name, xp: lvl.xp, levelName: lvl.name, level: lvl.key, createdTs: Date.now()
-    });
+    if(!Array.isArray(step.tasks)) step.tasks = [];
+    step.tasks.push({ id:'prt' + Date.now() + '_' + (taskCounter++), name, xp:lvl.xp, levelName:lvl.name, level:lvl.key, done:false, createdTs:Date.now() });
     render();
     closeProjectTaskModal();
     saveState();
@@ -2677,31 +3090,67 @@
 
     const addTaskBtn = e.target.closest('[data-project-add-task]');
     if(addTaskBtn && !addTaskBtn.disabled){
-      openProjectTaskModal(addTaskBtn.dataset.projectAddTask);
+      openProjectTaskModal(addTaskBtn.dataset.projectAddTask, addTaskBtn.dataset.projectStepId);
+      return;
+    }
+
+    const toggleTaskBtn = e.target.closest('[data-project-task-toggle]');
+    if(toggleTaskBtn){
+      const p = (state.projects || []).find(pp => pp.id === toggleTaskBtn.dataset.projectId);
+      const step = p && p.steps.find(s => s.id === toggleTaskBtn.dataset.projectStepId);
+      const task = step && step.tasks.find(t => t.id === toggleTaskBtn.dataset.projectTaskToggle);
+      if(!p || !step || !task || step.done) return;
+      task.done = !task.done;
+      if(task.done){
+        state.xp += task.xp;
+        recordTask({
+          id:'t' + Date.now() + '_' + (taskCounter++), name:task.name,
+          desc:`${task.levelName} · خطوة: ${step.text} · مشروع: ${p.name}`,
+          xp:task.xp, diffKey:'project-task', diffName:'مهمة مشروع', projectId:p.id, projectStepId:step.id, createdTs:Date.now(), ts:Date.now()
+        });
+      } else {
+        state.xp = Math.max(0, state.xp - task.xp);
+        const logs = state.tasks || [];
+        const log = [...logs].reverse().find(t => t.name === task.name && t.projectId === p.id && t.projectStepId === step.id && t.diffKey === 'project-task');
+        if(log){ state.tasks = logs.filter(t => t !== log); removeTaskLogById(log.id); }
+      }
+      render();
+      saveState();
+      return;
+    }
+
+    const delTaskBtn = e.target.closest('[data-project-task-del]');
+    if(delTaskBtn){
+      const p = (state.projects || []).find(pp => pp.id === delTaskBtn.dataset.projectId);
+      const step = p && p.steps.find(s => s.id === delTaskBtn.dataset.projectStepId);
+      if(!p || !step) return;
+      const task = step.tasks.find(t => t.id === delTaskBtn.dataset.projectTaskDel);
+      if(task && task.done) state.xp = Math.max(0, state.xp - task.xp);
+      step.tasks = step.tasks.filter(t => t.id !== delTaskBtn.dataset.projectTaskDel);
+      render();
+      saveState();
       return;
     }
 
     const toggleStepBtn = e.target.closest('[data-project-step-toggle]');
     if(toggleStepBtn){
       const p = (state.projects || []).find(pp => pp.id === toggleStepBtn.dataset.projectId);
-      const st = p && p.steps.find(s => s.id === toggleStepBtn.dataset.projectStepToggle);
-      if(!st) return;
+      const idx = p ? p.steps.findIndex(s => s.id === toggleStepBtn.dataset.projectStepToggle) : -1;
+      const st = idx >= 0 ? p.steps[idx] : null;
+      if(!p || !st) return;
+      if(idx > 0 && !p.steps[idx - 1].done) return;
+      const tasks = Array.isArray(st.tasks) ? st.tasks : [];
+      if(!st.done && tasks.length && !tasks.every(t => t.done)) return;
       st.done = !st.done;
       if(st.done){
-        // award XP for completing the step, and log it so it counts in the project's progress chart
         state.xp += PROJECT_STEP_XP;
         const logId = 'pst' + Date.now() + '_' + (taskCounter++);
-        state.tasks.push({
-          id: logId,
-          name: st.text,
-          desc: `خطوة مشروع: ${p.name}`,
-          xp: PROJECT_STEP_XP, diffKey:'project-step', diffName:'خطوة مشروع', projectId: p.id, createdTs:Date.now(), ts: Date.now()
-        });
+        recordTask({id:logId,name:st.text,desc:`خطوة مشروع: ${p.name}`,xp:PROJECT_STEP_XP,diffKey:'project-step',diffName:'خطوة مشروع',projectId:p.id,projectStepId:st.id,createdTs:Date.now(),ts:Date.now()});
         st.logId = logId;
       } else if(st.logId){
-        // undo: reverse the XP and remove the log entry
         state.xp = Math.max(0, state.xp - PROJECT_STEP_XP);
         state.tasks = state.tasks.filter(t => t.id !== st.logId);
+        removeTaskLogById(st.logId);
         delete st.logId;
       }
       render();
@@ -2713,40 +3162,20 @@
     if(delStepBtn){
       const p = (state.projects || []).find(pp => pp.id === delStepBtn.dataset.projectId);
       if(!p) return;
-      p.steps = p.steps.filter(s => s.id !== delStepBtn.dataset.projectStepDel);
-      render();
-      saveState();
-      return;
-    }
-
-    const completeTaskBtn = e.target.closest('[data-project-task-complete]');
-    if(completeTaskBtn){
-      const p = (state.projects || []).find(pp => pp.id === completeTaskBtn.dataset.projectId);
-      if(!p) return;
-      const idx = p.tasks.findIndex(t => t.id === completeTaskBtn.dataset.projectTaskComplete);
+      const idx = p.steps.findIndex(s => s.id === delStepBtn.dataset.projectStepDel);
       if(idx === -1) return;
-      const [task] = p.tasks.splice(idx, 1);
-      state.xp += task.xp;
-      state.tasks.push({
-        id: 't' + Date.now() + '_' + (taskCounter++),
-        name: task.name,
-        desc: `${task.levelName} · مشروع: ${p.name}`,
-        xp: task.xp, diffKey:'project', diffName:'مشروع', projectId: p.id, createdTs:Date.now(), ts: Date.now()
-      });
+      const removed = p.steps[idx];
+      if(removed.done){
+        state.xp = Math.max(0, state.xp - PROJECT_STEP_XP);
+        if(removed.logId){ state.tasks = state.tasks.filter(t => t.id !== removed.logId); removeTaskLogById(removed.logId); }
+      }
+      (removed.tasks || []).forEach(t => { if(t.done) state.xp = Math.max(0, state.xp - t.xp); });
+      p.steps.splice(idx,1);
       render();
       saveState();
       return;
     }
 
-    const cancelTaskBtn = e.target.closest('[data-project-task-cancel]');
-    if(cancelTaskBtn){
-      const p = (state.projects || []).find(pp => pp.id === cancelTaskBtn.dataset.projectId);
-      if(!p) return;
-      p.tasks = p.tasks.filter(t => t.id !== cancelTaskBtn.dataset.projectTaskCancel);
-      render();
-      saveState();
-      return;
-    }
   });
 
   // ---------- syndromes ----------
