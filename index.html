@@ -684,6 +684,38 @@
   }
   .ach-badge-date{font-size:9.5px; color:var(--muted); font-family:'Cairo';}
   .ach-empty{color:var(--muted); font-size:13px; text-align:center; padding:26px 10px;}
+
+  /* ---------- main daily tasks ---------- */
+  .main-task-panel{margin-bottom:16px;border-color:rgba(168,230,58,.22);}
+  .main-task-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:9px;margin-top:8px;}
+  .main-task-slot{
+    width:100%;min-height:88px;border:1px solid var(--line);border-radius:11px;
+    background:rgba(255,255,255,.025);color:var(--text);padding:12px;
+    font-family:inherit;text-align:right;display:flex;flex-direction:column;
+    align-items:flex-start;justify-content:center;gap:5px;cursor:pointer;
+    transition:border-color .15s,background .15s,transform .12s;
+  }
+  button.main-task-slot:hover{border-color:var(--cyan);background:var(--cyan-dim);transform:translateY(-1px);}
+  .main-task-slot.optional{border-style:dashed;}
+  .main-task-slot.filled{cursor:default;align-items:stretch;justify-content:flex-start;min-height:122px;}
+  .main-task-slot.filled:hover{transform:none;border-color:var(--line);background:rgba(255,255,255,.025);}
+  .main-task-slot.completed{opacity:.72;border-color:rgba(52,232,138,.28);}
+  .main-slot-head{display:flex;align-items:center;justify-content:space-between;gap:8px;width:100%;}
+  .main-slot-name{font-family:'Cairo';font-size:13px;font-weight:800;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .main-slot-xp{font-family:'Cairo';font-size:10px;color:var(--cyan);white-space:nowrap;}
+  .main-slot-desc{font-size:10.5px;color:var(--muted);line-height:1.5;}
+  .main-slot-subtasks{width:100%;display:flex;flex-direction:column;gap:5px;margin-top:4px;}
+  .main-slot-subtask{display:flex;align-items:center;gap:7px;font-size:10.5px;color:var(--text);cursor:pointer;}
+  .main-slot-subtask input{appearance:none;-webkit-appearance:none;width:16px;height:16px;border-radius:4px;border:1.5px solid rgba(220,255,234,.7);background:rgba(238,255,245,.1);cursor:pointer;position:relative;flex-shrink:0;}
+  .main-slot-subtask input:checked{background:#eafff1;border-color:#eafff1;}
+  .main-slot-subtask input:checked::after{content:"✓";position:absolute;inset:0;display:grid;place-items:center;color:#164d2b;font-size:11px;font-weight:900;}
+  .main-slot-subtask.done span{text-decoration:line-through;opacity:.55;}
+  .main-slot-progress{font-size:9.5px;color:var(--muted);margin-top:3px;}
+  .main-slot-actions{margin-top:auto;display:flex;justify-content:flex-end;width:100%;padding-top:6px;}
+  .main-slot-complete{padding:7px 12px!important;font-size:10.5px!important;}
+  .main-slot-complete:disabled{opacity:.4;cursor:not-allowed;}
+  .main-slot-locked{font-size:9.5px;color:var(--cyan);text-align:center;width:100%;padding-top:7px;}
+  @media(max-width:560px){.main-task-grid{grid-template-columns:1fr;}}
 </style>
 </head>
 <body>
@@ -820,11 +852,25 @@
     <div class="chart-legend" id="chart-legend">—</div>
   </div>
 
+
+  <!-- main daily tasks -->
+  <div class="panel log-panel main-task-panel">
+    <div class="corner tl"></div><div class="corner br"></div>
+    <div class="panel-title"><span class="bar"></span> المهمات الرئيسية</div>
+    <p class="queue-desc">ثلاث مهمات إلزامية ومهمة اختيارية — كل مهمة رئيسية تمنح 750 XP.</p>
+    <div id="main-task-slots" class="main-task-grid">
+      <button type="button" class="main-task-slot" data-main-slot="progress"><strong>مهمة تقدُّم</strong><span class="main-slot-xp">750 XP</span></button>
+      <button type="button" class="main-task-slot" data-main-slot="sport"><strong>رياضة</strong><span class="main-slot-xp">750 XP</span></button>
+      <button type="button" class="main-task-slot" data-main-slot="skill"><strong>تطوير مهارة</strong><span class="main-slot-xp">750 XP</span></button>
+      <button type="button" class="main-task-slot optional" data-main-slot="daily-cost"><strong>التكاليف اليومية</strong><span class="main-slot-xp">اختيارية · 750 XP</span></button>
+    </div>
+  </div>
+
   <!-- task list -->
   <div class="panel log-panel">
     <div class="corner tl"></div><div class="corner br"></div>
     <div class="panel-title"><span class="bar"></span> قائمة المهام <span class="queue-cap" id="queue-cap-label">(0/3)</span></div>
-    <p class="queue-desc">حد أقصى 3 مهام نشطة بنفس الوقت — عند إدراج كل مهمة تختار لها مسارًا (تصنيفًا) ودرجة صعوبة.</p>
+    <p class="queue-desc">حد أقصى 1 مهمة يومية حتى إنجاز المهمات الرئيسية الثلاث الإلزامية، ثم يرتفع الحد إلى 3 مهام.</p>
     <button class="btn add-task-btn" id="open-modal-btn" style="margin-bottom:14px;"><svg class="icon-inline" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg> إدراج مهمة</button>
     <div id="queue-list"><div class="log-empty">القائمة فاضية.</div></div>
   </div>
@@ -1316,6 +1362,14 @@
   let editingTaskId = null;
   let editingHabitId = null;
   let taskCounter = 1;
+  let selectedMainSlot = null;
+  const MAIN_TASKS = {
+    progress:{label:'مهمة تقدُّم',track:'mind',required:true},
+    sport:{label:'رياضة',track:'body',required:true},
+    skill:{label:'تطوير مهارة',track:'sci',required:true},
+    'daily-cost':{label:'التكاليف اليومية',track:'food',required:false}
+  };
+  const MAIN_XP = 750;
 
   const ICON_BOLT = '<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M13 2 4 14h6l-1 8 9-12h-6l1-8z"/></svg>';
 
@@ -1548,6 +1602,28 @@
     }
   };
 
+  function mainDayKey(){
+    const d=new Date();
+    return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+  }
+  function ensureMainTasks(){
+    if(!Array.isArray(state.mainTasks)) state.mainTasks=[];
+    const today=mainDayKey();
+    if(state.mainTasksDay!==today){
+      state.mainTasks=[];
+      state.mainTasksDay=today;
+    }
+    state.mainTasks=state.mainTasks.filter(t=>MAIN_TASKS[t.slotKey]);
+  }
+  function requiredMainTasksDone(){
+    ensureMainTasks();
+    return ['progress','sport','skill'].every(k=>{
+      const t=state.mainTasks.find(x=>x.slotKey===k);
+      return !!t && !!t.done;
+    });
+  }
+  function dailyTaskMax(){ return requiredMainTasksDone() ? MAX_QUEUE : 1; }
+
   async function saveState(){
     try{
       // safety net: never let a slow/hanging storage call freeze the UI —
@@ -1577,8 +1653,39 @@
     return streak;
   }
 
+  function renderMainTasks(){
+    const wrap=document.getElementById('main-task-slots');
+    if(!wrap || !state) return;
+    ensureMainTasks();
+    const keys=['progress','sport','skill','daily-cost'];
+    wrap.innerHTML=keys.map(key=>{
+      const info=MAIN_TASKS[key];
+      const task=state.mainTasks.find(t=>t.slotKey===key);
+      if(!task){
+        return `<button type="button" class="main-task-slot${info.required?'':' optional'}" data-main-slot="${key}">
+          <strong>${info.label}</strong><span class="main-slot-xp">${info.required?'750 XP':'اختيارية · 750 XP'}</span>
+        </button>`;
+      }
+      const subs=Array.isArray(task.subtasks)?task.subtasks:[];
+      const doneCount=subs.filter(st=>st.done).length;
+      const completeDisabled=subs.length>0 && doneCount<subs.length;
+      const subHtml=subs.length ? `<div class="main-slot-progress">${doneCount}/${subs.length} مهام فرعية</div><div class="main-slot-subtasks">${subs.map((st,i)=>`
+        <label class="main-slot-subtask ${st.done?'done':''}"><input type="checkbox" data-main-subtask="${task.id}" data-main-subindex="${i}" ${st.done?'checked':''} ${task.done?'disabled':''}><span>${escapeHtml(st.text)}</span></label>`).join('')}</div>` : '';
+      const action=task.done
+        ? `<div class="main-slot-locked">✓ مكتملة — مغلقة حتى اليوم التالي</div>`
+        : `<button type="button" class="btn btn-complete main-slot-complete" data-main-complete="${task.id}" ${completeDisabled?'disabled title="أكمل المهام الفرعية أولًا"':''}>إنجاز</button>`;
+      return `<div class="main-task-slot filled ${task.done?'completed':''}" data-main-slot="${key}">
+        <div class="main-slot-head"><div class="main-slot-name">${escapeHtml(task.name)}</div><div class="main-slot-xp">750 XP</div></div>
+        ${task.desc?`<div class="main-slot-desc">${escapeHtml(task.desc)}</div>`:''}
+        ${subHtml}<div class="main-slot-actions">${action}</div>
+      </div>`;
+    }).join('');
+  }
+
   function render(){
     if(!state) return;
+    ensureMainTasks();
+    renderMainTasks();
     const xp = state.xp;
     const idx = getRankIndex(xp);
     const rank = RANKS[idx];
@@ -1706,11 +1813,11 @@
     // queue state / cap (queue UI removed — kept as a no-op guard for older saved state)
     const pending = state.pending || [];
     const queueHintEl = document.getElementById('queue-hint');
-    if(queueHintEl) queueHintEl.textContent = `${pending.length} / ${MAX_QUEUE} مهام في القائمة`;
+    if(queueHintEl) queueHintEl.textContent = `${pending.length} / ${dailyTaskMax()} مهام في القائمة`;
     const queueCapEl = document.getElementById('queue-cap-label');
-    if(queueCapEl) queueCapEl.textContent = `(${pending.length}/${MAX_QUEUE})`;
+    if(queueCapEl) queueCapEl.textContent = `(${pending.length}/${dailyTaskMax()})`;
     const openBtn = document.getElementById('open-modal-btn');
-    if(openBtn) openBtn.disabled = pending.length >= MAX_QUEUE;
+    if(openBtn) openBtn.disabled = pending.length >= dailyTaskMax();
 
     // queue list
     const queueEl = document.getElementById('queue-list');
@@ -2376,7 +2483,7 @@
     err.style.display='none';
 
     const newCode = code();
-    state = { name, code:newCode, xp:0, tasks:[], pending:[], penalties:[], skills:[], syndromes:[], achievements:[], habits:[], coinsSpent:0, purchases:[], lastPurchaseTs:0 };
+    state = { name, code:newCode, xp:0, tasks:[], pending:[], mainTasks:[], mainTasksDay:mainDayKey(), penalties:[], skills:[], syndromes:[], achievements:[], habits:[], coinsSpent:0, purchases:[], lastPurchaseTs:0 };
     ensureSkills();
     ensureSyndromes();
     await saveState();
@@ -2399,6 +2506,7 @@
       if(!state.pending) state.pending = [];
       if(!state.tasks) state.tasks = [];
       if(!state.penalties) state.penalties = [];
+      ensureMainTasks();
       state.penalties.forEach(p => { if(typeof p.restored !== 'boolean') p.restored = false; if(typeof p.deductedAmount !== 'number') p.deductedAmount = p.amount; });
       ensureSkills();
       ensureSyndromes();
@@ -2471,9 +2579,13 @@
     document.getElementById('add-subtask-btn').style.display='block';
     document.getElementById('add-subtask-btn').textContent='+ إضافة مهمة فرعية';
     document.getElementById('subtasks-count-label').textContent='0 / 3';
-    selectedDiff=null; selectedTrack=null; selectedTimer=null;
+    selectedDiff=null; selectedTrack=null; selectedTimer=null; selectedMainSlot=null;
     diffGrid.querySelectorAll('.diff-opt').forEach(o=>o.classList.remove('selected'));
     trackSelectGrid.querySelectorAll('.diff-opt').forEach(o=>o.classList.remove('selected'));
+    const diffField=diffGrid.closest('.field');
+    const trackField=trackSelectGrid.closest('.field');
+    if(diffField) diffField.style.display='';
+    if(trackField) trackField.style.display='';
     ['task-name-err','diff-err','track-select-err'].forEach(id=>document.getElementById(id).style.display='none');
   }
   function fillTaskModal(task, mode){
@@ -2492,6 +2604,26 @@
     document.getElementById('modal-overlay').classList.add('show');
   }
   function openModal(){ resetTaskModal(); taskModalMode='daily'; editingTaskId=null; editingHabitId=null; document.querySelector('#modal-overlay h2').textContent='إدراج مهمة جديدة'; document.getElementById('confirm-task-btn').textContent='إضافة إلى القائمة'; document.getElementById('modal-overlay').classList.add('show'); }
+  function openMainTaskModal(slotKey){
+    ensureMainTasks();
+    const info=MAIN_TASKS[slotKey];
+    if(!info) return;
+    if(state.mainTasks.some(t=>t.slotKey===slotKey)) return;
+    resetTaskModal();
+    taskModalMode='mainTemplate';
+    selectedMainSlot=slotKey;
+    selectedDiff='lvl3';
+    selectedTrack=info.track;
+    diffGrid.querySelectorAll('.diff-opt').forEach(o=>o.classList.remove('selected'));
+    trackSelectGrid.querySelectorAll('.diff-opt').forEach(o=>o.classList.remove('selected'));
+    document.querySelector('#modal-overlay h2').textContent='إدراج مهمة رئيسية — '+info.label;
+    document.getElementById('confirm-task-btn').textContent='إضافة المهمة الرئيسية';
+    const diffField=diffGrid.closest('.field');
+    const trackField=trackSelectGrid.closest('.field');
+    if(diffField) diffField.style.display='none';
+    if(trackField) trackField.style.display='none';
+    document.getElementById('modal-overlay').classList.add('show');
+  }
   function closeModal(){ document.getElementById('modal-overlay').classList.remove('show'); }
 
   document.getElementById('add-subtask-btn').addEventListener('click', () => {
@@ -2502,6 +2634,39 @@
 
   const openModalBtnEl=document.getElementById('open-modal-btn');
   if(openModalBtnEl) openModalBtnEl.addEventListener('click',()=>openModal());
+  document.getElementById('main-task-slots').addEventListener('click', async (e)=>{
+    const sub=e.target.closest('[data-main-subtask]');
+    if(sub){
+      e.preventDefault(); e.stopPropagation();
+      ensureMainTasks();
+      const task=state.mainTasks.find(t=>t.id===sub.dataset.mainSubtask);
+      const i=Number(sub.dataset.mainSubindex);
+      if(!task || task.done || !task.subtasks?.[i]) return;
+      task.subtasks[i].done=sub.checked;
+      await saveState(); render();
+      return;
+    }
+    const complete=e.target.closest('[data-main-complete]');
+    if(complete){
+      e.preventDefault(); e.stopPropagation();
+      ensureMainTasks();
+      const task=state.mainTasks.find(t=>t.id===complete.dataset.mainComplete);
+      if(!task || task.done) return;
+      const hasSub=Array.isArray(task.subtasks) && task.subtasks.length;
+      if(hasSub && !task.subtasks.every(st=>st.done)) return;
+      task.done=true; task.ts=Date.now();
+      recordTask(task);
+      state.xp += MAIN_XP;
+      await saveState(); render();
+      return;
+    }
+    const slot=e.target.closest('[data-main-slot]');
+    if(!slot || !slot.matches('button')) return;
+    const key=slot.dataset.mainSlot;
+    ensureMainTasks();
+    if(state.mainTasks.some(t=>t.slotKey===key)) return;
+    openMainTaskModal(key);
+  });
   const openHabitsFromTaskBtn=document.getElementById('open-habits-from-task-btn');
   if(openHabitsFromTaskBtn) openHabitsFromTaskBtn.addEventListener('click',()=>{ closeModal(); openHabitsView(); });
   document.getElementById('cancel-modal-btn').addEventListener('click',closeModal);
@@ -2513,13 +2678,29 @@
     const subtasks=['subtask-1','subtask-2','subtask-3'].map(id=>document.getElementById(id).value.trim()).filter(Boolean).map(text=>({id:'st'+Date.now()+'_'+(taskCounter++),text,done:false}));
     let ok=true;
     if(!name){document.getElementById('task-name-err').style.display='block';ok=false;}
-    if(!selectedTrack){document.getElementById('track-select-err').style.display='block';ok=false;}
-    if(!selectedDiff){document.getElementById('diff-err').style.display='block';ok=false;}
+    if(taskModalMode!=='mainTemplate'){
+      if(!selectedTrack){document.getElementById('track-select-err').style.display='block';ok=false;}
+      if(!selectedDiff){document.getElementById('diff-err').style.display='block';ok=false;}
+    }
     if(!ok) return;
+    if(taskModalMode==='mainTemplate'){
+      ensureMainTasks();
+      const info=MAIN_TASKS[selectedMainSlot];
+      if(!info || state.mainTasks.some(t=>t.slotKey===selectedMainSlot)) return;
+      const now=Date.now();
+      state.mainTasks.push({
+        id:'mt'+now+'_'+(taskCounter++), slotKey:selectedMainSlot, slotLabel:info.label,
+        name, desc, xp:MAIN_XP, diffKey:'main', diffName:'مهمة رئيسية',
+        trackKey:info.track, trackName:TRACKS.find(t=>t.key===info.track)?.name||'',
+        mainTask:true, dayKey:state.mainTasksDay, createdTs:now, done:false,
+        subtasks
+      });
+      await saveState(); render(); closeModal(); return;
+    }
     const diffObj=selectedDiff===SPECIAL.key?SPECIAL:DIFFS.find(d=>d.key===selectedDiff);
     const trackObj=TRACKS.find(t=>t.key===selectedTrack);
     if(taskModalMode==='daily'){
-      if((state.pending||[]).length>=MAX_QUEUE) return;
+      if((state.pending||[]).length>=dailyTaskMax()) return;
       const now=Date.now();
       state.pending.push({id:'t'+now+'_'+(taskCounter++),name,desc,xp:diffObj.xp,diffKey:diffObj.key,diffName:diffObj.name,trackKey:trackObj.key,trackName:trackObj.name,createdTs:now,startedTs:now,timerMinutes:null,subtasks});
     } else if(taskModalMode==='habit'){
@@ -2627,7 +2808,7 @@
     const edit=e.target.closest('[data-edit-habit]');
     const del=e.target.closest('[data-delete-habit]');
     if(renew){
-      if((state.pending||[]).length>=MAX_QUEUE) return;
+      if((state.pending||[]).length>=dailyTaskMax()) return;
       const h=state.habits.find(x=>x.id===renew.dataset.renewHabit);
       if(h){ state.pending.push(freshTaskFromTemplate(h)); await saveState(); render(); }
     } else if(edit){
