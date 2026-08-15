@@ -1008,18 +1008,6 @@
       <textarea id="task-desc" placeholder="تفاصيل إضافية عن المهمة..."></textarea>
     </div>
     <div class="field">
-      <label>المؤقت <span style="color:var(--danger);">(إجباري)</span></label>
-      <div class="timer-grid" id="task-timer-grid">
-        <div class="timer-opt" data-minutes="5">5 دقائق</div>
-        <div class="timer-opt" data-minutes="10">10 دقائق</div>
-        <div class="timer-opt" data-minutes="15">15 دقيقة</div>
-        <div class="timer-opt" data-minutes="20">20 دقيقة</div>
-        <div class="timer-opt" data-minutes="25">25 دقيقة</div>
-        <div class="timer-opt" data-minutes="60">1 ساعة</div>
-      </div>
-      <div class="field-err" id="task-timer-err">اختر مدة المؤقت.</div>
-    </div>
-    <div class="field">
       <label>درجة الصعوبة</label>
       <div class="diff-grid" id="diff-grid"></div>
       <div class="field-err" id="diff-err">اختر درجة الصعوبة.</div>
@@ -2474,14 +2462,6 @@
   }
   buildTrackSelectGrid();
 
-  const timerGrid = document.getElementById('task-timer-grid');
-  timerGrid.querySelectorAll('.timer-opt').forEach(el => el.addEventListener('click', () => {
-    timerGrid.querySelectorAll('.timer-opt').forEach(o=>o.classList.remove('selected'));
-    el.classList.add('selected');
-    selectedTimer = Number(el.dataset.minutes);
-    document.getElementById('task-timer-err').style.display='none';
-  }));
-
   function resetTaskModal(){
     document.getElementById('task-name').value='';
     document.getElementById('task-desc').value='';
@@ -2494,8 +2474,7 @@
     selectedDiff=null; selectedTrack=null; selectedTimer=null;
     diffGrid.querySelectorAll('.diff-opt').forEach(o=>o.classList.remove('selected'));
     trackSelectGrid.querySelectorAll('.diff-opt').forEach(o=>o.classList.remove('selected'));
-    timerGrid.querySelectorAll('.timer-opt').forEach(o=>o.classList.remove('selected'));
-    ['task-name-err','diff-err','track-select-err','task-timer-err'].forEach(id=>document.getElementById(id).style.display='none');
+    ['task-name-err','diff-err','track-select-err'].forEach(id=>document.getElementById(id).style.display='none');
   }
   function fillTaskModal(task, mode){
     resetTaskModal();
@@ -2508,7 +2487,6 @@
     selectedDiff=task.diffKey||null; selectedTrack=task.trackKey||null; selectedTimer=Number(task.timerMinutes)||null;
     if(selectedDiff) diffGrid.querySelector(`[data-key="${selectedDiff}"]`)?.classList.add('selected');
     if(selectedTrack) trackSelectGrid.querySelector(`[data-key="${selectedTrack}"]`)?.classList.add('selected');
-    if(selectedTimer) timerGrid.querySelector(`[data-minutes="${selectedTimer}"]`)?.classList.add('selected');
     document.querySelector('#modal-overlay h2').textContent = mode==='habit' ? 'إضافة عادة جديدة' : (mode==='editHabit' ? 'تعديل العادة' : (mode==='editTask' ? 'تعديل المهمة' : 'إدراج مهمة جديدة'));
     document.getElementById('confirm-task-btn').textContent = mode==='habit' || mode==='editHabit' ? 'حفظ العادة' : (mode==='editTask' ? 'حفظ التعديل' : 'إضافة إلى القائمة');
     document.getElementById('modal-overlay').classList.add('show');
@@ -2537,23 +2515,22 @@
     if(!name){document.getElementById('task-name-err').style.display='block';ok=false;}
     if(!selectedTrack){document.getElementById('track-select-err').style.display='block';ok=false;}
     if(!selectedDiff){document.getElementById('diff-err').style.display='block';ok=false;}
-    if(!selectedTimer){document.getElementById('task-timer-err').style.display='block';ok=false;}
     if(!ok) return;
     const diffObj=selectedDiff===SPECIAL.key?SPECIAL:DIFFS.find(d=>d.key===selectedDiff);
     const trackObj=TRACKS.find(t=>t.key===selectedTrack);
     if(taskModalMode==='daily'){
       if((state.pending||[]).length>=MAX_QUEUE) return;
       const now=Date.now();
-      state.pending.push({id:'t'+now+'_'+(taskCounter++),name,desc,xp:diffObj.xp,diffKey:diffObj.key,diffName:diffObj.name,trackKey:trackObj.key,trackName:trackObj.name,createdTs:now,startedTs:now,deadlineTs:now+selectedTimer*60000,timerMinutes:selectedTimer,subtasks});
+      state.pending.push({id:'t'+now+'_'+(taskCounter++),name,desc,xp:diffObj.xp,diffKey:diffObj.key,diffName:diffObj.name,trackKey:trackObj.key,trackName:trackObj.name,createdTs:now,startedTs:now,timerMinutes:null,subtasks});
     } else if(taskModalMode==='habit'){
       ensureHabits();
-      state.habits.push({id:'h'+Date.now()+'_'+(taskCounter++),name,desc,xp:diffObj.xp,diffKey:diffObj.key,diffName:diffObj.name,trackKey:trackObj.key,trackName:trackObj.name,timerMinutes:selectedTimer,subtasks,createdTs:Date.now()});
+      state.habits.push({id:'h'+Date.now()+'_'+(taskCounter++),name,desc,xp:diffObj.xp,diffKey:diffObj.key,diffName:diffObj.name,trackKey:trackObj.key,trackName:trackObj.name,timerMinutes:null,subtasks,createdTs:Date.now()});
     } else if(taskModalMode==='editHabit'){
       const h=state.habits.find(x=>x.id===editingHabitId);
       if(h){Object.assign(h,{name,desc,xp:diffObj.xp,diffKey:diffObj.key,diffName:diffObj.name,trackKey:trackObj.key,trackName:trackObj.name,timerMinutes:selectedTimer,subtasks});}
     } else if(taskModalMode==='editTask'){
       const t=state.pending.find(x=>x.id===editingTaskId);
-      if(t){Object.assign(t,{name,desc,xp:diffObj.xp,diffKey:diffObj.key,diffName:diffObj.name,trackKey:trackObj.key,trackName:trackObj.name,timerMinutes:selectedTimer,subtasks,startedTs:Date.now(),deadlineTs:Date.now()+selectedTimer*60000});}
+      if(t){Object.assign(t,{name,desc,xp:diffObj.xp,diffKey:diffObj.key,diffName:diffObj.name,trackKey:trackObj.key,trackName:trackObj.name,subtasks});}
     }
     await saveState(); render(); closeModal();
   });
