@@ -550,13 +550,18 @@
   }
   .skill-log-row .btn-reduce-hours:hover{background:rgba(158,177,170,0.1);}
 
-  /* white square step buttons (restore XP / restore coins big steps) */
+  /* restore XP / restore coins step buttons — Mint + Slate theme */
   .step-sq-white{
-    width:44px; height:44px; padding:0; flex-shrink:0; background:#d1d9d6fff; color:#151c23;
-    border:1px solid var(--line); border-radius:10px; font-family:'Cairo'; font-size:11px; font-weight:800;
-    cursor:pointer; display:flex; align-items:center; justify-content:center; transition:transform .12s, filter .12s;
+    width:44px; height:44px; padding:0; flex-shrink:0;
+    background:var(--panel-2); color:var(--olive-accent);
+    border:1px solid var(--silver-accent); border-radius:10px;
+    font-family:'Cairo'; font-size:11px; font-weight:800;
+    cursor:pointer; display:flex; align-items:center; justify-content:center;
+    transition:transform .12s, background .12s, border-color .12s, color .12s;
   }
-  .step-sq-white:hover{filter:brightness(0.94);}
+  .step-sq-white:hover{
+    background:var(--cyan-dim); color:var(--olive-accent); border-color:var(--olive-accent);
+  }
   .step-sq-white:active{transform:scale(0.96);}
 
   /* syndromes */
@@ -749,6 +754,80 @@
   .main-slot-complete:disabled{opacity:.4;cursor:not-allowed;}
   .main-slot-locked{font-size:9.5px;color:var(--olive-accent);text-align:center;width:100%;padding-top:7px;}
   @media(max-width:560px){.main-task-grid{grid-template-columns:1fr;}}
+
+/* Global Mint + Slate button system */
+button,
+.btn,
+.button,
+button[type="button"],
+button[type="submit"],
+button[type="reset"],
+[role="button"] {
+  background: #202f39 !important;
+  color: #8beccc !important;
+  border: 1px solid #46575e !important;
+  box-shadow: none !important;
+  background-image: none !important;
+}
+
+button:hover,
+.btn:hover,
+.button:hover,
+[role="button"]:hover {
+  background: #263a44 !important;
+  color: #a0f1d2 !important;
+  border-color: #5d777e !important;
+  box-shadow: 0 0 0 1px rgba(79,211,164,.18) !important;
+}
+
+button:focus-visible,
+.btn:focus-visible,
+.button:focus-visible,
+[role="button"]:focus-visible {
+  outline: 2px solid #4fd3a4 !important;
+  outline-offset: 2px;
+}
+
+button:active,
+.btn:active,
+.button:active,
+[role="button"]:active {
+  background: #1b2931 !important;
+  color: #79e7c0 !important;
+}
+
+button:disabled,
+.btn:disabled,
+.button:disabled,
+[role="button"][aria-disabled="true"] {
+  background: #18242b !important;
+  color: #60777d !important;
+  border-color: #33474f !important;
+  box-shadow: none !important;
+  opacity: .65;
+}
+
+/* Override legacy white/blue utility classes commonly used by controls */
+.bg-white, .bg-blue, .bg-primary, .bg-info,
+.text-blue, .text-primary, .text-info,
+.border-blue, .border-primary {
+  background-color: #202f39 !important;
+  color: #8beccc !important;
+  border-color: #46575e !important;
+}
+
+/* Number/choice controls */
+input[type="button"],
+input[type="submit"],
+input[type="reset"] {
+  background: #202f39 !important;
+  color: #8beccc !important;
+  border: 1px solid #46575e !important;
+  box-shadow: none !important;
+}
+
+/* Keep form fields themselves Slate rather than turning them into buttons */
+
 </style>
 </head>
 <body>
@@ -842,7 +921,7 @@
         <div class="radar-detail" id="radar-detail">مرّر على أي محور لمعرفة الإحصائية</div>
         <div class="figure-caption" id="figure-caption">جاهز لاستلام المهمة القادمة</div>
         <button class="btn penalty-btn" id="open-penalty-btn"><svg class="icon-inline" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l9.5 17H2.5L12 3z"/><path d="M12 10v4"/><circle cx="12" cy="17" r="0.9" fill="currentColor" stroke="none"/></svg> تسجيل عقوبة</button>
-        <button class="btn penalty-btn" id="open-restore-xp-btn" style="margin-top:8px; color:var(--olive-accent); border-color:rgba(72,205,162,0.35);"><svg class="icon-inline" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg> استرجاع XP</button>
+        <button class="btn penalty-btn" id="open-restore-xp-btn" style="margin-top:8px;  "><svg class="icon-inline" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg> استرجاع XP</button>
       </div>
     </div>
 
@@ -1052,7 +1131,7 @@
           <div class="wallet-label">عملة متاحة للصرف</div>
         </div>
       </div>
-      <button class="btn penalty-btn" id="open-restore-coins-btn" style="margin-top:8px; margin-bottom:14px; color:var(--silver-accent); border-color:rgba(158,177,170,0.35);"><svg class="icon-inline" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg> استرجاع عملات</button>
+      <button class="btn penalty-btn" id="open-restore-coins-btn" style="margin-top:8px; margin-bottom:14px;  "><svg class="icon-inline" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg> استرجاع عملات</button>
       <div class="store-grid" id="store-grid"></div>
     </div>
 
@@ -1127,7 +1206,7 @@
     <p class="sub">راح تنحذف كل بياناتك (الرتبة، الـXP، المهام) ولن تقدر تسترجعها بهذا الرمز مرة ثانية.</p>
     <div class="modal-actions">
       <button class="btn btn-ghost" id="cancel-delete-btn">تراجع</button>
-      <button class="btn btn-primary" id="confirm-delete-btn" style="background:linear-gradient(90deg,#9eb1aa,#668579); color:#27323a; box-shadow:0 8px 24px -12px rgba(158,177,170,0.28);">حذف نهائي</button>
+      <button class="btn btn-primary" id="confirm-delete-btn" style="  ">حذف نهائي</button>
     </div>
   </div>
 </div>
@@ -1158,7 +1237,7 @@
     </div>
     <div class="modal-actions">
       <button class="btn btn-ghost" id="cancel-penalty-btn">إلغاء</button>
-      <button class="btn btn-primary" id="confirm-penalty-btn" style="background:linear-gradient(90deg,#9eb1aa,#668579); color:#27323a; box-shadow:0 8px 24px -12px rgba(158,177,170,0.28);">تنفيذ الخصم</button>
+      <button class="btn btn-primary" id="confirm-penalty-btn" style="  ">تنفيذ الخصم</button>
     </div>
   </div>
 </div>
@@ -1194,15 +1273,15 @@
       <label>المقدار</label>
       <div style="display:flex; align-items:center; justify-content:center; gap:10px; margin-top:8px; flex-wrap:wrap;">
         <button class="step-sq-white" id="restore-coins-plus10" type="button">+10</button>
-        <button class="btn btn-ghost" id="restore-coins-plus" type="button" style="width:44px; height:44px; padding:0; font-size:20px; font-weight:800; color:var(--silver-accent); border-color:rgba(158,177,170,0.35);">+</button>
+        <button class="btn btn-ghost" id="restore-coins-plus" type="button" style="width:44px; height:44px; padding:0; font-size:20px; font-weight:800;  ">+</button>
         <div id="restore-coins-value" style="min-width:110px; text-align:center; font-family:'Cairo'; font-size:26px; font-weight:800; color:var(--silver-accent);">0</div>
-        <button class="btn btn-ghost" id="restore-coins-minus" type="button" style="width:44px; height:44px; padding:0; font-size:20px; font-weight:800; color:var(--silver-accent); border-color:rgba(158,177,170,0.35);">−</button>
+        <button class="btn btn-ghost" id="restore-coins-minus" type="button" style="width:44px; height:44px; padding:0; font-size:20px; font-weight:800;  ">−</button>
         <button class="step-sq-white" id="restore-coins-minus10" type="button">-10</button>
       </div>
     </div>
     <div class="modal-actions">
       <button class="btn btn-ghost" id="cancel-restore-coins-btn">إلغاء</button>
-      <button class="btn btn-primary" id="confirm-restore-coins-btn" style="background:linear-gradient(90deg,#9eb1aa,#668579); color:#27323a; box-shadow:0 8px 24px -12px rgba(158,177,170,0.28);">تأكيد الاسترجاع</button>
+      <button class="btn btn-primary" id="confirm-restore-coins-btn" style="  ">تأكيد الاسترجاع</button>
     </div>
   </div>
 </div>
@@ -1270,7 +1349,7 @@
     <p class="sub">راح يتصفّر عداد الأيام لمتلازمة <strong id="relapse-target-name"></strong> من جديد ويُخصم 500 XP من رصيدك. المهام اليومية تبقى محفوظة بس بدون تعليم إنجاز.</p>
     <div class="modal-actions">
       <button class="btn btn-ghost" id="cancel-relapse-btn">تراجع</button>
-      <button class="btn btn-primary" id="confirm-relapse-btn" style="background:linear-gradient(90deg,#9eb1aa,#668579); color:#27323a; box-shadow:0 8px 24px -12px rgba(158,177,170,0.28);">تأكيد الانتكاس</button>
+      <button class="btn btn-primary" id="confirm-relapse-btn" style="  ">تأكيد الانتكاس</button>
     </div>
   </div>
 </div>
@@ -2240,7 +2319,7 @@
       : `
       <div class="syn-actions">
         <button class="btn add-task-btn btn-sm" type="button" data-syn-add-task="${s.id}">+ مهمة يومية</button>
-        <button class="btn add-task-btn btn-sm" type="button" data-syn-renew="${s.id}" style="background:linear-gradient(90deg, #3f8f76, #3e5e52);">تجديد اليوم</button>
+        <button class="btn add-task-btn btn-sm" type="button" data-syn-renew="${s.id}" style="">تجديد اليوم</button>
       </div>`;
     const bottomRowHtml = s.completed
       ? `<div class="syn-bottom-row"><button class="btn syn-log-btn btn-sm" type="button" data-syn-log-toggle="${s.id}">السجل</button></div>`
@@ -2335,7 +2414,7 @@
       <div class="project-section-title">خط سير المشروع</div>
       <button class="project-add-mini" type="button" data-project-add-step="${p.id}">+ إضافة محطة جديدة</button>
       <div class="project-steps-list">${stepsHtml}</div>
-      <button class="btn add-task-btn" type="button" data-project-complete="${p.id}" style="margin-top:14px; background:linear-gradient(90deg, #3f8f76, #3e5e52);">
+      <button class="btn add-task-btn" type="button" data-project-complete="${p.id}" style="margin-top:14px; ">
         <svg class="icon-inline" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg>
         إتمام المشروع
       </button>
