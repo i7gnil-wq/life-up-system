@@ -840,6 +840,10 @@
           <div class="radar-tooltip" id="radar-tooltip"></div>
         </div>
         <div class="radar-detail" id="radar-detail">مرّر على أي محور لمعرفة الإحصائية</div>
+        <div style="width:100%;margin-top:12px;text-align:center;font-family:Cairo;">
+          <label for="radar-max-slider" style="font-size:11px;color:var(--muted);font-weight:700;">الحد الأقصى للشبكة: <span id="radar-max-value">50%</span></label>
+          <input id="radar-max-slider" type="range" min="20" max="100" step="5" value="50" style="width:100%;margin-top:8px;accent-color:var(--olive-accent);cursor:pointer;">
+        </div>
         <div class="figure-caption" id="figure-caption">جاهز لاستلام المهمة القادمة</div>
         <button class="btn penalty-btn" id="open-penalty-btn"><svg class="icon-inline" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l9.5 17H2.5L12 3z"/><path d="M12 10v4"/><circle cx="12" cy="17" r="0.9" fill="currentColor" stroke="none"/></svg> تسجيل عقوبة</button>
         <button class="btn penalty-btn" id="open-restore-xp-btn" style="margin-top:8px; color:var(--olive-accent); border-color:rgba(72,205,162,0.35);"><svg class="icon-inline" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg> استرجاع XP</button>
@@ -1404,6 +1408,7 @@
 
   const MAX_QUEUE = 3;
   let state = null; // {name, code, xp, tasks:[], pending:[]}
+  let radarMax = 50; // الحد الأقصى لشبكة الرسم العنكبية
   let selectedDiff = null;
   let selectedTrack = null;
   let selectedTimer = null;
@@ -1749,7 +1754,7 @@
     const angle=i=>(-Math.PI/2)+(i*2*Math.PI/N);
     const pt=(i,r)=>({x:cx+Math.cos(angle(i))*r,y:cy+Math.sin(angle(i))*r});
     const poly=(r)=>TRACKS.map((_,i)=>{const p=pt(i,r);return `${p.x},${p.y}`}).join(' ');
-    const dataPoly=TRACKS.map((_,i)=>{const p=pt(i,R*(scores[i]/50));return `${p.x},${p.y}`}).join(' ');
+    const dataPoly=TRACKS.map((_,i)=>{const p=pt(i,R*(scores[i]/radarMax));return `${p.x},${p.y}`}).join(' ');
 
     let html='';
     for(let level=1;level<=5;level++) html+=`<polygon class="radar-grid" points="${poly(R*level/5)}"/>`;
@@ -1766,7 +1771,7 @@
       html+=`</g>`;
     });
     html+=`<polygon class="radar-fill" points="${dataPoly}"/>`;
-    TRACKS.forEach((t,i)=>{const p=pt(i,R*(scores[i]/50)); html+=`<circle class="radar-point" data-radar-index="${i}" cx="${p.x}" cy="${p.y}" r="5"/>`;});
+    TRACKS.forEach((t,i)=>{const p=pt(i,R*(scores[i]/radarMax)); html+=`<circle class="radar-point" data-radar-index="${i}" cx="${p.x}" cy="${p.y}" r="5"/>`;});
     html+=`<circle cx="${cx}" cy="${cy}" r="4" fill="#48cda2" stroke="#1b222a" stroke-width="2"/>`;
     svg.innerHTML=html;
 
@@ -1796,6 +1801,16 @@
       el.addEventListener('click',e=>show(i,e));
       el.addEventListener('focus',e=>show(i,e));
       el.addEventListener('blur',hide);
+    });
+  }
+
+  const radarSlider=document.getElementById('radar-max-slider');
+  if(radarSlider){
+    radarSlider.addEventListener('input',()=>{
+      radarMax=Number(radarSlider.value);
+      const v=document.getElementById('radar-max-value');
+      if(v) v.textContent=radarMax+'%';
+      renderLifeRadar();
     });
   }
 
