@@ -404,29 +404,28 @@
   .queue-item .btn-complete:disabled{opacity:.4;cursor:not-allowed;}
 
   /* tracks */
-  .tracks-grid{display:grid; grid-template-columns:repeat(3, 1fr); gap:10px;}
-  @media (max-width:560px){ .tracks-grid{grid-template-columns:repeat(2, 1fr);} }
+  .tracks-grid{display:grid; grid-template-columns:repeat(2, minmax(0, 1fr)); gap:10px;}
+  @media (max-width:560px){ .tracks-grid{grid-template-columns:1fr;} }
   .track-card{
+    min-height:104px;
     background:rgba(255,255,255,0.03); border:1px solid var(--line); border-radius:12px;
-    padding:14px 8px; display:flex; flex-direction:column; align-items:center; gap:8px;
+    padding:7px; display:grid; grid-template-columns:88px minmax(0,1fr); align-items:stretch; gap:12px;
     cursor:pointer; transition:border-color .15s, background .15s, transform .12s;
-    text-align:center;
+    text-align:right; direction:ltr;
   }
   .track-card:hover{border-color:var(--olive-accent); background:var(--cyan-dim); transform:translateY(-2px);}
   .track-card .t-icon{
-    width:40px; height:40px; border-radius:11px; display:grid; place-items:center;
+    width:88px; height:90px; align-self:center; border-radius:11px; display:grid; place-items:center;
     background:linear-gradient(135deg, rgba(72,205,162,0.14), rgba(63,143,118,0.14));
     color:var(--olive-accent); border:1px solid var(--line);
   }
-  .track-card .t-icon svg{width:20px; height:20px;}
+  .track-card .t-icon svg{width:34px; height:34px;}
+  .track-card .track-info{direction:rtl; display:flex; flex-direction:column; justify-content:center; gap:8px; min-width:0;}
   .track-card .t-name{font-weight:700; font-size:12.5px;}
-  .track-card .t-count{font-size:10px; color:var(--muted); font-family:'Cairo';}
-  .track-progress{margin-top:8px;}
-  .track-progress-top{display:flex; align-items:center; justify-content:space-between; margin-bottom:4px;}
-  .track-progress-lbl{font-size:9px; color:var(--muted);}
-  .track-progress-pct{font-family:'Cairo'; font-weight:800; font-size:11px; color:var(--olive-accent);}
-  .track-bar{height:5px; border-radius:4px; background:rgba(255,255,255,0.07); overflow:hidden;}
-  .track-bar-fill{height:100%; border-radius:4px; background:linear-gradient(90deg, var(--olive-accent), var(--olive-deep)); transition:width .3s;}
+  .track-stats{display:flex; flex-direction:column; gap:5px;}
+  .track-stat{font-size:10.5px; color:var(--muted); line-height:1.5; white-space:nowrap;}
+  .track-stat .track-stat-num{font-family:'Cairo'; font-weight:900; font-size:13px; color:var(--olive-accent); margin-right:4px;}
+  .track-stat .track-stat-label{color:var(--muted);}
 
   /* quick nav: skills & syndromes — small side-by-side buttons, own box (not tracks-grid) */
   .quick-nav-grid{display:grid; grid-template-columns:1fr 1fr; gap:10px;}
@@ -1156,6 +1155,11 @@
       <div class="field-err" id="penalty-task-err">اكتب مهمة العقاب أو ألغِ خيار إضافة مهمة العقاب.</div>
     </div>
     <div class="field">
+      <label>تصنيف المسار <span style="color:var(--muted)">(اختياري)</span></label>
+      <div class="diff-grid" id="penalty-track-grid"></div>
+      <div class="penalty-task-hint">إذا اخترت مسارًا، يُخصم المبلغ من نقاط هذا المسار ومن النقاط العامة أيضًا. بدون تصنيف يكون الخصم من النقاط العامة فقط.</div>
+    </div>
+    <div class="field">
       <label>مقدار الخصم</label>
       <div class="diff-grid" id="penalty-grid"></div>
       <div class="field-err" id="penalty-err">اختر مقدار الخصم.</div>
@@ -1737,6 +1741,18 @@
     }).join('');
   }
 
+  function getTrackXP(trackKey){
+    if(!state) return 0;
+    const earned = (state.tasks || []).reduce((sum, task) => {
+      return sum + (task.trackKey === trackKey ? (Number(task.xp) || 0) : 0);
+    }, 0);
+    const deducted = (state.penalties || []).reduce((sum, penalty) => {
+      if(penalty.restored || penalty.trackKey !== trackKey) return sum;
+      return sum + (Number(penalty.trackDeductedAmount) || 0);
+    }, 0);
+    return Math.max(0, earned - deducted);
+  }
+
   function renderLifeRadar(){
     const svg=document.getElementById('life-radar-svg');
     const wrap=document.getElementById('life-radar');
@@ -1889,27 +1905,23 @@
     ensureStore();
     const tracksGrid = document.getElementById('tracks-grid');
     if(tracksGrid){
-      const trackCounts = {};
-      let grandTotal = 0;
-      TRACKS.forEach(t => {
-        const count = state.tasks.filter(tk => tk.trackKey === t.key).length;
-        trackCounts[t.key] = count;
-        grandTotal += count;
-      });
-      tracksGrid.innerHTML = TRACKS.map(t => {
-        const count = trackCounts[t.key];
-        const pct = grandTotal > 0 ? Math.round((count / grandTotal) * 100) : 0;
+      const trackData = TRACKS.map(t => ({
+        track:t,
+        count:state.tasks.filter(tk => tk.trackKey === t.key).length,
+        xp:getTrackXP(t.key)
+      }));
+      const maxTrackXP = Math.max(1, ...trackData.map(x => x.xp));
+      tracksGrid.innerHTML = trackData.map(({track:t,count,xp}) => {
+        const trackPoints = Number((xp / 1000).toFixed(2));
         return `
         <div class="track-card">
           <div class="t-icon">${t.icon}</div>
-          <div class="t-name">${t.name}</div>
-          <div class="t-count">${count} مهمة منجزة</div>
-          <div class="track-progress">
-            <div class="track-progress-top">
-              <span class="track-progress-lbl">من إجمالي المهام</span>
-              <span class="track-progress-pct">${pct}%</span>
+          <div class="track-info">
+            <div class="t-name">${t.name}</div>
+            <div class="track-stats">
+              <div class="track-stat"><span class="track-stat-label">المهمات المنجزة</span><span class="track-stat-num">${count}</span></div>
+              <div class="track-stat"><span class="track-stat-label">نقاط المسار</span><span class="track-stat-num">${trackPoints}</span></div>
             </div>
-            <div class="track-bar"><div class="track-bar-fill" style="width:${pct}%"></div></div>
           </div>
         </div>`;
       }).join('');
@@ -2667,7 +2679,11 @@
       if(!state.tasks) state.tasks = [];
       if(!state.penalties) state.penalties = [];
       ensureMainTasks();
-      state.penalties.forEach(p => { if(typeof p.restored !== 'boolean') p.restored = false; if(typeof p.deductedAmount !== 'number') p.deductedAmount = p.amount; });
+      state.penalties.forEach(p => {
+        if(typeof p.restored !== 'boolean') p.restored = false;
+        if(typeof p.deductedAmount !== 'number') p.deductedAmount = p.amount;
+        if(typeof p.trackDeductedAmount !== 'number') p.trackDeductedAmount = p.trackKey ? Math.min(p.deductedAmount, getTrackXP(p.trackKey)) : 0;
+      });
       ensureSkills();
       ensureSyndromes();
       ensureHabits();
@@ -2883,6 +2899,9 @@
       if(penalty && !penalty.restored){
         const restoreAmount = penalty.deductedAmount ?? penalty.amount;
         state.xp += restoreAmount;
+        // Track XP is derived from completed tasks minus active track penalties,
+        // so marking the penalty restored automatically returns its track points.
+        penalty.trackDeductedAmount = Number(penalty.trackDeductedAmount) || 0;
         penalty.restored = true;
         penalty.restoredTs = Date.now();
       }
@@ -3099,6 +3118,21 @@
   // ---------- penalty ----------
   const penaltyOverlay = document.getElementById('penalty-overlay');
   const penaltyGrid = document.getElementById('penalty-grid');
+  const penaltyTrackGrid = document.getElementById('penalty-track-grid');
+  let selectedPenaltyTrack = null;
+
+  function buildPenaltyTrackGrid(){
+    penaltyTrackGrid.innerHTML = `<div class="diff-opt" data-key=""><div class="name">النقاط العامة فقط</div></div>` + TRACKS.map(t => `
+      <div class="diff-opt" data-key="${t.key}"><div class="name">${t.name}</div></div>`).join('');
+    penaltyTrackGrid.querySelectorAll('.diff-opt').forEach(el => {
+      el.addEventListener('click', () => {
+        penaltyTrackGrid.querySelectorAll('.diff-opt').forEach(o => o.classList.remove('selected'));
+        el.classList.add('selected');
+        selectedPenaltyTrack = el.dataset.key || null;
+      });
+    });
+  }
+  buildPenaltyTrackGrid();
   function buildPenaltyGrid(){
     penaltyGrid.innerHTML = PENALTIES.map(p => `
       <div class="diff-opt" data-key="${p.key}">
@@ -3124,7 +3158,10 @@
     document.getElementById('penalty-reason-err').style.display='none';
     document.getElementById('penalty-task-err').style.display='none';
     selectedPenalty = null;
+    selectedPenaltyTrack = null;
     penaltyGrid.querySelectorAll('.diff-opt').forEach(o => o.classList.remove('selected'));
+    penaltyTrackGrid.querySelectorAll('.diff-opt').forEach(o => o.classList.remove('selected'));
+    penaltyTrackGrid.querySelector('[data-key=""]')?.classList.add('selected');
     document.getElementById('penalty-err').style.display='none';
     penaltyOverlay.classList.add('show');
   }
@@ -3158,9 +3195,10 @@
     if(!ok) return;
     const pObj = PENALTIES.find(p => p.key === selectedPenalty);
     const deductedAmount = Math.min(state.xp, pObj.amount);
+    const trackDeductedAmount = selectedPenaltyTrack ? Math.min(getTrackXP(selectedPenaltyTrack), deductedAmount) : 0;
     const penaltyId = 'pen' + Date.now() + '_' + (taskCounter++);
     if(!state.penalties) state.penalties = [];
-    const penalty = { id:penaltyId, name:pObj.name, amount:pObj.amount, deductedAmount, reason, ts:Date.now(), restored:false };
+    const penalty = { id:penaltyId, name:pObj.name, amount:pObj.amount, deductedAmount, trackKey:selectedPenaltyTrack || '', trackName:TRACKS.find(t=>t.key===selectedPenaltyTrack)?.name || '', trackDeductedAmount, reason, ts:Date.now(), restored:false };
     state.penalties.push(penalty);
     state.xp = Math.max(0, state.xp - deductedAmount);
 
@@ -3169,7 +3207,7 @@
       state.pending.push({
         id:'t' + Date.now() + '_' + (taskCounter++),
         name:penaltyTaskName, desc:'مهمة عقاب مرتبطة بعقوبة: ' + pObj.name,
-        xp:0, diffKey:'penalty', diffName:'مهمة عقاب', trackKey:'', trackName:'',
+        xp:0, diffKey:'penalty', diffName:'مهمة عقاب', trackKey:selectedPenaltyTrack || '', trackName:TRACKS.find(t=>t.key===selectedPenaltyTrack)?.name || '',
         createdTs:Date.now(), subtasks:[], penaltyTask:true, penaltyId:penaltyId
       });
     }
