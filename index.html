@@ -2960,7 +2960,7 @@
     const subtasks=['subtask-1','subtask-2','subtask-3'].map(id=>document.getElementById(id).value.trim()).filter(Boolean).map(text=>({id:'st'+Date.now()+'_'+(taskCounter++),text,done:false}));
     let ok=true;
     if(!name){document.getElementById('task-name-err').style.display='block';ok=false;}
-    if(taskModalMode!=='mainTemplate'){
+    if(taskModalMode!=='mainTemplate' && taskModalMode!=='editMainTask'){
       if(!selectedTrack){document.getElementById('track-select-err').style.display='block';ok=false;}
       if(!selectedDiff){document.getElementById('diff-err').style.display='block';ok=false;}
     }
