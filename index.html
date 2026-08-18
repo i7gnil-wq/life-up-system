@@ -752,7 +752,9 @@
   .main-slot-subtask input:checked::after{content:"✓";position:absolute;inset:0;display:grid;place-items:center;color:#30433f;font-size:11px;font-weight:900;}
   .main-slot-subtask.done span{text-decoration:line-through;opacity:.55;}
   .main-slot-progress{font-size:9.5px;color:var(--muted);margin-top:3px;}
-  .main-slot-actions{margin-top:auto;display:flex;justify-content:flex-end;width:100%;padding-top:6px;}
+  .main-slot-actions{margin-top:auto;display:flex;align-items:center;justify-content:flex-end;gap:6px;width:100%;padding-top:6px;}
+  .main-slot-edit{padding:7px 10px!important;font-size:10.5px!important;background:rgba(255,255,255,.04);border:1px solid var(--line);color:var(--muted);border-radius:8px;}
+  .main-slot-edit:hover{color:var(--text);border-color:var(--olive-accent);background:var(--cyan-dim);}
   .main-slot-complete{padding:7px 12px!important;font-size:10.5px!important;}
   .main-slot-complete:disabled{opacity:.4;cursor:not-allowed;}
   .main-slot-locked{font-size:9.5px;color:var(--olive-accent);text-align:center;width:100%;padding-top:7px;}
@@ -1761,9 +1763,10 @@
       const completeDisabled=subs.length>0 && doneCount<subs.length;
       const subHtml=subs.length ? `<div class="main-slot-progress">${doneCount}/${subs.length} مهام فرعية</div><div class="main-slot-subtasks">${subs.map((st,i)=>`
         <label class="main-slot-subtask ${st.done?'done':''}"><input type="checkbox" data-main-subtask="${task.id}" data-main-subindex="${i}" ${st.done?'checked':''} ${task.done?'disabled':''}><span>${escapeHtml(st.text)}</span></label>`).join('')}</div>` : '';
+      const editButton=`<button type="button" class="btn main-slot-edit" data-main-edit="${task.id}" ${task.done?'disabled title="المهمة مكتملة ومغلقة حتى اليوم التالي"':''}>تعديل</button>`;
       const action=task.done
         ? `<div class="main-slot-locked">✓ مكتملة — مغلقة حتى اليوم التالي</div>`
-        : `<button type="button" class="btn btn-complete main-slot-complete" data-main-complete="${task.id}" ${completeDisabled?'disabled title="أكمل المهام الفرعية أولًا"':''}>إنجاز</button>`;
+        : `${editButton}<button type="button" class="btn btn-complete main-slot-complete" data-main-complete="${task.id}" ${completeDisabled?'disabled title="أكمل المهام الفرعية أولًا"':''}>إنجاز</button>`;
       return `<div class="main-task-slot filled ${task.done?'completed':''}" data-main-slot="${key}">
         <div class="main-slot-head"><div class="main-slot-name">${escapeHtml(task.name)}</div><div class="main-slot-xp">750 XP</div></div>
         ${task.desc?`<div class="main-slot-desc">${escapeHtml(task.desc)}</div>`:''}
@@ -2875,6 +2878,28 @@
     if(trackField) trackField.style.display='none';
     document.getElementById('modal-overlay').classList.add('show');
   }
+  function openMainTaskEdit(taskId){
+    ensureMainTasks();
+    const task=state.mainTasks.find(t=>t.id===taskId);
+    if(!task || task.done) return;
+    resetTaskModal();
+    taskModalMode='editMainTask';
+    editingTaskId=taskId;
+    selectedMainSlot=task.slotKey;
+    document.getElementById('task-name').value=task.name||'';
+    document.getElementById('task-desc').value=task.desc||'';
+    const subs=Array.isArray(task.subtasks)?task.subtasks:[];
+    subs.slice(0,3).forEach((st,i)=>{document.getElementById('subtask-'+(i+1)).value=st.text||'';});
+    if(subs.length>1) document.getElementById('subtask-extra-fields').style.display='block';
+    if(subs.length>2){document.getElementById('subtask-3').style.display='block';document.getElementById('add-subtask-btn').style.display='none';}
+    document.querySelector('#modal-overlay h2').textContent='تعديل المهمة الرئيسية — '+(MAIN_TASKS[task.slotKey]?.label||'');
+    document.getElementById('confirm-task-btn').textContent='حفظ التعديل';
+    const diffField=diffGrid.closest('.field');
+    const trackField=trackSelectGrid.closest('.field');
+    if(diffField) diffField.style.display='none';
+    if(trackField) trackField.style.display='none';
+    document.getElementById('modal-overlay').classList.add('show');
+  }
   function closeModal(){ document.getElementById('modal-overlay').classList.remove('show'); }
 
   document.getElementById('add-subtask-btn').addEventListener('click', () => {
@@ -2886,6 +2911,12 @@
   const openModalBtnEl=document.getElementById('open-modal-btn');
   if(openModalBtnEl) openModalBtnEl.addEventListener('click',()=>openModal());
   document.getElementById('main-task-slots').addEventListener('click', async (e)=>{
+    const edit=e.target.closest('[data-main-edit]');
+    if(edit){
+      e.preventDefault(); e.stopPropagation();
+      openMainTaskEdit(edit.dataset.mainEdit);
+      return;
+    }
     const sub=e.target.closest('[data-main-subtask]');
     if(sub){
       e.preventDefault(); e.stopPropagation();
@@ -2945,6 +2976,20 @@
         trackKey:info.track, trackName:TRACKS.find(t=>t.key===info.track)?.name||'',
         mainTask:true, dayKey:state.mainTasksDay, createdTs:now, done:false,
         subtasks
+      });
+      await saveState(); render(); closeModal(); return;
+    }
+    if(taskModalMode==='editMainTask'){
+      ensureMainTasks();
+      const task=state.mainTasks.find(t=>t.id===editingTaskId);
+      if(!task || task.done) return;
+      const oldSubs=Array.isArray(task.subtasks)?task.subtasks:[];
+      const newTexts=[...document.querySelectorAll('#subtask-1,#subtask-2,#subtask-3')].map(el=>el.value.trim()).filter(Boolean);
+      task.name=name;
+      task.desc=desc;
+      task.subtasks=newTexts.map((text,i)=>{
+        const old=oldSubs[i];
+        return {id:old?.id||('st'+Date.now()+'_'+(taskCounter++)),text,done:!!old?.done};
       });
       await saveState(); render(); closeModal(); return;
     }
