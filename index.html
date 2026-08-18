@@ -370,6 +370,7 @@
   .diff-opt.special.selected{border-color:var(--silver-accent); background:rgba(158,177,170,0.16); box-shadow:0 0 20px -6px rgba(158,177,170,0.5);}
   #penalty-grid .diff-opt .xp{color:var(--silver-accent);}
   #penalty-grid .diff-opt.selected{border-color:var(--silver-accent); background:rgba(158,177,170,0.12); box-shadow:0 0 20px -6px rgba(158,177,170,0.5);}
+  #penalty-track-grid .diff-opt.selected{border-color:var(--silver-accent); background:rgba(158,177,170,0.12); box-shadow:0 0 20px -6px rgba(158,177,170,0.5);}
   .penalty-task-field{background:rgba(158,177,170,0.035);border:1px dashed rgba(158,177,170,0.28);border-radius:11px;padding:10px 12px;margin-bottom:14px;}
   .penalty-task-toggle{display:block;font-size:12.5px;font-weight:700;margin-bottom:10px;}
   .penalty-task-toggle input{accent-color:var(--silver-accent);width:16px;height:16px;}
@@ -1155,9 +1156,10 @@
       <div class="field-err" id="penalty-task-err">اكتب مهمة العقاب أو ألغِ خيار إضافة مهمة العقاب.</div>
     </div>
     <div class="field">
-      <label>تصنيف المسار <span style="color:var(--muted)">(اختياري)</span></label>
+      <label>تصنيف المسار <span style="color:var(--silver-accent)">(إجباري)</span></label>
       <div class="diff-grid" id="penalty-track-grid"></div>
-      <div class="penalty-task-hint">إذا اخترت مسارًا، يُخصم المبلغ من نقاط هذا المسار ومن النقاط العامة أيضًا. بدون تصنيف يكون الخصم من النقاط العامة فقط.</div>
+      <div class="field-err" id="penalty-track-err">اختر مسار العقوبة.</div>
+      <div class="penalty-task-hint">يُخصم المبلغ من النقاط العامة ومن نقاط المسار المصنّف.</div>
     </div>
     <div class="field">
       <label>مقدار الخصم</label>
@@ -3122,13 +3124,14 @@
   let selectedPenaltyTrack = null;
 
   function buildPenaltyTrackGrid(){
-    penaltyTrackGrid.innerHTML = `<div class="diff-opt" data-key=""><div class="name">النقاط العامة فقط</div></div>` + TRACKS.map(t => `
+    penaltyTrackGrid.innerHTML = TRACKS.map(t => `
       <div class="diff-opt" data-key="${t.key}"><div class="name">${t.name}</div></div>`).join('');
     penaltyTrackGrid.querySelectorAll('.diff-opt').forEach(el => {
       el.addEventListener('click', () => {
         penaltyTrackGrid.querySelectorAll('.diff-opt').forEach(o => o.classList.remove('selected'));
         el.classList.add('selected');
         selectedPenaltyTrack = el.dataset.key || null;
+        document.getElementById('penalty-track-err').style.display='none';
       });
     });
   }
@@ -3161,7 +3164,7 @@
     selectedPenaltyTrack = null;
     penaltyGrid.querySelectorAll('.diff-opt').forEach(o => o.classList.remove('selected'));
     penaltyTrackGrid.querySelectorAll('.diff-opt').forEach(o => o.classList.remove('selected'));
-    penaltyTrackGrid.querySelector('[data-key=""]')?.classList.add('selected');
+    document.getElementById('penalty-track-err').style.display='none';
     document.getElementById('penalty-err').style.display='none';
     penaltyOverlay.classList.add('show');
   }
@@ -3180,7 +3183,10 @@
 
 
   document.getElementById('confirm-penalty-btn').addEventListener('click', async () => {
-    if(!selectedPenalty){ document.getElementById('penalty-err').style.display='block'; return; }
+    let selectionOk = true;
+    if(!selectedPenaltyTrack){ document.getElementById('penalty-track-err').style.display='block'; selectionOk=false; }
+    if(!selectedPenalty){ document.getElementById('penalty-err').style.display='block'; selectionOk=false; }
+    if(!selectionOk) return;
     const penaltyTaskEnabled = document.getElementById('penalty-task-enabled').checked;
     const penaltyTaskName = document.getElementById('penalty-task-input').value.trim();
     const reason = document.getElementById('penalty-reason').value.trim();
