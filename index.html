@@ -410,6 +410,8 @@
   .radar-custom-modal .modal{max-width:340px;}
   .radar-custom-modal .field input{width:100%;box-sizing:border-box;background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:9px;padding:10px;color:var(--text);font-family:'Cairo';outline:none;}
   .radar-custom-modal .field input:focus{border-color:var(--olive-accent);box-shadow:0 0 0 3px var(--cyan-dim);}
+  .radar-custom-error{color:var(--olive-accent);font-size:10.5px;line-height:1.55;margin-top:7px;display:none;font-family:'Cairo',sans-serif;font-weight:700;}
+  .radar-custom-error.show{display:block;}
   /* tracks */
   .tracks-grid{display:grid; grid-template-columns:repeat(2, minmax(0, 1fr)); gap:10px;}
   @media (max-width:560px){ .tracks-grid{grid-template-columns:1fr;} }
@@ -849,7 +851,10 @@
         <div style="width:100%;margin-top:12px;text-align:center;font-family:Cairo;">
           <label for="radar-max-slider" style="font-size:11px;color:var(--muted);font-weight:700;">الحد الأقصى للشبكة: <span id="radar-max-value">50%</span></label>
           <input id="radar-max-slider" type="range" min="12.5" max="100" step="12.5" value="50" style="width:100%;margin-top:8px;accent-color:var(--olive-accent);cursor:pointer;">
-          <div class="radar-custom-row"><button type="button" class="radar-custom-link" id="custom-radar-max-btn">تخصيص</button></div>
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:4px;font-family:Cairo;direction:ltr;">
+            <div style="text-align:left;font-size:9.5px;color:var(--muted);direction:rtl;">لا يمكن تقليل نطاق الشبكة أقل من أعلى النِسب المئوية عليها</div>
+            <div class="radar-custom-row"><button type="button" class="radar-custom-link" id="custom-radar-max-btn">تخصيص</button></div>
+          </div>
         </div>
         <div class="figure-caption" id="figure-caption">جاهز لاستلام المهمة القادمة</div>
         <button class="btn penalty-btn" id="open-penalty-btn"><svg class="icon-inline" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l9.5 17H2.5L12 3z"/><path d="M12 10v4"/><circle cx="12" cy="17" r="0.9" fill="currentColor" stroke="none"/></svg> تسجيل عقوبة</button>
@@ -1139,6 +1144,7 @@
     <div class="field">
       <label for="custom-radar-max-input">الحد الأقصى (%)</label>
       <input id="custom-radar-max-input" type="number" min="0.1" step="any" inputmode="decimal" placeholder="مثال: 75">
+      <div class="radar-custom-error" id="custom-radar-error">الحد الأقصى قليل جدًا، وازن الإحصائية ثم قلل الحد.</div>
     </div>
     <div class="modal-actions">
       <button class="btn btn-ghost" id="cancel-custom-radar-btn" type="button">تراجع</button>
@@ -1787,11 +1793,10 @@
 
     const W=520,H=430,cx=260,cy=205,R=135,N=TRACKS.length;
     const counts=TRACKS.map(t=>state.tasks.filter(x=>x.trackKey===t.key).length);
-    // Percentage = this field's share of all completed tasks.
-    // This avoids the old max-normalization where several fields could all become 100%.
+    // Percentages are ALWAYS calculated from the same underlying task totals.
+    // Changing the radar maximum must never alter, clamp, or otherwise modify them.
     const totalCount=counts.reduce((sum,c)=>sum+c,0);
-    // Radar scale: the outer edge follows the user-selected maximum.
-    const scores=counts.map(c=>totalCount ? Math.min(radarMax, Math.round((c/totalCount)*100)) : 0);
+    const scores=counts.map(c=>totalCount ? Math.round((c/totalCount)*100) : 0);
     const angle=i=>(-Math.PI/2)+(i*2*Math.PI/N);
     const pt=(i,r)=>({x:cx+Math.cos(angle(i))*r,y:cy+Math.sin(angle(i))*r});
     const poly=(r)=>TRACKS.map((_,i)=>{const p=pt(i,r);return `${p.x},${p.y}`}).join(' ');
@@ -1847,38 +1852,57 @@
 
   const radarSlider=document.getElementById('radar-max-slider');
   const customRadarMaxBtn=document.getElementById('custom-radar-max-btn');
-  function updateRadarMax(value){
+  function getRadarScores(){
+    if(!state) return [];
+    const counts=TRACKS.map(t=>state.tasks.filter(x=>x.trackKey===t.key).length);
+    const total=counts.reduce((sum,c)=>sum+c,0);
+    return counts.map(c=>total ? Math.round((c/total)*100) : 0);
+  }
+  function getRadarMaxRequired(){
+    return Math.max(0,...getRadarScores());
+  }
+  function updateRadarMax(value, options={}){
     const parsed=Number(value);
-    if(!Number.isFinite(parsed) || parsed <= 0){
-      alert('أدخل رقمًا أكبر من 0.');
-      return;
+    const errorEl=document.getElementById('custom-radar-error');
+    if(!Number.isFinite(parsed) || parsed <= 0) return false;
+    const required=getRadarMaxRequired();
+    // Never apply a maximum below any existing track percentage.
+    if(parsed < required){
+      if(options.showError && errorEl){
+        errorEl.textContent='الحد الأقصى قليل جدًا، وازن الإحصائية ثم قلل.';
+        errorEl.classList.add('show');
+      }
+      return false;
     }
+    if(errorEl) errorEl.classList.remove('show');
     radarMax=parsed;
     const v=document.getElementById('radar-max-value');
     if(v) v.textContent=radarMax+'%';
-    if(radarSlider){
-      if(radarMax >= 12.5 && radarMax <= 100){
-        radarSlider.value=radarMax;
-      } else {
-        radarSlider.value=50;
-      }
-    }
+    if(radarSlider && radarMax >= 12.5 && radarMax <= 100) radarSlider.value=radarMax;
     renderLifeRadar();
+    return true;
   }
   if(radarSlider){
     radarSlider.addEventListener('input',()=>{
-      updateRadarMax(radarSlider.value);
+      // Slider changes are also validated; invalid values simply do not apply.
+      updateRadarMax(radarSlider.value, {showError:false});
+      radarSlider.value=radarMax;
     });
   }
   const customRadarOverlay=document.getElementById('custom-radar-overlay');
   const customRadarInput=document.getElementById('custom-radar-max-input');
   const cancelCustomRadarBtn=document.getElementById('cancel-custom-radar-btn');
   const applyCustomRadarBtn=document.getElementById('apply-custom-radar-btn');
-  function openCustomRadar(){ if(!customRadarOverlay) return; if(customRadarInput) customRadarInput.value=radarMax; customRadarOverlay.classList.add('show'); setTimeout(()=>customRadarInput&&customRadarInput.focus(),50); }
+  function openCustomRadar(){ if(!customRadarOverlay) return; if(customRadarInput) customRadarInput.value=radarMax; const err=document.getElementById('custom-radar-error'); if(err) err.classList.remove('show'); customRadarOverlay.classList.add('show'); setTimeout(()=>customRadarInput&&customRadarInput.focus(),50); }
   function closeCustomRadar(){ if(customRadarOverlay) customRadarOverlay.classList.remove('show'); }
   if(customRadarMaxBtn) customRadarMaxBtn.addEventListener('click',openCustomRadar);
   if(cancelCustomRadarBtn) cancelCustomRadarBtn.addEventListener('click',closeCustomRadar);
-  if(applyCustomRadarBtn) applyCustomRadarBtn.addEventListener('click',()=>{ const value=customRadarInput.value.trim(); const parsed=Number(value); if(!Number.isFinite(parsed)||parsed<=0){customRadarInput.focus();return;} updateRadarMax(parsed); closeCustomRadar(); });
+  if(applyCustomRadarBtn) applyCustomRadarBtn.addEventListener('click',()=>{
+    const value=customRadarInput.value.trim();
+    const parsed=Number(value);
+    if(!Number.isFinite(parsed)||parsed<=0){customRadarInput.focus();return;}
+    if(updateRadarMax(parsed,{showError:true})) closeCustomRadar();
+  });
   if(customRadarInput) customRadarInput.addEventListener('keydown',e=>{if(e.key==='Enter') applyCustomRadarBtn.click(); if(e.key==='Escape') closeCustomRadar();});
 
   function render(){
