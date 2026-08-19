@@ -158,10 +158,6 @@
   .logout-btn.danger-link{color:var(--silver-accent);}
 
   #app{position:relative;}
-  .timer-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;}
-  .timer-opt{background:rgba(255,255,255,0.03);border:1px solid var(--line);border-radius:9px;padding:9px 4px;text-align:center;color:var(--muted);font-family:'Cairo';font-size:11px;font-weight:800;cursor:pointer;}
-  .timer-opt.selected{border-color:var(--olive-accent);color:var(--olive-accent);background:rgba(72,205,162,0.1);box-shadow:0 0 0 2px rgba(72,205,162,0.08);}
-  .task-timer{font-family:'Cairo';font-size:10px;color:var(--silver-accent);margin-top:4px;}
   .habit-item{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 4px;border-bottom:1px solid var(--line);}
   .habit-item:last-child{border-bottom:none;}
   .habit-item .info{min-width:0;}
@@ -172,7 +168,6 @@
   .btn-edit{background:rgba(255,255,255,0.04);border:1px solid var(--line);color:var(--text);}
   .btn-delete{background:linear-gradient(90deg,#c4cfcb,#9eb1aa);border:1px solid #9eb1aa;color:#0c131b;}
   .btn-renew{background:linear-gradient(90deg,#c4cfcb,#9eb1aa);border:1px solid #9eb1aa;color:#0c131b;}
-  .task-timer-expired{color:var(--danger);}
 
   .grid{
     display:grid;
@@ -1448,7 +1443,6 @@
   let radarMax = 50; // الحد الأقصى لشبكة الرسم العنكبية
   let selectedDiff = null;
   let selectedTrack = null;
-  let selectedTimer = null;
   let selectedPenalty = null;
   let taskModalMode = 'daily';
   let editingTaskId = null;
@@ -1501,7 +1495,6 @@
 
   // ---------- coin wallet / luxury store ----------
   const COIN_PER_XP = 100; // 100 XP = 1 coin, XP balance itself is never reduced
-  const STORE_COOLDOWN_MS = 40000; // 40s between purchases
   const STORE_ITEMS = [
     { key:'ent15', name:'15 دقيقة ترفيه', cost:15 },
     { key:'ent30', name:'30 دقيقة ترفيه', cost:30 },
@@ -1511,7 +1504,6 @@
   function ensureStore(){
     if(typeof state.coinsSpent !== 'number') state.coinsSpent = 0;
     if(!state.purchases) state.purchases = [];
-    if(typeof state.lastPurchaseTs !== 'number') state.lastPurchaseTs = 0;
     if(typeof state.coinsAdjustment !== 'number') state.coinsAdjustment = 0; // manual restore/removal, independent of XP
   }
   function totalCoins(xp){
@@ -1519,11 +1511,6 @@
   }
   function availableCoins(){
     return Math.max(0, totalCoins(state.xp) - state.coinsSpent + (state.coinsAdjustment || 0));
-  }
-  function storeCooldownRemaining(){
-    if(!state.lastPurchaseTs) return 0;
-    const diff = Date.now() - state.lastPurchaseTs;
-    return diff >= STORE_COOLDOWN_MS ? 0 : Math.ceil((STORE_COOLDOWN_MS - diff) / 1000);
   }
   function coinIconSvg(){
     return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9 12h6M12 9v6"/></svg>';
@@ -1546,34 +1533,6 @@
   function ensureHabits(){
     if(!Array.isArray(state.habits)) state.habits = [];
     state.habits.forEach(h => { if(!Array.isArray(h.subtasks)) h.subtasks=[]; });
-  }
-  function timerLabel(min){ if(!min) return 'بدون مؤقت'; return Number(min)===60 ? '1 ساعة' : `${min} دقيقة`; }
-  function freshTaskFromTemplate(t){
-    const now = Date.now();
-    const mins = Number(t.timerMinutes) || 5;
-    return { ...JSON.parse(JSON.stringify(t)), id:'t'+now+'_'+(taskCounter++), createdTs:now, startedTs:now, deadlineTs:now + mins*60000, subtasks:(t.subtasks||[]).map(st => ({...st, id:'st'+now+'_'+(taskCounter++), done:false})) };
-  }
-  function registerShortfallPenalty(task){
-    if(task.shortfallPenaltyApplied) return;
-    if(!state.penalties) state.penalties=[];
-    // عند انتهاء الوقت، يُخصم من XP نفس المقدار الذي كانت المهمة ستضيفه عند إنجازها.
-    const amount=Math.max(0, Number(task.xp)||0);
-    const deductedAmount=Math.min(state.xp, amount);
-    state.xp=Math.max(0,state.xp-deductedAmount);
-    state.penalties.push({id:'pen'+Date.now()+'_'+(taskCounter++),name:'تقصير',amount,deductedAmount,reason:`انتهاء مؤقت المهمة: ${task.name}`,ts:Date.now(),restored:false,shortfall:true,taskId:task.id});
-    task.shortfallPenaltyApplied=true;
-  }
-  async function expireTimedTask(task){
-    registerShortfallPenalty(task);
-    state.pending = (state.pending||[]).filter(t=>t.id!==task.id);
-    await saveState();
-    render();
-  }
-  async function checkTaskTimers(){
-    if(!state || !Array.isArray(state.pending)) return;
-    const now=Date.now();
-    const expired=state.pending.filter(t=>t.deadlineTs && now>=t.deadlineTs);
-    for(const task of expired) await expireTimedTask(task);
   }
   function ensureTaskLog(){
     if(!Array.isArray(state.taskLog)) state.taskLog = [];
@@ -2064,7 +2023,6 @@
               <div class="info">
                 <div class="t">${escapeHtml(t.name)}${t.penaltyTask ? ' <span style="color:var(--silver-accent);font-size:10px;font-family:Cairo;">· مهمة عقاب</span>' : ''}</div>
                 <div class="d">${t.penaltyTask ? 'إتمامها يسترجع خصم العقوبة' : (t.trackName ? escapeHtml(t.trackName) + ' · ' : '') + escapeHtml(t.desc || t.diffName)}</div>
-                ${t.deadlineTs ? `<div class="task-timer" data-timer-id="${t.id}">⏱ ${timerLabel(t.timerMinutes)} · <span>${formatRemaining(t.deadlineTs)}</span></div>` : ''}
                 ${hasSubtasks ? `<div class="queue-progress">${doneCount}/${sts.length} مهام فرعية</div><div class="queue-subtasks">${sts.map((st,i) => `<label class="queue-subtask ${st.done ? 'done' : ''}"><input type="checkbox" data-subtask="${t.id}" data-subindex="${i}" ${st.done ? 'checked' : ''}><span>${escapeHtml(st.text)}</span></label>`).join('')}</div>` : ''}
               </div>
             </div>
@@ -2116,13 +2074,6 @@
         </div>`;
       }).join('');
     }
-  }
-
-  function formatRemaining(deadlineTs){
-    const ms=Math.max(0, deadlineTs-Date.now());
-    const total=Math.ceil(ms/1000);
-    const m=Math.floor(total/60), sec=total%60;
-    return `${m}:${String(sec).padStart(2,'0')}`;
   }
 
   function escapeHtml(s){
@@ -2649,12 +2600,10 @@
   taskHistoryOverlay.addEventListener('click', (e) => { if(e.target === taskHistoryOverlay) taskHistoryOverlay.classList.remove('show'); });
 
   // ---------- luxury store ----------
-  function storeItemHtml(item, coins, cooldown){
+  function storeItemHtml(item, coins){
     const affordable = coins >= item.cost;
-    const disabled = !affordable || cooldown > 0;
-    let label = 'شراء';
-    if(cooldown > 0) label = `انتظر ${cooldown} ث`;
-    else if(!affordable) label = 'رصيد غير كافي';
+    const disabled = !affordable;
+    let label = affordable ? 'شراء' : 'رصيد غير كافي';
     return `
     <div class="store-item">
       <div class="si-name">${escapeHtml(item.name)}</div>
@@ -2676,8 +2625,7 @@
     if(!grid || !state) return;
     ensureStore();
     const coins = availableCoins();
-    const cooldown = storeCooldownRemaining();
-    grid.innerHTML = STORE_ITEMS.map(it => storeItemHtml(it, coins, cooldown)).join('');
+    grid.innerHTML = STORE_ITEMS.map(it => storeItemHtml(it, coins)).join('');
     if(histEl){
       const recent = [...state.purchases].sort((a,b) => b.ts - a.ts).slice(0, 20);
       histEl.innerHTML = !recent.length
@@ -2692,22 +2640,11 @@
     if(!item) return;
     ensureStore();
     if(availableCoins() < item.cost) return;
-    if(storeCooldownRemaining() > 0) return;
     state.coinsSpent += item.cost;
-    state.lastPurchaseTs = Date.now();
     state.purchases.push({ id: 'pur' + Date.now(), name: item.name, cost: item.cost, ts: Date.now() });
     await saveState();
     render();
   });
-  // tick the cooldown countdown every second while the store view is visible
-  setInterval(() => {
-    if(state){ checkTaskTimers();
-      document.querySelectorAll('[data-timer-id]').forEach(el=>{ const t=state.pending?.find(x=>x.id===el.dataset.timerId); if(t && t.deadlineTs){ const span=el.querySelector('span'); if(span) span.textContent=formatRemaining(t.deadlineTs); if(Date.now()>=t.deadlineTs) el.classList.add('task-timer-expired'); }});
-    }
-    const sv = document.getElementById('store-view');
-    if(sv && sv.style.display !== 'none' && state) renderStore();
-  }, 1000);
-
   // ---------- login flow ----------
   const loginScreen = document.getElementById('login-screen');
   const app = document.getElementById('app');
@@ -2733,7 +2670,7 @@
     err.style.display='none';
 
     const newCode = code();
-    state = { name, code:newCode, xp:0, tasks:[], pending:[], mainTasks:[], mainTasksDay:mainDayKey(), penalties:[], skills:[], syndromes:[], achievements:[], habits:[], coinsSpent:0, purchases:[], lastPurchaseTs:0 };
+    state = { name, code:newCode, xp:0, tasks:[], pending:[], mainTasks:[], mainTasksDay:mainDayKey(), penalties:[], skills:[], syndromes:[], achievements:[], habits:[], coinsSpent:0, purchases:[] };
     ensureSkills();
     ensureSyndromes();
     await saveState();
@@ -2833,7 +2770,7 @@
     document.getElementById('add-subtask-btn').style.display='block';
     document.getElementById('add-subtask-btn').textContent='+ إضافة مهمة فرعية';
     document.getElementById('subtasks-count-label').textContent='0 / 3';
-    selectedDiff=null; selectedTrack=null; selectedTimer=null; selectedMainSlot=null;
+    selectedDiff=null; selectedTrack=null; selectedMainSlot=null;
     diffGrid.querySelectorAll('.diff-opt').forEach(o=>o.classList.remove('selected'));
     trackSelectGrid.querySelectorAll('.diff-opt').forEach(o=>o.classList.remove('selected'));
     const diffField=diffGrid.closest('.field');
@@ -2850,7 +2787,7 @@
     (task.subtasks||[]).slice(0,3).forEach((st,i)=>{document.getElementById('subtask-'+(i+1)).value=st.text||'';});
     if((task.subtasks||[]).length>1){document.getElementById('subtask-extra-fields').style.display='block';}
     if((task.subtasks||[]).length>2){document.getElementById('subtask-3').style.display='block';document.getElementById('add-subtask-btn').style.display='none';}
-    selectedDiff=task.diffKey||null; selectedTrack=task.trackKey||null; selectedTimer=Number(task.timerMinutes)||null;
+    selectedDiff=task.diffKey||null; selectedTrack=task.trackKey||null;
     if(selectedDiff) diffGrid.querySelector(`[data-key="${selectedDiff}"]`)?.classList.add('selected');
     if(selectedTrack) trackSelectGrid.querySelector(`[data-key="${selectedTrack}"]`)?.classList.add('selected');
     document.querySelector('#modal-overlay h2').textContent = mode==='habit' ? 'إضافة عادة جديدة' : (mode==='editHabit' ? 'تعديل العادة' : (mode==='editTask' ? 'تعديل المهمة' : 'إدراج مهمة جديدة'));
@@ -2998,13 +2935,13 @@
     if(taskModalMode==='daily'){
       if((state.pending||[]).length>=dailyTaskMax()) return;
       const now=Date.now();
-      state.pending.push({id:'t'+now+'_'+(taskCounter++),name,desc,xp:diffObj.xp,diffKey:diffObj.key,diffName:diffObj.name,trackKey:trackObj.key,trackName:trackObj.name,createdTs:now,startedTs:now,timerMinutes:null,subtasks});
+      state.pending.push({id:'t'+now+'_'+(taskCounter++),name,desc,xp:diffObj.xp,diffKey:diffObj.key,diffName:diffObj.name,trackKey:trackObj.key,trackName:trackObj.name,createdTs:now,startedTs:now,subtasks});
     } else if(taskModalMode==='habit'){
       ensureHabits();
-      state.habits.push({id:'h'+Date.now()+'_'+(taskCounter++),name,desc,xp:diffObj.xp,diffKey:diffObj.key,diffName:diffObj.name,trackKey:trackObj.key,trackName:trackObj.name,timerMinutes:null,subtasks,createdTs:Date.now()});
+      state.habits.push({id:'h'+Date.now()+'_'+(taskCounter++),name,desc,xp:diffObj.xp,diffKey:diffObj.key,diffName:diffObj.name,trackKey:trackObj.key,trackName:trackObj.name,subtasks,createdTs:Date.now()});
     } else if(taskModalMode==='editHabit'){
       const h=state.habits.find(x=>x.id===editingHabitId);
-      if(h){Object.assign(h,{name,desc,xp:diffObj.xp,diffKey:diffObj.key,diffName:diffObj.name,trackKey:trackObj.key,trackName:trackObj.name,timerMinutes:selectedTimer,subtasks});}
+      if(h){Object.assign(h,{name,desc,xp:diffObj.xp,diffKey:diffObj.key,diffName:diffObj.name,trackKey:trackObj.key,trackName:trackObj.name,subtasks});}
     } else if(taskModalMode==='editTask'){
       const t=state.pending.find(x=>x.id===editingTaskId);
       if(t){Object.assign(t,{name,desc,xp:diffObj.xp,diffKey:diffObj.key,diffName:diffObj.name,trackKey:trackObj.key,trackName:trackObj.name,subtasks});}
@@ -3069,11 +3006,7 @@
       const idx = state.pending.findIndex(t => t.id === completeId);
       if(idx === -1) return;
       const [task] = state.pending.splice(idx, 1);
-      if(task.deadlineTs && Date.now() >= task.deadlineTs){
-        registerShortfallPenalty(task);
-      } else {
-        await completePendingTask(task);
-      }
+      await completePendingTask(task);
       await saveState();
       render();
     } else if(cancelId){
@@ -3089,7 +3022,7 @@
   function habitHtml(h){
     const subs=(h.subtasks||[]).length ? ` · ${(h.subtasks||[]).length} مهام فرعية` : '';
     return `<div class="habit-item">
-      <div class="info"><div class="name">${escapeHtml(h.name)}</div><div class="meta">${escapeHtml(h.trackName||'')} · ${escapeHtml(h.diffName||'')} · +${h.xp} XP · ${timerLabel(h.timerMinutes)}${subs}</div>${h.desc?`<div class="meta">${escapeHtml(h.desc)}</div>`:''}</div>
+      <div class="info"><div class="name">${escapeHtml(h.name)}</div><div class="meta">${escapeHtml(h.trackName||'')} · ${escapeHtml(h.diffName||'')} · +${h.xp} XP${subs}</div>${h.desc?`<div class="meta">${escapeHtml(h.desc)}</div>`:''}</div>
       <div class="habit-actions"><button class="btn btn-renew" data-renew-habit="${h.id}">تجديد</button><button class="btn btn-edit" data-edit-habit="${h.id}">تعديل</button><button class="btn btn-delete" data-delete-habit="${h.id}">حذف</button></div>
     </div>`;
   }
@@ -3109,7 +3042,11 @@
     if(renew){
       if((state.pending||[]).length>=dailyTaskMax()) return;
       const h=state.habits.find(x=>x.id===renew.dataset.renewHabit);
-      if(h){ state.pending.push(freshTaskFromTemplate(h)); await saveState(); render(); }
+      if(h){
+        const now=Date.now();
+        state.pending.push({...JSON.parse(JSON.stringify(h)), id:'t'+now+'_'+(taskCounter++), createdTs:now, startedTs:now, subtasks:(h.subtasks||[]).map(st=>({...st,id:'st'+now+'_'+(taskCounter++),done:false}))});
+        await saveState(); render();
+      }
     } else if(edit){
       const h=state.habits.find(x=>x.id===edit.dataset.editHabit);
       if(h){ editingHabitId=h.id; fillTaskModal(h,'editHabit'); }
