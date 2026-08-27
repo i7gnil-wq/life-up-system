@@ -8,22 +8,22 @@
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@500;700;800;900&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
   :root{
-    /* Reference palette: near-black navy + slate panels + muted mint green */
-    --bg:#0c131b;
-    --panel:#1f262e;
-    --panel-2:#202932;
-    --line:rgba(174,190,187,0.14);
-    --olive-accent:#48cda2;
-    --cyan-dim:rgba(72,205,162,0.16);
-    --olive-deep:#3f8f76;
-    --silver-accent:#9eb1aa;
-    --text:#d1d9d6;
-    --muted:#7f8b94;
-    --danger:#9eb1aa;
-    --silver:#b8c5c1;
-    --silver-dim:#66737b;
-    --olive:#3f9b7b;
-    --olive-light:#62d8b1;
+    /* Sylvatic Forest palette: deep forest black-green + glowing spring-green accents */
+    --bg:#171f13;
+    --panel:#212b19;
+    --panel-2:#2a3620;
+    --line:rgba(151,183,106,0.14);
+    --olive-accent:#8fd14f;
+    --cyan-dim:rgba(143,209,79,0.16);
+    --olive-deep:#4c6b2f;
+    --silver-accent:#b6e88a;
+    --text:#eef2e3;
+    --muted:#93a17e;
+    --danger:#b6e88a;
+    --silver:#d7edb0;
+    --silver-dim:#75835a;
+    --olive:#5a7f34;
+    --olive-light:#a9dd6e;
     --radius:16px;
   }
   *{box-sizing:border-box; margin:0; padding:0;}
@@ -41,7 +41,7 @@
     content:"";
     position:fixed; inset:0;
     background-image:
-      repeating-linear-gradient(0deg, rgba(180,205,200,0.008) 0px, rgba(180,205,200,0.008) 1px, transparent 1px, transparent 3px);
+      repeating-linear-gradient(0deg, rgba(151,183,106,0.008) 0px, rgba(151,183,106,0.008) 1px, transparent 1px, transparent 3px);
     pointer-events:none;
     z-index:0;
   }
@@ -60,7 +60,7 @@
     border:1px solid var(--line);
     border-radius:var(--radius);
     padding:32px 28px;
-    box-shadow:0 0 0 1px rgba(158,177,170,0.08), 0 30px 60px -20px rgba(0,0,0,0.7);
+    box-shadow:0 0 0 1px rgba(182,232,138,0.08), 0 30px 60px -20px rgba(0,0,0,0.7);
     position:relative;
   }
   .login-card::before{
@@ -68,7 +68,7 @@
     position:absolute; inset:-1px;
     border-radius:var(--radius);
     padding:1px;
-    background:linear-gradient(135deg, rgba(158,177,170,0.42), transparent 40%, transparent 60%, rgba(79,211,164,0.30));
+    background:linear-gradient(135deg, rgba(182,232,138,0.42), transparent 40%, transparent 60%, rgba(143,209,79,0.30));
     -webkit-mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
     -webkit-mask-composite: xor;
     mask-composite: exclude;
@@ -86,11 +86,12 @@
   .field{margin-bottom:14px;}
   .field label{display:block; font-size:12.5px; color:var(--muted); margin-bottom:6px; font-weight:700;}
   .field input{
-    width:100%; background:#202a32; border:1px solid var(--line);
+    width:100%; background:#212b19; border:1px solid var(--line);
     border-radius:10px; padding:13px 14px; color:var(--text); font-family:inherit;
     font-size:14.5px; outline:none; transition:border-color .15s, box-shadow .15s;
   }
   .field input:focus{border-color:var(--olive-accent); box-shadow:0 0 0 3px var(--cyan-dim);}
+  input::placeholder, textarea::placeholder{color:var(--muted); opacity:.85;}
   .btn{
     border:none; border-radius:10px; padding:13px 18px; font-family:'Cairo',sans-serif;
     font-weight:700; font-size:14.5px; cursor:pointer; transition:transform .12s, filter .12s;
@@ -98,8 +99,8 @@
   .btn:active{transform:scale(0.97);}
   .icon-inline{vertical-align:-2px;}
   .btn-primary{
-    width:100%; background:linear-gradient(90deg, #62d8b1, #48cda2); color:#10201c;
-    box-shadow:0 8px 24px -8px rgba(79,211,164,0.28);
+    width:100%; background:linear-gradient(90deg, #a9dd6e, #8fd14f); color:#14200c;
+    box-shadow:0 8px 24px -8px rgba(143,209,79,0.28);
   }
   .btn-primary:hover{filter:brightness(1.08);}
   .toggle-mode{
@@ -107,8 +108,8 @@
   }
   .toggle-mode a{color:var(--olive-deep); cursor:pointer; font-weight:700; text-decoration:none;}
   .code-reveal{
-    display:none; margin-top:18px; background:rgba(31,41,48,0.92);
-    border:1px dashed rgba(79,211,164,0.30); border-radius:10px; padding:14px;
+    display:none; margin-top:18px; background:rgba(16,30,24,0.92);
+    border:1px dashed rgba(143,209,79,0.30); border-radius:10px; padding:14px;
   }
   .code-reveal.show{display:block;}
   .code-reveal .lbl{font-size:11.5px; color:var(--muted); margin-bottom:6px;}
@@ -118,13 +119,13 @@
 
   /* ---------- Main navigation (navigation only; original design preserved) ---------- */
   body{padding-bottom:86px;}
-  .app-bottom-nav{position:fixed;z-index:45;left:50%;bottom:12px;transform:translateX(-50%);width:min(760px,calc(100vw - 24px));display:grid;grid-template-columns:repeat(4,1fr);gap:5px;padding:7px;border:1px solid rgba(180,190,155,.18);border-radius:20px;background:rgba(20,21,18,.96);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);box-shadow:0 18px 45px rgba(0,0,0,.42),0 0 0 1px rgba(72,205,162,.035);}
+  .app-bottom-nav{position:fixed;z-index:45;left:50%;bottom:12px;transform:translateX(-50%);width:min(760px,calc(100vw - 24px));display:grid;grid-template-columns:repeat(4,1fr);gap:5px;padding:7px;border:1px solid rgba(151,183,106,.18);border-radius:20px;background:rgba(10,20,16,.96);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);box-shadow:0 18px 45px rgba(0,0,0,.42),0 0 0 1px rgba(143,209,79,.035);}
   .app-nav-item{border:0;background:transparent;color:var(--muted);min-height:58px;border-radius:14px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;font-family:'Tajawal',sans-serif;font-size:10.5px;font-weight:700;cursor:pointer;transition:background .15s,color .15s,transform .12s;}
   .app-nav-item:hover{color:var(--text);background:rgba(255,255,255,.035)}
   .app-nav-item:active{transform:scale(.96)}
-  .app-nav-item.active{color:var(--olive-accent);background:linear-gradient(180deg,rgba(72,205,162,.13),rgba(72,205,162,.045));box-shadow:inset 0 0 0 1px rgba(72,205,162,.14)}
+  .app-nav-item.active{color:var(--olive-accent);background:linear-gradient(180deg,rgba(143,209,79,.13),rgba(143,209,79,.045));box-shadow:inset 0 0 0 1px rgba(143,209,79,.14)}
   .app-nav-icon{width:23px;height:23px;display:grid;place-items:center}.app-nav-icon svg{width:21px;height:21px}
-  .app-nav-item.active .app-nav-icon svg{filter:drop-shadow(0 0 6px rgba(72,205,162,.45))}
+  .app-nav-item.active .app-nav-icon svg{filter:drop-shadow(0 0 6px rgba(143,209,79,.45))}
   @media(max-width:560px){body{padding-bottom:82px}.app-bottom-nav{bottom:7px;border-radius:18px;padding:5px}.app-nav-item{min-height:56px;font-size:9.5px}.app-nav-icon{width:22px;height:22px}#dashboard-view,#habits-view,#skills-view,#syndromes-view,#projects-view,#store-view{padding-bottom:125px}}
 
   /* ---------- APP ---------- */
@@ -139,7 +140,7 @@
   .brand{display:flex; align-items:center; gap:10px;}
   .brand .glyph{
     width:34px; height:34px; border-radius:9px; display:grid; place-items:center;
-    background:linear-gradient(135deg, var(--olive-accent), var(--olive-deep)); font-weight:900; color:#151c23; font-family:'Cairo';
+    background:linear-gradient(135deg, var(--olive-accent), var(--olive-deep)); font-weight:900; color:#14200c; font-family:'Cairo';
   }
   .brand span{font-weight:800; font-size:16px; letter-spacing:.5px;}
   .brand small{display:block; color:var(--muted); font-size:10.5px; font-weight:500; letter-spacing:1px;}
@@ -151,11 +152,11 @@
   .profile-chip .pcode{color:var(--muted); font-size:10.5px; font-family:'Cairo';}
   .profile-chip .avatar{
     width:32px;height:32px;border-radius:50%;
-    background:radial-gradient(circle at 35% 30%, #27323a, #0c131bf);
+    background:radial-gradient(circle at 35% 30%, #1c2415, #171f13);
     border:1px solid var(--olive-accent); display:grid; place-items:center; color:var(--olive-accent); font-weight:800; font-size:13px;
   }
   .logout-btn{background:transparent; border:none; color:var(--muted); cursor:pointer; font-size:11px; text-decoration:underline; font-family:'Tajawal';}
-  .logout-btn.danger-link{color:var(--silver-accent);}
+  .logout-btn.danger-link{color:var(--olive-light);}
 
   #app{position:relative;}
   .habit-item{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 4px;border-bottom:1px solid var(--line);}
@@ -166,8 +167,8 @@
   .habit-actions{display:flex;gap:6px;flex-shrink:0;}
   .habit-actions .btn{padding:7px 9px;font-size:11px;}
   .btn-edit{background:rgba(255,255,255,0.04);border:1px solid var(--line);color:var(--text);}
-  .btn-delete{background:linear-gradient(90deg,#c4cfcb,#9eb1aa);border:1px solid #9eb1aa;color:#0c131b;}
-  .btn-renew{background:linear-gradient(90deg,#c4cfcb,#9eb1aa);border:1px solid #9eb1aa;color:#0c131b;}
+  .btn-delete{background:linear-gradient(90deg,#9fdb5e,#b6e88a);border:1px solid #b6e88a;color:#171f13;}
+  .btn-renew{background:linear-gradient(90deg,#9fdb5e,#b6e88a);border:1px solid #b6e88a;color:#171f13;}
 
   .grid{
     display:grid;
@@ -194,21 +195,21 @@
   .rail{position:relative; padding-inline-start:26px;}
   .rail::before{
     content:""; position:absolute; right:9px; top:6px; bottom:6px; width:2px;
-    background:linear-gradient(180deg, var(--olive-deep), rgba(63,143,118,0.1));
+    background:linear-gradient(180deg, var(--olive-deep), rgba(76,107,47,0.1));
   }
   .rank-node{position:relative; padding:0 24px 22px 0; padding-inline-end:0;}
   .rank-node:last-child{padding-bottom:0;}
   .rank-node .node-dot{
     position:absolute; right:2px; top:2px; width:16px; height:16px; border-radius:50%;
-    background:var(--panel); border:2px solid rgba(180,190,155,0.35); z-index:1;
+    background:var(--panel); border:2px solid rgba(151,183,106,0.35); z-index:1;
   }
   .rank-node.active .node-dot{border-color:var(--olive-accent); box-shadow:0 0 0 4px var(--cyan-dim), 0 0 12px var(--olive-accent);}
   .rank-node.done .node-dot{
     border-color:var(--olive-deep); background:var(--olive-deep);
-    box-shadow:0 0 0 4px rgba(63,143,118,0.22), 0 0 12px var(--olive-deep), 0 0 22px rgba(63,143,118,0.55);
+    box-shadow:0 0 0 4px rgba(76,107,47,0.22), 0 0 12px var(--olive-deep), 0 0 22px rgba(76,107,47,0.55);
   }
-  .rank-node.done .stars svg{filter:drop-shadow(0 0 3px var(--olive-deep)) drop-shadow(0 0 6px rgba(63,143,118,0.6));}
-  .rank-node.active .stars svg{filter:drop-shadow(0 0 3px var(--olive-accent)) drop-shadow(0 0 6px rgba(72,205,162,0.6));}
+  .rank-node.done .stars svg{filter:drop-shadow(0 0 3px var(--olive-deep)) drop-shadow(0 0 6px rgba(76,107,47,0.6));}
+  .rank-node.active .stars svg{filter:drop-shadow(0 0 3px var(--olive-accent)) drop-shadow(0 0 6px rgba(143,209,79,0.6));}
   .rank-node .ins-row{display:flex; align-items:center; justify-content:space-between; margin-bottom:4px;}
   .rank-node .ins-name{font-size:14px; font-weight:700; color:var(--muted);}
   .rank-node.active .ins-name{color:var(--text);}
@@ -217,54 +218,57 @@
   .rank-node .range{font-size:10.5px; color:var(--muted); font-family:'Cairo'; opacity:.8;}
   .rank-node .mini-bar{height:4px; border-radius:3px; background:rgba(255,255,255,0.06); margin-top:6px; overflow:hidden;}
   .rank-node .mini-fill{height:100%; background:linear-gradient(90deg, var(--olive-accent), var(--olive-deep)); width:0%; border-radius:3px;}
+  .rank-node.legendary .ins-name{color:var(--silver-accent); text-shadow:0 0 10px rgba(182,232,138,0.5);}
+  .rank-node.legendary .node-dot{border-color:var(--silver-accent); box-shadow:0 0 0 4px rgba(182,232,138,0.22), 0 0 14px var(--silver-accent);}
+  .rank-node.legendary .mini-fill{background:linear-gradient(90deg, var(--silver-accent), #a9dd6e);}
 
   /* center figure */
   .figure-wrap{display:flex; flex-direction:column; align-items:center; justify-content:center; padding-top:6px;}
   .rank-badge{
-    display:flex; align-items:center; gap:6px; background:rgba(72,205,162,0.08);
-    border:1px solid rgba(72,205,162,0.3); border-radius:20px; padding:5px 14px 5px 10px; margin-bottom:6px;
+    display:flex; align-items:center; gap:6px; background:rgba(143,209,79,0.08);
+    border:1px solid rgba(143,209,79,0.3); border-radius:20px; padding:5px 14px 5px 10px; margin-bottom:6px;
   }
   .rank-badge .stars{display:flex; gap:2px;}
   .rank-badge .stars svg{width:11px; height:11px;}
   .rank-badge span{font-family:'Cairo'; font-weight:800; font-size:13px; color:var(--olive-accent);}
   .life-radar{position:relative;width:100%;max-width:520px;margin:0 auto;height:310px;display:flex;align-items:center;justify-content:center;}
   #life-radar-svg{width:100%;height:100%;display:block;overflow:visible;}
-  .radar-grid{fill:none;stroke:rgba(158,177,170,.24);stroke-width:1;}
-  .radar-axis{stroke:rgba(158,177,170,.28);stroke-width:1;}
-  .radar-fill{fill:rgba(72,205,162,.20);stroke:#48cda2;stroke-width:2.5;stroke-linejoin:round;transition:.25s ease;}
-  .radar-fill:hover{fill:rgba(72,205,162,.28);}
-  .radar-point{fill:#48cda2;stroke:#1b222a;stroke-width:2;cursor:pointer;transition:.18s ease;}
-  .radar-point:hover,.radar-point.active{r:7;fill:#62d8b1;}
-  .radar-label{fill:#d1d9d6;font-family:'Cairo',sans-serif;font-size:13px;font-weight:800;cursor:pointer;}
-  .radar-label:hover{fill:#e0e7e4;}
-  .radar-value{fill:#62d8b1;font-family:'Cairo',sans-serif;font-size:12px;font-weight:900;}
-  .radar-label-connector{stroke:rgba(72,205,162,.48);stroke-width:1.4;stroke-linecap:round;opacity:.9;transition:.18s ease;}
-  .radar-label-box{fill:#1f262e;stroke:rgba(72,205,162,.55);stroke-width:1.2;cursor:pointer;transition:.18s ease;}
-  .radar-label-group:hover .radar-label-box,.radar-label-group:focus .radar-label-box{fill:#202932;stroke:#62d8b1;stroke-width:1.7;}
-  .radar-label-group:hover .radar-label-connector,.radar-label-group:focus .radar-label-connector{stroke:#62d8b1;stroke-width:2;}
-.radar-tooltip{position:absolute;display:none;pointer-events:none;min-width:125px;background:#182028;border:1px solid rgba(158,177,170,.35);border-radius:8px;padding:8px 10px;color:#d7dfdc;font-family:'Cairo',sans-serif;font-size:11px;line-height:1.55;box-shadow:0 10px 30px rgba(0,0,0,.35);z-index:3;text-align:center;}
+  .radar-grid{fill:none;stroke:rgba(182,232,138,.24);stroke-width:1;}
+  .radar-axis{stroke:rgba(182,232,138,.28);stroke-width:1;}
+  .radar-fill{fill:rgba(143,209,79,.20);stroke:#8fd14f;stroke-width:2.5;stroke-linejoin:round;transition:.25s ease;}
+  .radar-fill:hover{fill:rgba(143,209,79,.28);}
+  .radar-point{fill:#8fd14f;stroke:#19230f;stroke-width:2;cursor:pointer;transition:.18s ease;}
+  .radar-point:hover,.radar-point.active{r:7;fill:#a9dd6e;}
+  .radar-label{fill:#eef2e3;font-family:'Cairo',sans-serif;font-size:23px;font-weight:800;cursor:pointer;}
+  .radar-label:hover{fill:#dcefc0;}
+  .radar-value{fill:#a9dd6e;font-family:'Cairo',sans-serif;font-size:14px;font-weight:900;}
+  .radar-label-connector{stroke:rgba(143,209,79,.48);stroke-width:1.4;stroke-linecap:round;opacity:.9;transition:.18s ease;}
+  .radar-label-box{fill:#212b19;stroke:rgba(143,209,79,.55);stroke-width:1.2;cursor:pointer;transition:.18s ease;}
+  .radar-label-group:hover .radar-label-box,.radar-label-group:focus .radar-label-box{fill:#2a3620;stroke:#a9dd6e;stroke-width:1.7;}
+  .radar-label-group:hover .radar-label-connector,.radar-label-group:focus .radar-label-connector{stroke:#a9dd6e;stroke-width:2;}
+.radar-tooltip{position:absolute;display:none;pointer-events:none;min-width:125px;background:#18220e;border:1px solid rgba(182,232,138,.35);border-radius:8px;padding:8px 10px;color:#dcefc0;font-family:'Cairo',sans-serif;font-size:11px;line-height:1.55;box-shadow:0 10px 30px rgba(0,0,0,.35);z-index:3;text-align:center;}
   .radar-tooltip.show{display:block;}
   .radar-detail{min-height:28px;margin-top:2px;text-align:center;color:var(--muted);font-family:'Cairo',sans-serif;font-size:11px;}
   .figure-caption{color:var(--muted); font-size:12px; margin-top:6px; text-align:center;}
   .add-task-btn{
-    margin-top:18px; width:100%; background:linear-gradient(90deg, #3f8f76, #3e5e52);
-    color:#d1d9d6; box-shadow:0 8px 24px -10px rgba(63,143,118,0.6);
+    margin-top:18px; width:100%; background:linear-gradient(90deg, #4c6b2f, #253317);
+    color:#eef2e3; box-shadow:0 8px 24px -10px rgba(76,107,47,0.6);
     display:flex; align-items:center; justify-content:center; gap:8px;
   }
   .add-task-btn:disabled{opacity:.45; cursor:not-allowed; box-shadow:none;}
   .queue-hint{font-size:11px; color:var(--muted); margin-top:8px; text-align:center;}
   .penalty-btn{
-    margin-top:10px; width:100%; background:transparent; border:1px solid rgba(158,177,170,0.4);
+    margin-top:10px; width:100%; background:transparent; border:1px solid rgba(182,232,138,0.4);
     color:var(--silver-accent);
     display:flex; align-items:center; justify-content:center; gap:6px;
   }
-  .penalty-btn:hover{background:rgba(158,177,170,0.08);}
+  .penalty-btn:hover{background:rgba(182,232,138,0.08);}
 
   /* status panel */
   .stat-row{display:flex; align-items:center; gap:12px; margin-bottom:14px; flex-wrap:wrap;}
   .stat-row .who{flex:1; min-width:0;}
   .stat-row .avatar-lg{
-    width:46px;height:46px;border-radius:50%; background:radial-gradient(circle at 35% 30%, #27323a, #0c131bf);
+    width:46px;height:46px;border-radius:50%; background:radial-gradient(circle at 35% 30%, #1c2415, #171f13);
     border:1px solid var(--olive-accent); display:grid; place-items:center; color:var(--olive-accent); font-weight:800; font-family:'Cairo'; font-size:17px;
   }
   .stat-row .who .n{font-family:'Cairo'; font-weight:800; font-size:16px;}
@@ -273,6 +277,19 @@
   .stat-mini .cell{flex:1; background:rgba(255,255,255,0.03); border:1px solid var(--line); border-radius:10px; padding:10px; text-align:center;}
   .stat-mini .cell .v{font-family:'Cairo'; font-weight:800; font-size:16px; color:var(--olive-accent);}
   .stat-mini .cell .l{font-size:10.5px; color:var(--muted); margin-top:2px;}
+  .stat-mini .cell .streak-v{display:flex; align-items:center; justify-content:center;}
+  .streak-icon-wrap{position:relative; display:inline-flex; align-items:center; justify-content:center; width:30px; height:30px;}
+  .streak-flame{width:100%; height:100%; fill:var(--muted); opacity:.5; transition:fill .2s, opacity .2s, filter .2s;}
+  .streak-num{
+    position:absolute; left:0; right:0; top:56%; text-align:center;
+    font-family:'Cairo'; font-weight:800; font-size:10.5px; color:#14200c; line-height:1;
+    transition:color .2s;
+  }
+  .stat-mini .cell.active .streak-flame{
+    fill:var(--olive-accent); opacity:1;
+    filter:drop-shadow(0 0 4px rgba(143,209,79,.85)) drop-shadow(0 0 8px rgba(169,221,110,.5));
+  }
+  .stat-mini .cell:not(.active) .streak-num{color:var(--text);}
   .ring-wrap{display:flex; flex-direction:column; align-items:center; margin-top:6px;}
   .ring{position:relative; width:132px; height:132px;}
   .ring svg{transform:rotate(-90deg);}
@@ -305,14 +322,59 @@
     font-family:'Cairo'; font-weight:800; font-size:11.5px; background:rgba(255,255,255,0.05);
   }
   .queue-item .actions{display:flex; gap:8px; flex-shrink:0;}
+  .btn-complete{
+    background:linear-gradient(90deg, #a9dd6e, #8fd14f); color:#14200c;
+    border:none; border-radius:8px; font-family:'Cairo',sans-serif; font-weight:700; cursor:pointer;
+  }
   .queue-item .btn-complete{
-    background:linear-gradient(90deg, #62d8b1, #48cda2); color:#10201c;
-    padding:8px 14px; font-size:12.5px; border-radius:8px;
+    padding:8px 14px; font-size:12.5px;
   }
   .queue-item .btn-cancel{
     background:transparent; border:1px solid var(--line); color:var(--muted);
     padding:8px 10px; font-size:12px; border-radius:8px;
   }
+  .queue-item .task-check{
+    width:24px; height:24px; flex-shrink:0; border-radius:7px;
+    border:1.5px solid rgba(147,161,126,.7); background:rgba(147,161,126,.1);
+    cursor:pointer; position:relative; transition:border-color .12s, background .12s;
+  }
+  .queue-item .task-check:hover{border-color:var(--olive-accent); background:var(--cyan-dim);}
+  .queue-item .task-check:disabled{opacity:.4; cursor:not-allowed;}
+  .queue-item .task-check-box{flex-shrink:0; width:26px; height:26px; display:grid; place-items:center; cursor:pointer;}
+  .queue-item .task-check-box input{
+    appearance:none; -webkit-appearance:none; width:24px; height:24px; border-radius:8px;
+    border:1.5px solid rgba(147,161,126,.7); background:rgba(147,161,126,.1);
+    cursor:pointer; position:relative; transition:border-color .12s, background .12s; margin:0;
+  }
+  .queue-item .task-check-box input:hover:not(:disabled){border-color:var(--olive-accent); background:var(--cyan-dim);}
+  .queue-item .task-check-box input:disabled:not(:checked){opacity:.4; cursor:not-allowed;}
+  .queue-item .task-check-box input:disabled{cursor:not-allowed;}
+  .queue-item .task-check-box input:checked{background:linear-gradient(90deg,#a9dd6e,#8fd14f); border-color:#8fd14f;}
+  .queue-item .task-check-box input:checked::after{content:"✓"; position:absolute; inset:0; display:grid; place-items:center; color:#14200c; font-size:14px; font-weight:900;}
+  .queue-item.done .d{opacity:.75;}
+  .queue-item.done .task-check-box input:checked{
+    box-shadow:0 0 8px rgba(143,209,79,0.9), 0 0 16px rgba(169,221,110,0.55);
+    animation:doneGlow 1.8s ease-in-out infinite;
+  }
+  @keyframes doneGlow{
+    0%,100%{box-shadow:0 0 6px rgba(143,209,79,0.75), 0 0 12px rgba(169,221,110,0.4);}
+    50%{box-shadow:0 0 12px rgba(143,209,79,1), 0 0 22px rgba(169,221,110,0.75);}
+  }
+  .modal-warn{
+    display:none; margin-top:8px; padding:10px 12px; border-radius:10px;
+    background:rgba(182,232,138,0.10); border:1px solid rgba(143,209,79,0.35);
+    color:var(--olive-light); font-size:12px; font-weight:700; line-height:1.7;
+  }
+  .modal-warn:not(:empty){display:block;}
+  .modal-warn:not(:empty) + .modal-actions{margin-top:10px;}
+  .queue-item .icon-btn{
+    width:24px; height:24px; flex-shrink:0; border-radius:7px; display:grid; place-items:center;
+    background:transparent; border:1px solid var(--line); color:var(--muted); cursor:pointer;
+    padding:0; transition:color .15s, border-color .15s, background .15s;
+  }
+  .queue-item .icon-btn svg{width:13px; height:13px;}
+  .queue-item .icon-btn:hover{color:var(--text); border-color:rgba(143,209,79,.4); background:rgba(143,209,79,.08);}
+  .queue-item .icon-btn.icon-del:hover{color:var(--olive-light); border-color:rgba(143,209,79,.45);}
   .log-item{
     display:flex; align-items:center; justify-content:space-between; gap:12px;
     padding:12px 4px; border-bottom:1px solid var(--line);
@@ -331,7 +393,7 @@
 
   /* modal */
   .modal-overlay{
-    display:none; position:fixed; inset:0; background:rgba(2,4,10,0.72); backdrop-filter:blur(4px);
+    display:none; position:fixed; inset:0; background:rgba(5,12,9,0.72); backdrop-filter:blur(4px);
     z-index:50; align-items:center; justify-content:center; padding:16px;
   }
   .modal-overlay.show{display:flex;}
@@ -341,9 +403,60 @@
     border:1px solid var(--line); border-radius:var(--radius); padding:24px;
   }
   .modal h2{font-size:18px; font-weight:800; margin-bottom:4px;}
+
+  /* ---------- celebration ---------- */
+  .celebrate-overlay{
+    display:none; position:fixed; inset:0; z-index:80;
+    align-items:center; justify-content:center; padding:20px;
+    background:rgba(5,12,9,0.78); backdrop-filter:blur(5px);
+    overflow:hidden;
+  }
+  .celebrate-overlay.show{display:flex;}
+  .celebrate-confetti{position:absolute; inset:0; overflow:hidden; pointer-events:none;}
+  .celebrate-confetti span{
+    position:absolute; top:-12px; width:8px; height:14px; opacity:0.95;
+    border-radius:2px; animation:confetti-fall linear forwards;
+  }
+  @keyframes confetti-fall{
+    0%{transform:translateY(0) rotate(0deg); opacity:1;}
+    100%{transform:translateY(112vh) rotate(540deg); opacity:0.9;}
+  }
+  .celebrate-card{
+    position:relative; z-index:2; width:100%; max-width:360px; text-align:center;
+    background:linear-gradient(180deg, var(--panel-2), var(--panel));
+    border:1px solid rgba(143,209,79,0.35); border-radius:var(--radius);
+    padding:34px 26px 28px;
+    box-shadow:0 0 0 1px rgba(182,232,138,0.1), 0 30px 70px -20px rgba(0,0,0,0.75), 0 0 50px -10px rgba(143,209,79,0.25);
+    animation:celebrate-pop .45s cubic-bezier(.2,1.4,.4,1);
+  }
+  @keyframes celebrate-pop{
+    0%{transform:scale(.7); opacity:0;}
+    60%{transform:scale(1.05); opacity:1;}
+    100%{transform:scale(1); opacity:1;}
+  }
+  .celebrate-burst{position:relative; width:96px; height:96px; margin:0 auto 14px;}
+  .celebrate-star{width:100%; height:100%; filter:drop-shadow(0 6px 18px rgba(143,209,79,0.55)); animation:celebrate-spin 1.4s ease-out;}
+  .celebrate-star path{fill:#8fd14f;}
+  @keyframes celebrate-spin{
+    0%{transform:scale(0) rotate(-40deg); opacity:0;}
+    70%{transform:scale(1.15) rotate(8deg); opacity:1;}
+    100%{transform:scale(1) rotate(0deg); opacity:1;}
+  }
+  .celebrate-check{
+    position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+  }
+  .celebrate-check svg{width:34px; height:34px;}
+  .celebrate-card h2{font-size:22px; font-weight:900; margin-bottom:6px; color:var(--olive-light);}
+  .celebrate-sub{color:var(--text); font-size:14px; margin-bottom:14px; line-height:1.6;}
+  .celebrate-xp{
+    display:inline-block; font-family:'Cairo'; font-weight:900; font-size:19px; color:#14200c;
+    background:linear-gradient(90deg, #a9dd6e, #8fd14f); border-radius:999px; padding:8px 22px; margin-bottom:22px;
+    box-shadow:0 8px 22px -8px rgba(143,209,79,0.5);
+  }
+  .celebrate-card .btn-primary{width:100%;}
   .task-modal-title-row{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:4px;}
   .task-modal-title-row h2{margin-bottom:0;}
-  .habit-mini-btn{border:1px solid rgba(72,205,162,0.28);background:rgba(72,205,162,0.07);color:var(--olive-accent);border-radius:8px;padding:5px 9px;font-family:'Cairo',sans-serif;font-size:10.5px;font-weight:800;cursor:pointer;white-space:nowrap;transition:.15s ease;}
+  .habit-mini-btn{border:1px solid rgba(143,209,79,0.28);background:rgba(143,209,79,0.07);color:var(--olive-accent);border-radius:8px;padding:5px 9px;font-family:'Cairo',sans-serif;font-size:10.5px;font-weight:800;cursor:pointer;white-space:nowrap;transition:.15s ease;}
   .habit-mini-btn:hover{border-color:var(--olive-accent);background:var(--cyan-dim);transform:translateY(-1px);}
   .habit-mini-btn:active{transform:scale(.97);}
   .modal p.sub{color:var(--muted); font-size:12.5px; margin-bottom:18px;}
@@ -351,33 +464,63 @@
     width:100%; background:rgba(255,255,255,0.03); border:1px solid var(--line); border-radius:10px;
     padding:12px 14px; color:var(--text); font-family:inherit; font-size:13.5px; resize:vertical; min-height:64px; outline:none;
   }
+  .modal textarea::-webkit-resizer{background-color:rgba(143,209,79,0.18);}
   .modal textarea:focus, .modal input:focus{border-color:var(--olive-accent); box-shadow:0 0 0 3px var(--cyan-dim);}
-  .diff-grid{display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:6px;}
+  .diff-grid{display:grid; grid-template-columns:1fr 1fr; gap:6px; margin-top:6px;}
   .diff-opt{
-    border:1px solid var(--line); background:rgba(255,255,255,0.03); border-radius:10px;
-    padding:10px; cursor:pointer; text-align:center; transition:border-color .15s, background .15s;
+    border:1px solid var(--line); background:rgba(255,255,255,0.03); border-radius:9px;
+    padding:7px 8px; cursor:pointer; text-align:center; transition:border-color .15s, background .15s;
   }
-  .diff-opt .name{font-weight:700; font-size:12.5px;}
-  .diff-opt .xp{font-family:'Cairo'; font-weight:800; color:var(--olive-accent); font-size:14px; margin-top:2px;}
+  .diff-opt .name{font-weight:700; font-size:11px;}
+  .diff-opt .xp{font-family:'Cairo'; font-weight:800; color:var(--olive-accent); font-size:12.5px; margin-top:1px;}
+  #track-select-grid{grid-template-columns:repeat(4,1fr);}
+  #track-select-grid .diff-opt{display:flex; align-items:center; justify-content:center; text-align:center;}
+  #track-select-grid .diff-opt .name{font-size:14px; color:#eef2e3; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:100%;}
+  #diff-grid .diff-opt{display:flex; align-items:center; justify-content:space-between; gap:4px; text-align:initial;}
+  #diff-grid .diff-opt .name{white-space:nowrap; overflow:hidden; text-overflow:ellipsis; min-width:0;}
+  #diff-grid .diff-opt .xp{margin-top:0; white-space:nowrap; flex-shrink:0; font-size:11px;}
   .diff-opt.selected{border-color:var(--olive-accent); background:var(--cyan-dim);}
-  .diff-opt.special{grid-column:1 / -1; border-color:rgba(158,177,170,0.4); background:rgba(158,177,170,0.06);}
+  .diff-opt.special{grid-column:1 / -1; border-color:rgba(182,232,138,0.4); background:rgba(182,232,138,0.06);}
   .diff-opt.special .xp{color:var(--silver-accent);}
-  .diff-opt.special.selected{border-color:var(--silver-accent); background:rgba(158,177,170,0.16); box-shadow:0 0 20px -6px rgba(158,177,170,0.5);}
+  .diff-opt.special.selected{border-color:var(--silver-accent); background:rgba(182,232,138,0.16); box-shadow:0 0 20px -6px rgba(182,232,138,0.5);}
   #penalty-grid .diff-opt .xp{color:var(--silver-accent);}
-  #penalty-grid .diff-opt.selected{border-color:var(--silver-accent); background:rgba(158,177,170,0.12); box-shadow:0 0 20px -6px rgba(158,177,170,0.5);}
-  .penalty-task-field{background:rgba(158,177,170,0.035);border:1px dashed rgba(158,177,170,0.28);border-radius:11px;padding:10px 12px;margin-bottom:14px;}
-  .penalty-task-toggle{display:block;font-size:12.5px;font-weight:700;margin-bottom:10px;}
-  .penalty-task-toggle input{accent-color:var(--silver-accent);width:16px;height:16px;}
+  #penalty-grid .diff-opt.selected{border-color:var(--silver-accent); background:rgba(182,232,138,0.12); box-shadow:0 0 20px -6px rgba(182,232,138,0.5);}
+  .penalty-task-field{background:rgba(182,232,138,0.035);border:1px dashed rgba(182,232,138,0.28);border-radius:11px;padding:10px 12px;margin-bottom:14px;}
+  .field .penalty-task-toggle{display:flex;align-items:center;gap:10px;font-size:12.5px;font-weight:700;margin-bottom:10px;}
+  .penalty-task-toggle input{
+    appearance:none;-webkit-appearance:none;
+    width:22px;height:22px;flex-shrink:0;
+    border-radius:7px;
+    border:1.5px solid rgba(143,209,79,0.35);
+    background:rgba(255,255,255,0.03);
+    cursor:pointer;position:relative;
+    transition:background .18s ease, border-color .18s ease, box-shadow .18s ease, transform .12s ease;
+  }
+  .penalty-task-toggle input:hover{border-color:var(--olive-accent);}
+  .penalty-task-toggle input:active{transform:scale(.94);}
+  .penalty-task-toggle input:checked{
+    background:linear-gradient(135deg, var(--olive-light), var(--olive-accent));
+    border-color:var(--olive-accent);
+    box-shadow:0 4px 14px -5px rgba(143,209,79,0.55);
+  }
+  .penalty-task-toggle input:checked::after{
+    content:"";position:absolute;left:50%;top:45%;
+    width:6px;height:10px;
+    border:solid #14200c;border-width:0 2px 2px 0;
+    transform:translate(-50%,-50%) rotate(45deg);
+  }
   .penalty-task-input{display:block;width:100%;background:rgba(255,255,255,0.03);border:1px solid var(--line);border-radius:9px;padding:10px 12px;color:var(--text);font-family:inherit;font-size:12.5px;outline:none;margin-top:8px;}
   .penalty-task-input.show{display:block;}
-  .penalty-task-input:focus{border-color:var(--silver-accent);box-shadow:0 0 0 3px rgba(158,177,170,0.12);}
+  .penalty-task-input:focus{border-color:var(--silver-accent);box-shadow:0 0 0 3px rgba(182,232,138,0.12);}
   .penalty-task-hint{font-size:10.5px;color:var(--muted);margin-top:6px;line-height:1.5;}
   .modal-actions{display:flex; gap:10px; margin-top:20px;}
   .modal-actions .btn-ghost{flex:1; background:transparent; border:1px solid var(--line); color:var(--muted);}
+  .btn-ghost{background:transparent; border:1px solid var(--line); color:var(--muted);}
+  .btn-ghost:hover{background:rgba(143,209,79,0.08);}
   .modal-actions .btn-primary{flex:2;}
   .field-err{color:var(--danger); font-size:11.5px; margin-top:6px; display:none;}
   .subtasks-field{
-    background:rgba(72,205,162,0.025); border:1px dashed rgba(72,205,162,0.16);
+    background:rgba(143,209,79,0.025); border:1px dashed rgba(143,209,79,0.16);
     border-radius:11px; padding:10px 12px;
   }
   .subtask-input{
@@ -387,48 +530,53 @@
   .subtask-add-btn{
     width:100%; margin-top:8px; padding:8px 10px; font-size:11px;
   }
+  .subtasks-field .subtasks-toggle-btn{
+    background:none; border:none; padding:2px; cursor:pointer; display:flex; align-items:center; justify-content:center;
+    color:var(--olive-accent); flex-shrink:0;
+  }
+  .subtasks-field .subtasks-toggle-btn svg{width:14px; height:14px; transition:transform .2s ease;}
+  .subtasks-field.open .subtasks-toggle-btn svg{transform:rotate(180deg);}
+  #subtasks-fields{display:none;}
+  .subtasks-field.open #subtasks-fields{display:block;}
   .subtask-input:focus{border-color:var(--olive-accent); box-shadow:0 0 0 3px var(--cyan-dim);}
   .queue-subtasks{display:flex;flex-direction:column;gap:5px;margin-top:7px;}
   .queue-subtask{display:flex;align-items:center;gap:7px;color:var(--muted);font-size:11.5px;}
-  .queue-subtask input{appearance:none;-webkit-appearance:none;width:16px;height:16px;flex-shrink:0;border-radius:4px;border:1.5px solid rgba(183,184,176,0.75);background:rgba(174,190,187,0.14);cursor:pointer;position:relative;transition:.12s ease;}
-  .queue-subtask input:checked{background:#d7dfdc;border-color:#d7dfdc;}
-  .queue-subtask input:checked::after{content:"✓";position:absolute;inset:0;display:grid;place-items:center;color:#30433f;font-size:12px;font-weight:900;}
+  .queue-subtask input{appearance:none;-webkit-appearance:none;width:22px;height:22px;flex-shrink:0;border-radius:7px;border:1.5px solid rgba(147,161,126,.7);background:rgba(147,161,126,.1);cursor:pointer;position:relative;transition:border-color .12s, background .12s;}
+  .queue-subtask input:hover:not(:disabled){border-color:var(--olive-accent); background:var(--cyan-dim);}
+  .queue-subtask input:disabled:not(:checked){opacity:.4; cursor:not-allowed;}
+  .queue-subtask input:disabled{cursor:not-allowed;}
+  .queue-subtask input:checked{
+    background:linear-gradient(90deg,#a9dd6e,#8fd14f); border-color:#8fd14f;
+    box-shadow:0 0 8px rgba(143,209,79,0.9), 0 0 16px rgba(169,221,110,0.55);
+    animation:doneGlow 1.8s ease-in-out infinite;
+  }
+  .queue-subtask input:checked::after{content:"✓";position:absolute;inset:0;display:grid;place-items:center;color:#14200c;font-size:14px;font-weight:900;}
   .queue-subtask.done span{text-decoration:line-through;opacity:.65;}
   .queue-progress{font-family:'Cairo';font-size:10px;color:var(--olive-accent);margin-top:5px;}
   .queue-item.has-subtasks{align-items:flex-start;}
   .queue-item .btn-complete:disabled{opacity:.4;cursor:not-allowed;}
 
-  /* radar custom range */
-  .radar-custom-row{display:flex;justify-content:flex-start;align-items:center;margin-top:2px;height:18px;}
-  .radar-custom-link{background:none;border:0;padding:0;color:var(--muted);font-family:'Cairo',sans-serif;font-size:9.5px;font-weight:700;cursor:pointer;text-decoration:none;line-height:1;}
-  .radar-custom-link:hover{color:var(--olive-accent);}
-  .radar-custom-modal .modal{max-width:340px;}
-  .radar-custom-modal .field input{width:100%;box-sizing:border-box;background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:9px;padding:10px;color:var(--text);font-family:'Cairo';outline:none;}
-  .radar-custom-modal .field input:focus{border-color:var(--olive-accent);box-shadow:0 0 0 3px var(--cyan-dim);}
-  .radar-custom-error{color:var(--olive-accent);font-size:10.5px;line-height:1.55;margin-top:7px;display:none;font-family:'Cairo',sans-serif;font-weight:700;}
-  .radar-custom-error.show{display:block;}
   /* tracks */
-  .tracks-grid{display:grid; grid-template-columns:repeat(2, minmax(0, 1fr)); gap:10px;}
-  @media (max-width:560px){ .tracks-grid{grid-template-columns:1fr;} }
+  .tracks-grid{display:grid; grid-template-columns:repeat(2, minmax(0, 1fr)); gap:7px;}
   .track-card{
-    min-height:104px;
-    background:rgba(255,255,255,0.03); border:1px solid var(--line); border-radius:12px;
-    padding:7px; display:grid; grid-template-columns:88px minmax(0,1fr); align-items:stretch; gap:12px;
+    min-height:76px;
+    background:rgba(255,255,255,0.03); border:1px solid var(--line); border-radius:10px;
+    padding:6px; display:grid; grid-template-columns:56px minmax(0,1fr); align-items:stretch; gap:8px;
     cursor:pointer; transition:border-color .15s, background .15s, transform .12s;
     text-align:right; direction:ltr;
   }
   .track-card:hover{border-color:var(--olive-accent); background:var(--cyan-dim); transform:translateY(-2px);}
   .track-card .t-icon{
-    width:88px; height:90px; align-self:center; border-radius:11px; display:grid; place-items:center;
-    background:linear-gradient(135deg, rgba(72,205,162,0.14), rgba(63,143,118,0.14));
+    width:56px; height:58px; align-self:center; border-radius:9px; display:grid; place-items:center;
+    background:linear-gradient(135deg, rgba(143,209,79,0.14), rgba(76,107,47,0.14));
     color:var(--olive-accent); border:1px solid var(--line);
   }
-  .track-card .t-icon svg{width:34px; height:34px;}
-  .track-card .track-info{direction:rtl; display:flex; flex-direction:column; justify-content:center; gap:8px; min-width:0;}
-  .track-card .t-name{font-weight:700; font-size:12.5px;}
-  .track-stats{display:flex; flex-direction:column; gap:5px;}
-  .track-stat{font-size:10.5px; color:var(--muted); line-height:1.5; white-space:nowrap;}
-  .track-stat .track-stat-num{font-family:'Cairo'; font-weight:900; font-size:13px; color:var(--olive-accent); margin-right:4px;}
+  .track-card .t-icon svg{width:22px; height:22px;}
+  .track-card .track-info{direction:rtl; display:flex; flex-direction:column; justify-content:center; gap:4px; min-width:0;}
+  .track-card .t-name{font-weight:700; font-size:11px;}
+  .track-stats{display:flex; flex-direction:column; gap:2px;}
+  .track-stat{font-size:9px; color:var(--muted); line-height:1.4; white-space:nowrap;}
+  .track-stat .track-stat-num{font-family:'Cairo'; font-weight:900; font-size:11px; color:var(--olive-accent); margin-right:3px;}
   .track-stat .track-stat-label{color:var(--muted);}
 
   /* quick nav: skills & syndromes — small side-by-side buttons, own box (not tracks-grid) */
@@ -443,7 +591,7 @@
   .quick-nav-card:hover{border-color:var(--olive-accent); background:var(--cyan-dim); transform:translateY(-2px);}
   .quick-nav-card .qn-icon{
     width:28px; height:28px; border-radius:8px; display:grid; place-items:center; flex-shrink:0;
-    background:linear-gradient(135deg, rgba(72,205,162,0.14), rgba(63,143,118,0.14));
+    background:linear-gradient(135deg, rgba(143,209,79,0.14), rgba(76,107,47,0.14));
     color:var(--olive-accent); border:1px solid var(--line);
   }
   .quick-nav-card .qn-icon svg{width:15px; height:15px;}
@@ -456,16 +604,16 @@
   .wallet-row{display:flex; align-items:center; gap:12px;}
   .wallet-coin-icon{
     width:42px; height:42px; border-radius:50%; flex-shrink:0; display:grid; place-items:center;
-    background:linear-gradient(135deg, #b8c5c1, #9eb1aa); color:#34454b;
-    box-shadow:0 6px 16px -6px rgba(158,177,170,0.6);
+    background:linear-gradient(135deg, #d7edb0, #b6e88a); color:#14200c;
+    box-shadow:0 6px 16px -6px rgba(182,232,138,0.6);
   }
   .wallet-coin-icon svg{width:22px; height:22px;}
   .wallet-info{flex:1; min-width:0;}
   .wallet-balance{font-family:'Cairo'; font-weight:900; font-size:22px; color:var(--silver-accent); line-height:1.1;}
   .wallet-label{font-size:11px; color:var(--muted); margin-top:2px;}
   .store-balance-banner{
-    display:flex; align-items:center; gap:12px; background:rgba(158,177,170,0.08);
-    border:1px solid rgba(158,177,170,0.3); border-radius:12px; padding:14px; margin-bottom:16px;
+    display:flex; align-items:center; gap:12px; background:rgba(182,232,138,0.08);
+    border:1px solid rgba(182,232,138,0.3); border-radius:12px; padding:14px; margin-bottom:16px;
   }
   .store-grid{display:grid; grid-template-columns:repeat(2, 1fr); gap:8px;}
   .store-item{
@@ -486,14 +634,14 @@
 
   .back-btn{
     margin-bottom:14px; display:inline-flex; padding:7px 12px; font-size:12px;
-    background:transparent; border:1px solid rgba(200,210,205,0.35); color:#aebbb7;
+    background:transparent; border:1px solid rgba(182,232,138,0.35); color:#c3e29a;
   }
-  .back-btn:hover{border-color:#aebbb7; color:#d1d9d6;}
+  .back-btn:hover{border-color:#c3e29a; color:#eef2e3;}
   .track-header-panel{margin-bottom:16px;}
   .track-header{display:flex; align-items:center; gap:14px;}
   .track-header .t-icon{
     width:52px; height:52px; border-radius:14px; display:grid; place-items:center; flex-shrink:0;
-    background:linear-gradient(135deg, rgba(72,205,162,0.16), rgba(63,143,118,0.16));
+    background:linear-gradient(135deg, rgba(143,209,79,0.16), rgba(76,107,47,0.16));
     color:var(--olive-accent); border:1px solid var(--line);
   }
   .track-header .t-icon svg{width:26px; height:26px;}
@@ -516,7 +664,7 @@
   .skill-cat{color:var(--olive-accent); font-size:11px; margin-top:2px; font-family:'Cairo'; font-weight:700;}
   .skill-hours{font-family:'Cairo'; font-weight:900; font-size:16px; color:var(--olive-accent); flex-shrink:0; text-align:left;}
   .skill-hours span{font-size:10px; color:var(--muted); font-weight:500;}
-  .skill-level{font-family:'Cairo'; font-weight:800; font-size:11px; color:var(--olive-deep); background:rgba(63,143,118,0.1); border:1px solid rgba(63,143,118,0.35); border-radius:8px; padding:3px 8px; text-align:center; flex-shrink:0;}
+  .skill-level{font-family:'Cairo'; font-weight:800; font-size:11px; color:var(--olive-deep); background:rgba(76,107,47,0.1); border:1px solid rgba(76,107,47,0.35); border-radius:8px; padding:3px 8px; text-align:center; flex-shrink:0;}
   .skill-level-row{display:flex; align-items:center; gap:6px; margin-top:4px;}
   .skill-level-bar{width:130px; height:6px; border-radius:4px; background:rgba(255,255,255,0.06); overflow:hidden; flex-shrink:0;}
   .skill-level-fill{height:100%; background:linear-gradient(90deg, var(--olive-deep), var(--olive-accent)); border-radius:4px;}
@@ -549,13 +697,13 @@
   .skill-log-row .btn-complete[disabled]{opacity:.55; cursor:default;}
   .skill-log-row .btn-reduce-hours{
     flex:1; padding:8px 10px; font-size:11.5px;
-    background:transparent; border:1px solid rgba(158,177,170,0.35); color:var(--silver-accent);
+    background:transparent; border:1px solid rgba(182,232,138,0.35); color:var(--silver-accent);
   }
-  .skill-log-row .btn-reduce-hours:hover{background:rgba(158,177,170,0.1);}
+  .skill-log-row .btn-reduce-hours:hover{background:rgba(182,232,138,0.1);}
 
   /* white square step buttons (restore XP / restore coins big steps) */
   .step-sq-white{
-    width:44px; height:44px; padding:0; flex-shrink:0; background:#d1d9d6fff; color:#151c23;
+    width:44px; height:44px; padding:0; flex-shrink:0; background:#eef2e3; color:#17200d;
     border:1px solid var(--line); border-radius:10px; font-family:'Cairo'; font-size:11px; font-weight:800;
     cursor:pointer; display:flex; align-items:center; justify-content:center; transition:transform .12s, filter .12s;
   }
@@ -589,11 +737,11 @@
   .syn-history.show{display:block;}
   .syn-daycounter{display:flex; align-items:baseline; gap:8px; justify-content:center; margin-bottom:8px;}
   .syn-day-num{font-family:'Cairo'; font-weight:900; font-size:40px; color:var(--olive-accent); line-height:1;
-    text-shadow:0 0 18px rgba(79,211,164,0.28);}
+    text-shadow:0 0 18px rgba(143,209,79,0.28);}
   .syn-day-lbl{color:var(--muted); font-size:13px; font-weight:700;}
   .syn-bar{height:8px; border-radius:5px; background:rgba(255,255,255,0.06); overflow:hidden; margin-bottom:16px;}
   .syn-bar-fill{height:100%; border-radius:5px; background:linear-gradient(90deg, var(--olive-accent), var(--olive-deep));
-    box-shadow:0 0 10px rgba(79,211,164,0.28); transition:width .3s ease;}
+    box-shadow:0 0 10px rgba(143,209,79,0.28); transition:width .3s ease;}
   .syn-actions{display:flex; gap:8px; margin-bottom:14px;}
   .syn-actions .add-task-btn{flex:1; margin-bottom:0;}
   .syn-task-row{display:flex; align-items:center; gap:10px; background:rgba(255,255,255,0.03);
@@ -601,9 +749,9 @@
   .syn-task-row:last-child{margin-bottom:0;}
   .syn-check{width:20px; height:20px; flex-shrink:0; border-radius:50%; border:2px solid var(--line);
     background:transparent; cursor:pointer; position:relative; transition:border-color .12s, background .12s;}
-  .syn-check.checked{border-color:#d7dfdc; background:#d7dfdc;}
+  .syn-check.checked{border-color:#dcefc0; background:#dcefc0;}
   .syn-check.checked::after{content:"✓"; position:absolute; inset:0; display:flex; align-items:center;
-    justify-content:center; font-size:12px; color:#30433f; font-weight:900;}
+    justify-content:center; font-size:12px; color:#14200c; font-weight:900;}
   .syn-task-name{flex:1; font-size:13.5px; font-weight:600;}
   .syn-task-row.done .syn-task-name{color:var(--muted); text-decoration:line-through;}
   .syn-del{background:transparent; border:none; color:var(--muted); font-size:17px; cursor:pointer; line-height:1;
@@ -611,27 +759,27 @@
   .syn-del:hover{color:var(--silver-accent);}
   /* project step timeline */
   .project-steps-list{position:relative;display:flex;flex-direction:column;gap:0;padding:8px 4px 8px 0;}
-  .project-steps-list::before{content:"";position:absolute;right:19px;top:18px;bottom:18px;width:2px;border-radius:4px;background:rgba(72,205,162,.10);transition:.25s ease;}
-  .project-steps-list:has(.project-step.done)::before{background:linear-gradient(180deg,rgba(72,205,162,.5),rgba(63,143,118,.28));box-shadow:0 0 7px rgba(72,205,162,.35),0 0 16px rgba(72,205,162,.16);}
-  .project-step{position:relative;display:grid;grid-template-columns:42px 1fr 50px;gap:10px;align-items:start;padding:10px 0 18px;min-width:0;direction:ltr;}
+  .project-steps-list::before{content:"";position:absolute;right:19px;top:18px;bottom:18px;width:2px;border-radius:4px;background:rgba(143,209,79,.10);transition:.25s ease;}
+  .project-steps-list:has(.project-step.done)::before{background:linear-gradient(180deg,rgba(143,209,79,.5),rgba(76,107,47,.28));box-shadow:0 0 7px rgba(143,209,79,.35),0 0 16px rgba(143,209,79,.16);}
+  .project-step{position:relative;display:grid;grid-template-columns:42px 1fr 64px;gap:10px;align-items:start;padding:10px 0 18px;min-width:0;direction:ltr;}
   .project-step:last-child{padding-bottom:6px;}
-  .project-step-station{width:34px;height:34px;border-radius:50%;border:1px solid rgba(72,205,162,.3);background:linear-gradient(145deg,#181a16,#11120f);display:grid;place-items:center;z-index:1;justify-self:end;transition:.25s ease;box-shadow:0 0 0 3px rgba(5,10,8,.9);font-size:0;cursor:default;padding:0;}
+  .project-step-station{width:34px;height:34px;border-radius:50%;border:1px solid rgba(143,209,79,.3);background:linear-gradient(145deg,#1a2410,#171f13);display:grid;place-items:center;z-index:1;justify-self:end;transition:.25s ease;box-shadow:0 0 0 3px rgba(5,12,9,.9);font-size:0;cursor:default;padding:0;}
   .project-step-station::after{content:"";display:none;}
-  .project-step.done .project-step-station{border-color:#d1d9d6;background:linear-gradient(145deg,#d7dfdc,#c4cfcb);box-shadow:0 0 0 3px rgba(72,205,162,.08),0 0 11px rgba(183,184,176,.9),0 0 22px rgba(72,205,162,.5);}
+  .project-step.done .project-step-station{border-color:#eef2e3;background:linear-gradient(145deg,#dcefc0,#9fdb5e);box-shadow:0 0 0 3px rgba(143,209,79,.08),0 0 11px rgba(147,161,126,.9),0 0 22px rgba(143,209,79,.5);}
   .project-step-content{min-width:0;}
   .project-step-head{display:flex;align-items:center;justify-content:space-between;gap:8px;}
   .project-step-name{font-weight:800;font-size:13.5px;}
   .project-step.done .project-step-name{color:var(--olive-accent);}
   .project-step-meta{font-size:10px;color:var(--muted);margin-top:2px;}
-  .project-step-xp{width:48px;height:42px;border-radius:11px;display:grid;place-items:center;flex-shrink:0;font-family:'Cairo';font-weight:900;font-size:10.5px;color:#0c131b;background:#d1d9d6;border:1px solid rgba(255,255,255,.9);box-shadow:0 2px 8px rgba(0,0,0,.12);transition:.25s ease;cursor:pointer;padding:0;justify-self:start;direction:rtl;}
-  .project-step.done .project-step-xp{color:#0c131b;background:#d1d9d6;border-color:#d1d9d6;box-shadow:0 2px 8px rgba(0,0,0,.12);}
-  .project-step-xp:disabled{opacity:.55;cursor:not-allowed;color:#0c131b;background:#d1d9d6;}
+  .project-step-xp{width:64px;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center;gap:3px;flex-shrink:0;font-family:'Cairo';font-weight:900;font-size:11px;color:#14200c;background:linear-gradient(90deg,#a9dd6e,#8fd14f);border:none;box-shadow:0 2px 8px rgba(0,0,0,.12);transition:.25s ease;cursor:pointer;padding:0;justify-self:start;direction:ltr;}
+  .project-step.done .project-step-xp{color:#14200c;background:linear-gradient(90deg,#a9dd6e,#8fd14f);box-shadow:0 2px 8px rgba(0,0,0,.12);}
+  .project-step-xp:disabled{opacity:.5;cursor:not-allowed;color:#14200c;background:linear-gradient(90deg,#a9dd6e,#8fd14f);}
   .project-step-tasks{margin-top:9px;display:flex;flex-direction:column;gap:6px;}
   .project-step-task{display:flex;align-items:center;gap:8px;padding:7px 9px;border:1px solid var(--line);border-radius:9px;background:rgba(255,255,255,.025);}
   .project-step-task.done{opacity:.65;}
-  .project-step-task .task-check{width:18px;height:18px;border-radius:5px;border:1.5px solid rgba(183,184,176,.7);background:rgba(183,184,176,.1);cursor:pointer;position:relative;flex-shrink:0;}
-  .project-step-task.done .task-check{background:#d7dfdc;border-color:#d7dfdc;}
-  .project-step-task.done .task-check::after{content:"✓";position:absolute;inset:0;display:grid;place-items:center;color:#30433f;font-size:11px;font-weight:900;}
+  .project-step-task .task-check{width:18px;height:18px;border-radius:5px;border:1.5px solid rgba(147,161,126,.7);background:rgba(147,161,126,.1);cursor:pointer;position:relative;flex-shrink:0;}
+  .project-step-task.done .task-check{background:#dcefc0;border-color:#dcefc0;}
+  .project-step-task.done .task-check::after{content:"✓";position:absolute;inset:0;display:grid;place-items:center;color:#14200c;font-size:11px;font-weight:900;}
   .project-step-task .task-name{flex:1;min-width:0;font-size:11.5px;font-weight:600;}
   .project-step-task.done .task-name{text-decoration:line-through;color:var(--muted);}
   .project-step-task .task-xp{font-family:'Cairo';font-weight:900;font-size:10px;color:var(--olive-accent);white-space:nowrap;}
@@ -640,6 +788,13 @@
   .project-step-lock{font-size:10px;color:var(--muted);margin-top:7px;}
   .project-step-delete{background:transparent;border:none;color:var(--muted);font-size:16px;cursor:pointer;padding:2px 4px;}
   .project-step-delete:hover{color:var(--silver-accent);}
+  .project-step-expand-btn{background:none;border:none;padding:2px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--olive-accent);flex-shrink:0;}
+  .project-step-expand-btn svg{width:14px;height:14px;transition:transform .2s ease;}
+  .project-step.expanded .project-step-expand-btn svg{transform:rotate(180deg);}
+  .project-step-tasks,.project-step-add-task,.project-step-lock{display:none;}
+  .project-step.expanded .project-step-tasks,.project-step.expanded .project-step-add-task,.project-step.expanded .project-step-lock{display:flex;}
+  .project-step.expanded .project-step-add-task{display:block;}
+  .project-step.expanded .project-step-lock{display:block;}
   .project-add-mini[data-project-add-step]{margin-bottom:8px;}
   .project-card{background:rgba(255,255,255,0.02); border:1px solid var(--line); border-radius:14px; padding:16px; margin-bottom:14px;}
   .project-card:last-child{margin-bottom:0;}
@@ -647,7 +802,7 @@
   .project-top .project-name{font-weight:700; font-size:14.5px;}
   .project-del{background:transparent; border:none; color:var(--muted); font-size:19px; cursor:pointer; line-height:1; padding:2px 4px; flex-shrink:0; margin-right:auto;}
   .project-del:hover{color:var(--silver-accent);}
-  .project-goal-box{background:rgba(72,205,162,0.06); border:1px solid rgba(72,205,162,0.2); border-radius:10px;
+  .project-goal-box{background:rgba(143,209,79,0.06); border:1px solid rgba(143,209,79,0.2); border-radius:10px;
     padding:9px 12px; font-size:12.5px; line-height:1.6; margin-bottom:14px;}
   .project-goal-box .g-lbl{color:var(--olive-accent); font-weight:700; font-size:11px; display:block; margin-bottom:2px;}
   .project-section-title{font-size:11.5px; font-weight:700; color:var(--muted); margin:14px 0 8px;}
@@ -661,8 +816,8 @@
   .projects-chart-legend{display:flex; flex-wrap:wrap; gap:10px 16px; margin-top:10px;}
   .projects-chart-legend .pcl-item{display:flex; align-items:center; gap:6px; font-size:11px; color:var(--muted);}
   .projects-chart-legend .pcl-dot{width:9px; height:9px; border-radius:50%; flex-shrink:0;}
-  .relapse-btn{background:linear-gradient(90deg,#c4cfcb,#9eb1aa);border:1px solid #9eb1aa;color:#0c131b; 
-    box-shadow:0 8px 24px -12px rgba(158,177,170,0.28);}
+  .relapse-btn{background:linear-gradient(90deg,#9fdb5e,#b6e88a);border:1px solid #b6e88a;color:#171f13; 
+    box-shadow:0 8px 24px -12px rgba(182,232,138,0.28);}
   .syn-hist-row{display:flex; justify-content:space-between; font-size:11.5px; color:var(--muted);
     padding:4px 0; font-family:'Cairo';}
   .syn-hist-row .relapse-tag{color:var(--silver-accent); font-weight:800;}
@@ -679,12 +834,12 @@
   .sht-tag{
     font-family:'Cairo'; font-weight:800; font-size:10px; border-radius:6px; padding:2px 8px; flex-shrink:0;
   }
-  .sht-tag.ok{color:#3f4b2d; background:var(--olive-accent);}
-  .sht-tag.fail{color:#31352a; background:var(--silver-accent);}
-  .syndrome-card.completed{border-color:rgba(255,182,72,0.45); background:linear-gradient(180deg, rgba(255,182,72,0.07), transparent);}
+  .sht-tag.ok{color:#10160a; background:var(--olive-accent);}
+  .sht-tag.fail{color:#14200c; background:var(--silver-accent);}
+  .syndrome-card.completed{border-color:rgba(143,209,79,0.45); background:linear-gradient(180deg, rgba(143,209,79,0.07), transparent);}
   .syndrome-conquered-tag{
     display:flex; align-items:center; gap:8px; justify-content:center; text-align:center;
-    background:rgba(158,177,170,0.1); border:1px solid rgba(158,177,170,0.35); border-radius:10px;
+    background:rgba(182,232,138,0.1); border:1px solid rgba(182,232,138,0.35); border-radius:10px;
     padding:10px; margin-bottom:12px; color:var(--silver-accent); font-weight:800; font-size:13px; font-family:'Cairo';
   }
   .syndrome-conquered-tag svg{width:16px; height:16px; flex-shrink:0;}
@@ -692,26 +847,26 @@
   /* ---------- achievements ---------- */
   .ach-btn{
     display:inline-flex; align-items:center; gap:6px; background:transparent;
-    border:1.5px solid rgba(255,255,255,0.55); color:var(--text);
+    border:1.5px solid rgba(143,209,79,0.35); color:var(--text);
     border-radius:999px; padding:5px 12px 5px 6px; font-family:'Cairo'; font-weight:700; font-size:11.5px;
     cursor:pointer; transition:border-color .15s, background .15s;
   }
-  .ach-btn:hover{border-color:var(--silver-accent); color:var(--silver-accent);}
+  .ach-btn:hover{border-color:var(--olive-accent); color:var(--olive-accent);}
   .ach-btn .ach-dot{
-    width:20px; height:20px; border-radius:50%; border:1.5px solid rgba(255,255,255,0.55);
+    width:20px; height:20px; border-radius:50%; border:1.5px solid rgba(143,209,79,0.4);
     display:flex; align-items:center; justify-content:center; flex-shrink:0;
   }
   .ach-btn .ach-dot svg{width:11px; height:11px;}
   .ach-count-pill{
-    background:var(--silver-accent); color:#27323a; font-family:'Cairo'; font-weight:900; font-size:10px;
+    background:var(--silver-accent); color:#1c2415; font-family:'Cairo'; font-weight:900; font-size:10px;
     border-radius:999px; min-width:16px; height:16px; padding:0 4px; display:flex; align-items:center; justify-content:center;
   }
   .ach-grid{display:grid; grid-template-columns:repeat(auto-fill, minmax(120px,1fr)); gap:14px; margin-top:6px;}
   .ach-badge{display:flex; flex-direction:column; align-items:center; text-align:center; gap:8px;}
-  .ach-shield-wrap{position:relative; width:88px; height:100px;}
-  .ach-shield-wrap svg{width:100%; height:100%; filter:drop-shadow(0 6px 14px rgba(158,177,170,0.35));}
+  .ach-shield-wrap{position:relative; width:84px; height:62px;}
+  .ach-shield-wrap svg{width:100%; height:100%; filter:drop-shadow(0 6px 14px rgba(182,232,138,0.35));}
   .ach-shield-icon{
-    position:absolute; top:24px; left:0; right:0; display:flex; align-items:center; justify-content:center;
+    position:absolute; top:8px; left:0; right:0; display:flex; align-items:center; justify-content:center;
   }
   .ach-shield-icon svg{width:22px; height:22px;}
   .ach-badge-name{
@@ -721,39 +876,55 @@
   .ach-badge-date{font-size:9.5px; color:var(--muted); font-family:'Cairo';}
   .ach-empty{color:var(--muted); font-size:13px; text-align:center; padding:26px 10px;}
 
+  /* ---------- task list mode switch ---------- */
+  .task-mode-panel{margin-bottom:16px;padding:20px 18px;}
+  .task-mode-tabs{display:grid;grid-template-columns:1fr 1fr;gap:10px; margin-top:6px;}
+  .task-mode-tab{
+    border:1px solid var(--line); background:rgba(255,255,255,0.03); color:var(--muted);
+    border-radius:14px; padding:11px 12px; font-family:'Cairo',sans-serif; font-weight:800;
+    font-size:15px; cursor:pointer; transition:background .15s, color .15s, border-color .15s, transform .12s;
+    display:flex; flex-direction:column; align-items:center; justify-content:center; gap:3px; line-height:1.4;
+    min-height:44px;
+  }
+  .task-mode-tab:active{transform:scale(.97);}
+  .task-mode-tab:hover{color:var(--text); border-color:rgba(143,209,79,.35);}
+  .task-mode-tab.active{
+    color:#14200c; background:linear-gradient(90deg,#a9dd6e,#8fd14f);
+    border-color:transparent; box-shadow:0 8px 20px -10px rgba(143,209,79,.5);
+  }
+
   /* ---------- main daily tasks ---------- */
-  .main-task-panel{margin-bottom:16px;border-color:rgba(63,143,118,.22);}
-  .main-task-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:9px;margin-top:8px;}
+  .main-task-panel{margin-bottom:16px;border-color:rgba(76,107,47,.22);}
+  .main-task-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:7px;margin-top:8px;}
   .main-task-slot{
-    width:100%;min-height:88px;border:1px solid var(--line);border-radius:11px;
-    background:rgba(255,255,255,.025);color:var(--text);padding:12px;
+    width:100%;min-height:64px;border:1px solid var(--line);border-radius:10px;
+    background:rgba(255,255,255,.025);color:var(--text);padding:9px 10px;
     font-family:inherit;text-align:right;display:flex;flex-direction:column;
-    align-items:flex-start;justify-content:center;gap:5px;cursor:pointer;
+    align-items:flex-start;justify-content:center;gap:3px;cursor:pointer;
     transition:border-color .15s,background .15s,transform .12s;
   }
   button.main-task-slot:hover{border-color:var(--olive-accent);background:var(--cyan-dim);transform:translateY(-1px);}
   .main-task-slot.optional{border-style:dashed;}
-  .main-task-slot.filled{cursor:default;align-items:stretch;justify-content:flex-start;min-height:122px;}
+  .main-task-slot.filled{cursor:default;align-items:stretch;justify-content:flex-start;min-height:92px;}
   .main-task-slot.filled:hover{transform:none;border-color:var(--line);background:rgba(255,255,255,.025);}
-  .main-task-slot.completed{opacity:.72;border-color:rgba(72,205,162,.28);}
+  .main-task-slot.completed{opacity:.72;border-color:rgba(143,209,79,.28);}
   .main-slot-head{display:flex;align-items:center;justify-content:space-between;gap:8px;width:100%;}
-  .main-slot-name{font-family:'Cairo';font-size:13px;font-weight:800;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-  .main-slot-xp{font-family:'Cairo';font-size:10px;color:var(--olive-accent);white-space:nowrap;}
-  .main-slot-desc{font-size:10.5px;color:var(--muted);line-height:1.5;}
-  .main-slot-subtasks{width:100%;display:flex;flex-direction:column;gap:5px;margin-top:4px;}
-  .main-slot-subtask{display:flex;align-items:center;gap:7px;font-size:10.5px;color:var(--text);cursor:pointer;}
-  .main-slot-subtask input{appearance:none;-webkit-appearance:none;width:16px;height:16px;border-radius:4px;border:1.5px solid rgba(183,184,176,.7);background:rgba(183,184,176,.1);cursor:pointer;position:relative;flex-shrink:0;}
-  .main-slot-subtask input:checked{background:#d7dfdc;border-color:#d7dfdc;}
-  .main-slot-subtask input:checked::after{content:"✓";position:absolute;inset:0;display:grid;place-items:center;color:#30433f;font-size:11px;font-weight:900;}
+  .main-slot-name{font-family:'Cairo';font-size:12px;font-weight:800;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .main-slot-xp{font-family:'Cairo';font-size:9px;color:var(--olive-accent);white-space:nowrap;}
+  .main-slot-desc{font-size:10px;color:var(--muted);line-height:1.4;}
+  .main-slot-subtasks{width:100%;display:flex;flex-direction:column;gap:4px;margin-top:3px;}
+  .main-slot-subtask{display:flex;align-items:center;gap:6px;font-size:10px;color:var(--text);cursor:pointer;}
+  .main-slot-subtask input{appearance:none;-webkit-appearance:none;width:14px;height:14px;border-radius:4px;border:1.5px solid rgba(147,161,126,.7);background:rgba(147,161,126,.1);cursor:pointer;position:relative;flex-shrink:0;}
+  .main-slot-subtask input:checked{background:#dcefc0;border-color:#dcefc0;}
+  .main-slot-subtask input:checked::after{content:"✓";position:absolute;inset:0;display:grid;place-items:center;color:#14200c;font-size:10px;font-weight:900;}
   .main-slot-subtask.done span{text-decoration:line-through;opacity:.55;}
-  .main-slot-progress{font-size:9.5px;color:var(--muted);margin-top:3px;}
-  .main-slot-actions{margin-top:auto;display:flex;align-items:center;justify-content:flex-end;gap:6px;width:100%;padding-top:6px;}
-  .main-slot-edit{padding:7px 10px!important;font-size:10.5px!important;background:rgba(255,255,255,.04);border:1px solid var(--line);color:var(--muted);border-radius:8px;}
+  .main-slot-progress{font-size:9px;color:var(--muted);margin-top:2px;}
+  .main-slot-actions{margin-top:auto;display:flex;align-items:center;justify-content:flex-end;gap:5px;width:100%;padding-top:5px;}
+  .main-slot-edit{padding:6px 9px!important;font-size:10px!important;background:rgba(255,255,255,.04);border:1px solid var(--line);color:var(--muted);border-radius:8px;}
   .main-slot-edit:hover{color:var(--text);border-color:var(--olive-accent);background:var(--cyan-dim);}
-  .main-slot-complete{padding:7px 12px!important;font-size:10.5px!important;}
+  .main-slot-complete{padding:6px 11px!important;font-size:10px!important;}
   .main-slot-complete:disabled{opacity:.4;cursor:not-allowed;}
-  .main-slot-locked{font-size:9.5px;color:var(--olive-accent);text-align:center;width:100%;padding-top:7px;}
-  @media(max-width:560px){.main-task-grid{grid-template-columns:1fr;}}
+  .main-slot-locked{font-size:9px;color:var(--olive-accent);text-align:center;width:100%;padding-top:6px;}
 </style>
 </head>
 <body>
@@ -798,10 +969,15 @@
 <div id="app">
   <header class="topbar">
     <div class="brand">
-      <div class="glyph">OP</div>
+      <div class="glyph">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 17L9 11L13 15L21 7" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M15 7H21V13" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
       <div>
-        <span>نظام ترقّي الحياة</span>
-        <small>نظام ترقّي الحياة</small>
+        <span>نظام الترقي الشخصي</span>
+        <small>ضع لنفسك مكافئات على كل المهام في يومك</small>
       </div>
     </div>
     <div class="profile-chip">
@@ -844,18 +1020,9 @@
           <svg id="life-radar-svg" viewBox="0 0 520 430" role="img" aria-label="مخطط راداري تفاعلي لإحصائيات مجالات الحياة"></svg>
           <div class="radar-tooltip" id="radar-tooltip"></div>
         </div>
-        <div class="radar-detail" id="radar-detail">مرّر على أي محور لمعرفة الإحصائية</div>
-        <div style="width:100%;margin-top:12px;text-align:center;font-family:Cairo;">
-          <label for="radar-max-slider" style="font-size:11px;color:var(--muted);font-weight:700;">الحد الأقصى للشبكة: <span id="radar-max-value">50%</span></label>
-          <input id="radar-max-slider" type="range" min="12.5" max="100" step="12.5" value="50" style="width:100%;margin-top:8px;accent-color:var(--olive-accent);cursor:pointer;">
-          <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:4px;font-family:Cairo;direction:ltr;">
-            <div style="text-align:left;font-size:9.5px;color:var(--muted);direction:rtl;">لا يمكن تقليل نطاق الشبكة أقل من أعلى النِسب المئوية عليها</div>
-            <div class="radar-custom-row"><button type="button" class="radar-custom-link" id="custom-radar-max-btn">تخصيص</button></div>
-          </div>
-        </div>
-        <div class="figure-caption" id="figure-caption">جاهز لاستلام المهمة القادمة</div>
+        
         <button class="btn penalty-btn" id="open-penalty-btn"><svg class="icon-inline" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l9.5 17H2.5L12 3z"/><path d="M12 10v4"/><circle cx="12" cy="17" r="0.9" fill="currentColor" stroke="none"/></svg> تسجيل عقوبة</button>
-        <button class="btn penalty-btn" id="open-restore-xp-btn" style="margin-top:8px; color:var(--olive-accent); border-color:rgba(72,205,162,0.35);"><svg class="icon-inline" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg> استرجاع XP</button>
+        <button class="btn penalty-btn" id="open-restore-xp-btn" style="margin-top:8px; color:var(--olive-accent); border-color:rgba(143,209,79,0.35);"><svg class="icon-inline" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg> استرجاع XP</button>
       </div>
     </div>
 
@@ -876,7 +1043,7 @@
       </div>
       <div class="stat-mini">
         <div class="cell"><div class="v" id="stat-xp">0</div><div class="l">إجمالي XP</div></div>
-        <div class="cell"><div class="v" id="stat-streak">0</div><div class="l">أيام متتالية</div></div>
+        <div class="cell" id="stat-streak-cell"><div class="v streak-v"><span class="streak-icon-wrap"><svg class="streak-flame" viewBox="0 0 24 24"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg><span class="streak-num" id="stat-streak">0</span></span></div><div class="l">أيام متتالية</div></div>
         <div class="cell"><div class="v" id="stat-tasks">0</div><div class="l">مهام منجزة</div></div>
       </div>
       <div class="ring-wrap">
@@ -887,12 +1054,12 @@
                     stroke-linecap="round" id="ring-progress" stroke-dasharray="352" stroke-dashoffset="352"/>
             <defs>
               <linearGradient id="ringGrad" x1="0" y1="0" x2="1" y2="1">
-                <stop offset="0%" stop-color="#48cda2"/>
-                <stop offset="100%" stop-color="#3f8f76"/>
+                <stop offset="0%" stop-color="#8fd14f"/>
+                <stop offset="100%" stop-color="#4c6b2f"/>
               </linearGradient>
             </defs>
           </svg>
-          <div class="pct"><div class="p" id="ring-pct">0%</div><div class="lbl">للرتبة القادمة</div></div>
+          <div class="pct"><div class="p" id="ring-pct">0%</div><div class="lbl">للمستوى القادم</div></div>
         </div>
         <div class="ring-caption" id="ring-caption">—</div>
       </div>
@@ -910,13 +1077,23 @@
   </div>
 
 
+  <!-- task list mode switch -->
+  <div class="panel log-panel task-mode-panel" id="task-mode-panel">
+    <div class="corner tl"></div><div class="corner br"></div>
+    <div class="panel-title"><span class="bar"></span> اختر طريقك</div>
+    <div class="task-mode-tabs" id="task-mode-tabs">
+      <button type="button" class="task-mode-tab active" data-task-mode="main">المهمات الرئيسية</button>
+      <button type="button" class="task-mode-tab" data-task-mode="unlimited">بلا حدود</button>
+    </div>
+  </div>
+
   <!-- main daily tasks -->
   <div class="panel log-panel main-task-panel" id="main-tasks-panel">
     <div class="corner tl"></div><div class="corner br"></div>
     <div class="panel-title"><span class="bar"></span> المهمات الرئيسية</div>
     <p class="queue-desc">ثلاث مهمات إلزامية ومهمة اختيارية — كل مهمة رئيسية تمنح 750 XP.</p>
     <div id="main-task-slots" class="main-task-grid">
-      <button type="button" class="main-task-slot" data-main-slot="progress"><strong>مهمة تقدُّم</strong><span class="main-slot-xp">750 XP</span></button>
+      <button type="button" class="main-task-slot" data-main-slot="progress"><strong>مهمة تقدُّم</strong><span class="main-slot-xp">750 XP</span></button>
       <button type="button" class="main-task-slot" data-main-slot="sport"><strong>رياضة</strong><span class="main-slot-xp">750 XP</span></button>
       <button type="button" class="main-task-slot" data-main-slot="skill"><strong>تطوير مهارة</strong><span class="main-slot-xp">750 XP</span></button>
       <button type="button" class="main-task-slot optional" data-main-slot="daily-cost"><strong>التكاليف اليومية</strong><span class="main-slot-xp">اختيارية · 750 XP</span></button>
@@ -926,8 +1103,8 @@
   <!-- task list -->
   <div class="panel log-panel" id="task-list-panel">
     <div class="corner tl"></div><div class="corner br"></div>
-    <div class="panel-title"><span class="bar"></span> قائمة المهام <span class="queue-cap" id="queue-cap-label">(0/3)</span></div>
-    <p class="queue-desc">حد أقصى 1 مهمة يومية حتى إنجاز المهمات الرئيسية الثلاث الإلزامية، ثم يرتفع الحد إلى 3 مهام.</p>
+    <div class="panel-title"><span class="bar"></span> قائمة المهام</div>
+    <p class="queue-desc" id="task-list-desc">حد أقصى 1 مهمة يومية حتى إنجاز المهمات الرئيسية الثلاث الإلزامية، ثم يرتفع الحد إلى 3 مهام.</p>
     <button class="btn add-task-btn" id="open-modal-btn" style="margin-bottom:14px;"><svg class="icon-inline" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg> إدراج مهمة</button>
     <div id="queue-list"><div class="log-empty">القائمة فاضية.</div></div>
   </div>
@@ -979,7 +1156,7 @@
     <div class="panel-title"><span class="bar"></span> متجر الرفاهية</div>
     <p class="queue-desc">كل 100 XP = عملة واحدة — العملات لا تنقص رصيد الـXP، هي عدّاد مستقل تقدر تصرفه على وقت ترفيه.</p>
     <div class="wallet-row">
-      <div class="wallet-coin-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9 12h6M12 9v6"/></svg></div>
+      <div class="wallet-coin-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="6" opacity="0.45"/><path d="M12 8.3l1.15 2.55 2.55 1.15-2.55 1.15L12 15.7l-1.15-2.55L8.3 12l2.55-1.15L12 8.3Z" fill="currentColor" stroke="none"/></svg></div>
       <div class="wallet-info">
         <div class="wallet-balance" id="wallet-balance">0</div>
         <div class="wallet-label">عملة متاحة للصرف</div>
@@ -1053,19 +1230,18 @@
 
   <!-- ================= STORE VIEW ================= -->
   <div id="store-view" style="display:none;">
-    <button class="btn btn-ghost back-btn" id="store-back-btn">→ رجوع للوحة الرئيسية</button>
     <div class="panel log-panel">
       <div class="corner tl"></div><div class="corner br"></div>
       <div class="panel-title"><span class="bar"></span> متجر الرفاهية</div>
       <p class="queue-desc">كل 100 XP تساوي عملة واحدة، من غير ما ينقص رصيد الـXP نفسه. اصرف عملاتك على وقت ترفيه مستحق.</p>
       <div class="store-balance-banner">
-        <div class="wallet-coin-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9 12h6M12 9v6"/></svg></div>
+        <div class="wallet-coin-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="6" opacity="0.45"/><path d="M12 8.3l1.15 2.55 2.55 1.15-2.55 1.15L12 15.7l-1.15-2.55L8.3 12l2.55-1.15L12 8.3Z" fill="currentColor" stroke="none"/></svg></div>
         <div class="wallet-info">
           <div class="wallet-balance" id="store-balance">0</div>
           <div class="wallet-label">عملة متاحة للصرف</div>
         </div>
       </div>
-      <button class="btn penalty-btn" id="open-restore-coins-btn" style="margin-top:8px; margin-bottom:14px; color:var(--silver-accent); border-color:rgba(158,177,170,0.35);"><svg class="icon-inline" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg> استرجاع عملات</button>
+      <button class="btn penalty-btn" id="open-restore-coins-btn" style="margin-top:8px; margin-bottom:14px; color:var(--silver-accent); border-color:rgba(182,232,138,0.35);"><svg class="icon-inline" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg> استرجاع عملات</button>
       <div class="store-grid" id="store-grid"></div>
     </div>
 
@@ -1097,10 +1273,15 @@
       <input type="text" id="task-name" placeholder="مثال: قراءة 20 صفحة">
       <div class="field-err" id="task-name-err">اكتب اسم المهمة.</div>
     </div>
-    <div class="field subtasks-field">
+    <div class="field subtasks-field" id="subtasks-field-wrap">
       <label style="display:flex;align-items:center;justify-content:space-between;gap:10px;">
         <span>المهام الفرعية (اختياري)</span>
-        <span id="subtasks-count-label" style="font-size:10.5px;color:var(--muted);">0 / 3</span>
+        <span style="display:flex;align-items:center;gap:8px;">
+          <span id="subtasks-count-label" style="font-size:10.5px;color:var(--muted);">0 / 3</span>
+          <button type="button" class="subtasks-toggle-btn" id="subtasks-toggle-btn" aria-label="فتح/إغلاق المهام الفرعية">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+        </span>
       </label>
       <div id="subtasks-fields">
         <input type="text" class="subtask-input" id="subtask-1" maxlength="120" placeholder="مهمة فرعية 1 (اختياري)">
@@ -1112,10 +1293,7 @@
         <div style="font-size:10.5px;color:var(--muted);margin-top:6px;line-height:1.5;">يمكنك تركها فارغة، أو إضافة حتى 3 مهام فرعية. عند وجودها، لا تكتمل المهمة الرئيسية إلا بعد إكمالها كلها.</div>
       </div>
     </div>
-    <div class="field">
-      <label>الوصف (اختياري)</label>
-      <textarea id="task-desc" placeholder="تفاصيل إضافية عن المهمة..."></textarea>
-    </div>
+    <input type="hidden" id="task-desc" value="">
     <div class="field">
       <label>درجة الصعوبة</label>
       <div class="diff-grid" id="diff-grid"></div>
@@ -1133,19 +1311,15 @@
   </div>
 </div>
 
-<!-- ================= CUSTOM RADAR MAX ================= -->
-<div class="modal-overlay radar-custom-modal" id="custom-radar-overlay">
+<!-- ================= TASK MODE CONFIRM ================= -->
+<div class="modal-overlay" id="task-mode-confirm-overlay">
   <div class="modal">
-    <h2>تخصيص نطاق الشبكة</h2>
-    <p class="sub">اكتب الحد الأقصى الذي تريده للشبكة العنكبية.</p>
-    <div class="field">
-      <label for="custom-radar-max-input">الحد الأقصى (%)</label>
-      <input id="custom-radar-max-input" type="number" min="0.1" step="any" inputmode="decimal" placeholder="مثال: 75">
-      <div class="radar-custom-error" id="custom-radar-error">الحد الأقصى قليل جدًا، وازن الإحصائية ثم قلل الحد.</div>
-    </div>
+    <h2 id="task-mode-confirm-title">تأكيد الانتقال</h2>
+    <p class="sub" id="task-mode-confirm-text"></p>
+    <p class="modal-warn" id="task-mode-confirm-warn"></p>
     <div class="modal-actions">
-      <button class="btn btn-ghost" id="cancel-custom-radar-btn" type="button">تراجع</button>
-      <button class="btn" id="apply-custom-radar-btn" type="button">تطبيق</button>
+      <button class="btn btn-ghost" id="cancel-task-mode-btn">تراجع</button>
+      <button class="btn btn-primary" id="confirm-task-mode-btn">تأكيد الانتقال</button>
     </div>
   </div>
 </div>
@@ -1157,7 +1331,7 @@
     <p class="sub">راح تنحذف كل بياناتك (الرتبة، الـXP، المهام) ولن تقدر تسترجعها بهذا الرمز مرة ثانية.</p>
     <div class="modal-actions">
       <button class="btn btn-ghost" id="cancel-delete-btn">تراجع</button>
-      <button class="btn btn-primary" id="confirm-delete-btn" style="background:linear-gradient(90deg,#9eb1aa,#668579); color:#27323a; box-shadow:0 8px 24px -12px rgba(158,177,170,0.28);">حذف نهائي</button>
+      <button class="btn btn-primary" id="confirm-delete-btn" style="background:linear-gradient(90deg,#b6e88a,#93a17e); color:#1c2415; box-shadow:0 8px 24px -12px rgba(182,232,138,0.28);">حذف نهائي</button>
     </div>
   </div>
 </div>
@@ -1168,21 +1342,21 @@
     <h2>تسجيل عقوبة</h2>
     <p class="sub">اختر مقدار الخصم من رصيدك — يُستخدم عند الإخلال بمهمة أو التزام حددته لنفسك.</p>
     <div class="field">
-      <label>السبب <span style="color:var(--silver-accent)">(إجباري)</span></label>
+      <label>السبب</label>
       <textarea id="penalty-reason" placeholder="مثال: تأخرت عن موعد النوم..."></textarea>
       <div class="field-err" id="penalty-reason-err">اكتب سبب العقوبة.</div>
     </div>
     <div class="field penalty-task-field">
       <label class="penalty-task-toggle">
         <input type="checkbox" id="penalty-task-enabled">
-        إضافة مهمة عقاب <span style="color:var(--muted)">(اختياري)</span>
+        إضافة مهمة عقاب
       </label>
       <input type="text" id="penalty-task-input" class="penalty-task-input" maxlength="120" placeholder="مثال: تنظيف الغرفة بالكامل" style="display:none;">
       <div class="penalty-task-hint">إذا أضفت مهمة وأتممتها يُسترجع الخصم الذي حصل بسبب هذه العقوبة. يمكنك تنفيذ العقوبة بدون إضافة مهمة.</div>
       <div class="field-err" id="penalty-task-err">اكتب مهمة العقاب أو ألغِ خيار إضافة مهمة العقاب.</div>
     </div>
     <div class="field">
-      <label>تصنيف المسار <span style="color:var(--silver-accent)">(إجباري)</span></label>
+      <label>تصنيف المسار</label>
       <div class="diff-grid" id="penalty-track-grid"></div>
       <div class="field-err" id="penalty-track-err">اختر مسار العقوبة.</div>
       <div class="penalty-task-hint">يُخصم المبلغ من النقاط العامة ومن نقاط المسار المصنّف.</div>
@@ -1194,7 +1368,7 @@
     </div>
     <div class="modal-actions">
       <button class="btn btn-ghost" id="cancel-penalty-btn">إلغاء</button>
-      <button class="btn btn-primary" id="confirm-penalty-btn" style="background:linear-gradient(90deg,#9eb1aa,#668579); color:#27323a; box-shadow:0 8px 24px -12px rgba(158,177,170,0.28);">تنفيذ الخصم</button>
+      <button class="btn btn-primary" id="confirm-penalty-btn" style="background:linear-gradient(90deg,#b6e88a,#93a17e); color:#1c2415; box-shadow:0 8px 24px -12px rgba(182,232,138,0.28);">تنفيذ الخصم</button>
     </div>
   </div>
 </div>
@@ -1230,15 +1404,15 @@
       <label>المقدار</label>
       <div style="display:flex; align-items:center; justify-content:center; gap:10px; margin-top:8px; flex-wrap:wrap;">
         <button class="step-sq-white" id="restore-coins-plus10" type="button">+10</button>
-        <button class="btn btn-ghost" id="restore-coins-plus" type="button" style="width:44px; height:44px; padding:0; font-size:20px; font-weight:800; color:var(--silver-accent); border-color:rgba(158,177,170,0.35);">+</button>
+        <button class="btn btn-ghost" id="restore-coins-plus" type="button" style="width:44px; height:44px; padding:0; font-size:20px; font-weight:800; color:var(--silver-accent); border-color:rgba(182,232,138,0.35);">+</button>
         <div id="restore-coins-value" style="min-width:110px; text-align:center; font-family:'Cairo'; font-size:26px; font-weight:800; color:var(--silver-accent);">0</div>
-        <button class="btn btn-ghost" id="restore-coins-minus" type="button" style="width:44px; height:44px; padding:0; font-size:20px; font-weight:800; color:var(--silver-accent); border-color:rgba(158,177,170,0.35);">−</button>
+        <button class="btn btn-ghost" id="restore-coins-minus" type="button" style="width:44px; height:44px; padding:0; font-size:20px; font-weight:800; color:var(--silver-accent); border-color:rgba(182,232,138,0.35);">−</button>
         <button class="step-sq-white" id="restore-coins-minus10" type="button">-10</button>
       </div>
     </div>
     <div class="modal-actions">
       <button class="btn btn-ghost" id="cancel-restore-coins-btn">إلغاء</button>
-      <button class="btn btn-primary" id="confirm-restore-coins-btn" style="background:linear-gradient(90deg,#9eb1aa,#668579); color:#27323a; box-shadow:0 8px 24px -12px rgba(158,177,170,0.28);">تأكيد الاسترجاع</button>
+      <button class="btn btn-primary" id="confirm-restore-coins-btn" style="background:linear-gradient(90deg,#b6e88a,#93a17e); color:#1c2415; box-shadow:0 8px 24px -12px rgba(182,232,138,0.28);">تأكيد الاسترجاع</button>
     </div>
   </div>
 </div>
@@ -1306,7 +1480,7 @@
     <p class="sub">راح يتصفّر عداد الأيام لمتلازمة <strong id="relapse-target-name"></strong> من جديد ويُخصم 500 XP من رصيدك. المهام اليومية تبقى محفوظة بس بدون تعليم إنجاز.</p>
     <div class="modal-actions">
       <button class="btn btn-ghost" id="cancel-relapse-btn">تراجع</button>
-      <button class="btn btn-primary" id="confirm-relapse-btn" style="background:linear-gradient(90deg,#9eb1aa,#668579); color:#27323a; box-shadow:0 8px 24px -12px rgba(158,177,170,0.28);">تأكيد الانتكاس</button>
+      <button class="btn btn-primary" id="confirm-relapse-btn" style="background:linear-gradient(90deg,#b6e88a,#93a17e); color:#1c2415; box-shadow:0 8px 24px -12px rgba(182,232,138,0.28);">تأكيد الانتكاس</button>
     </div>
   </div>
 </div>
@@ -1408,20 +1582,103 @@
   </div>
 </div>
 
+<!-- ================= CELEBRATION ================= -->
+<div class="celebrate-overlay" id="celebrate-overlay">
+  <div class="celebrate-confetti" id="celebrate-confetti"></div>
+  <div class="celebrate-card">
+    <div class="celebrate-burst">
+      <svg viewBox="0 0 100 100" class="celebrate-star">
+        <path d="M50 4 L61 36 L96 36 L68 57 L79 90 L50 70 L21 90 L32 57 L4 36 L39 36 Z"/>
+      </svg>
+      <div class="celebrate-check">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#14200c" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12l5 5L20 6"/></svg>
+      </div>
+    </div>
+    <h2 id="celebrate-title">أحسنت!</h2>
+    <p class="celebrate-sub" id="celebrate-sub"></p>
+    <div class="celebrate-xp" id="celebrate-xp"></div>
+    <button class="btn btn-primary" id="celebrate-close-btn">متابعة</button>
+  </div>
+</div>
+
 <script>
 (function(){
-  const RANKS = [
-    { key:'sld',  name:'مجنّد',   min:0,      max:5000,   stars:1  },
-    { key:'lt',   name:'ملازم',   min:5000,   max:12500,  stars:2  },
-    { key:'cpt',  name:'نقيب',    min:12500,  max:22500,  stars:3  },
-    { key:'maj',  name:'رائد',    min:22500,  max:35000,  stars:4  },
-    { key:'ltc',  name:'مقدَّم',   min:35000,  max:50000,  stars:5  },
-    { key:'col',  name:'عقيد',    min:50000,  max:60000,  stars:6  },
-    { key:'brg',  name:'عميد',    min:60000,  max:75000,  stars:7  },
-    { key:'mgn',  name:'لواء',    min:75000,  max:100000, stars:8  },
-    { key:'ltg',  name:'فريق',    min:100000, max:150000, stars:9  },
-    { key:'min',  name:'وزير',    min:150000, max:250000, stars:10 },
+  // =========================================================
+  // نظام الاكسبي والمستويات — منحنى تصاعدي حقيقي (RPG curve)
+  // كل مستوى يحتاج XP أكبر من الي قبله بالمعادلة:
+  //   XP للانتقال من مستوى n إلى n+1  =  35 × n × √n   (مقرّب)
+  // يعني كل ما ترتفع، الفرق يكبر بشكل غير خطي — النص الأول من
+  // السلّم (المستويات 1–50) يمشي بسرعة نسبية، لكن من 50 لين 100
+  // يتطلب مجهود أضعاف مضاعفة، وبعد المستوى 100 يدخل اللاعب
+  // مرحلة "أسطورة" اللي ما إلها سقف نهائي.
+  // =========================================================
+  const XP_BASE = 35;
+  const XP_GROWTH = 1.5;
+  const RANK_TIERS = [
+    { key:'sld', name:'مجنّد'  },
+    { key:'lt',  name:'ملازم'  },
+    { key:'cpt', name:'نقيب'   },
+    { key:'maj', name:'رائد'   },
+    { key:'ltc', name:'مقدَّم'  },
+    { key:'col', name:'عقيد'   },
+    { key:'brg', name:'عميد'   },
+    { key:'mgn', name:'لواء'   },
+    { key:'ltg', name:'فريق'   },
+    { key:'min', name:'وزير'   },
   ];
+  const LEVELS_PER_TIER = 10;                                  // كل رتبة = 10 مستويات
+  const MAX_TIER_LEVEL = RANK_TIERS.length * LEVELS_PER_TIER;  // = 100 (نهاية "وزير")
+
+  // عتبات XP التراكمية — تُبنى تدريجيًا وتُمدَّد تلقائيًا كل ما احتجنا مستوى أعلى.
+  // LEVEL_THRESHOLDS[n] = مجموع XP اللازم لبلوغ المستوى (n+1) بدءًا من صفر.
+  const LEVEL_THRESHOLDS = [0];
+  function xpToClimb(n){ return Math.round(XP_BASE * Math.pow(n, XP_GROWTH)); }
+  function ensureLevelThresholds(targetIndex){
+    while(LEVEL_THRESHOLDS.length <= targetIndex){
+      const n = LEVEL_THRESHOLDS.length;
+      LEVEL_THRESHOLDS.push(LEVEL_THRESHOLDS[n-1] + xpToClimb(n));
+    }
+  }
+  function levelFromXp(xp){
+    let n = 0;
+    ensureLevelThresholds(n+1);
+    while(LEVEL_THRESHOLDS[n+1] <= xp){
+      n++;
+      ensureLevelThresholds(n+1);
+    }
+    return n+1;
+  }
+  function rankForLevel(level){
+    if(level <= MAX_TIER_LEVEL){
+      const idx = Math.min(RANK_TIERS.length-1, Math.floor((level-1)/LEVELS_PER_TIER));
+      return { name:RANK_TIERS[idx].name, stars:idx+1, legendary:false, tierIndex:idx };
+    }
+    const legendTier = Math.floor((level - MAX_TIER_LEVEL - 1)/LEVELS_PER_TIER) + 1;
+    return { name:`أسطورة #${legendTier}`, stars:10, legendary:true, tierIndex:RANK_TIERS.length - 1 + legendTier };
+  }
+  // يرجّع كل المعلومات المطلوبة للواجهة دفعة وحدة: المستوى، الرتبة، ونسبة التقدم
+  function getLevelData(xp){
+    const level = levelFromXp(xp);
+    ensureLevelThresholds(level);
+    const floorXp = level === 1 ? 0 : LEVEL_THRESHOLDS[level-1];
+    const nextXp = LEVEL_THRESHOLDS[level];
+    const rank = rankForLevel(level);
+    const into = xp - floorXp;
+    const span = nextXp - floorXp;
+    const pct = Math.max(0, Math.min(100, Math.round((into/span)*100)));
+    return { level, rank, floorXp, nextXp, into, span, pct };
+  }
+  // حدود XP لبداية ونهاية رتبة معيّنة (تُستخدم في سلّم الرُتب)
+  function tierXpRange(tierIndex){
+    const startLevel = tierIndex*LEVELS_PER_TIER + 1;
+    const endLevel = startLevel + LEVELS_PER_TIER - 1;
+    ensureLevelThresholds(endLevel);
+    return {
+      startLevel, endLevel,
+      minXp: startLevel === 1 ? 0 : LEVEL_THRESHOLDS[startLevel-1],
+      maxXp: LEVEL_THRESHOLDS[endLevel]
+    };
+  }
   const DIFFS = [
     { key:'lvl1', name:'المستوى الأول',   xp:100  },
     { key:'lvl2', name:'المستوى الثاني',  xp:250  },
@@ -1440,9 +1697,9 @@
 
   const MAX_QUEUE = 3;
   let state = null; // {name, code, xp, tasks:[], pending:[]}
-  let radarMax = 50; // الحد الأقصى لشبكة الرسم العنكبية
   let selectedDiff = null;
   let selectedTrack = null;
+  const expandedProjectSteps = new Set();
   let selectedPenalty = null;
   let taskModalMode = 'daily';
   let editingTaskId = null;
@@ -1470,7 +1727,7 @@
       icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20s-7-4.4-9.3-9C1.4 8 2.6 5 5.7 5c1.9 0 3.3 1.1 4 2.3.7-1.2 2.1-2.3 4-2.3 3.1 0 4.3 3 3 6-2.3 4.6-9.3 9-9.3 9Z"/><path d="M4.2 12h3l1.5-2.8L11 15l1.3-4 1 1h4.5"/></svg>' },
     { key:'sci',   name:'علمي',   sub:'المعرفة والبحث',
       icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h6M10 3v5.5L5.3 17a2 2 0 001.7 3h10a2 2 0 001.7-3L14 8.5V3"/><path d="M8 15h8"/></svg>' },
-    { key:'faith', name:'إيماني', sub:'المعنى والسكينة',
+    { key:'faith', name:'إيماني', sub:'العبادات والتطوع',
       icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3.6"/><path d="M12 2.5v3M12 18.5v3M2.5 12h3M18.5 12h3M5.3 5.3l2.1 2.1M16.6 16.6l2.1 2.1M5.3 18.7l2.1-2.1M16.6 7.4l2.1-2.1"/></svg>' },
     { key:'media',  name:'إعلامي', sub:'المتابعة والمحتوى',
       icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="6" width="19" height="13" rx="2"/><path d="M8 3.5 12 6l4-2.5"/><path d="M7 11.5h4v4H7z"/><path d="M14 11.5h3M14 14.5h3"/></svg>' },
@@ -1479,12 +1736,18 @@
   ];
 
   const SKILL_CATS = [
-    { key:'digital', name:'رقمي' },
-    { key:'health',  name:'صحّي' },
-    { key:'growth',  name:'تنموي' },
-    { key:'lit',     name:'أدبي' },
-    { key:'fin',     name:'مالي' },
-    { key:'edu',     name:'تعليمي' },
+    { key:'digital', name:'رقمي',
+      icon:'<svg viewBox="0 0 24 24" fill="none" stroke="#14200c" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="12" rx="1.6"/><path d="M8 20h8M12 16v4"/></svg>' },
+    { key:'health',  name:'صحّي',
+      icon:'<svg viewBox="0 0 24 24" fill="none" stroke="#14200c" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20s-7-4.4-9.3-9C1.4 8 2.6 5 5.7 5c1.9 0 3.3 1.1 4 2.3.7-1.2 2.1-2.3 4-2.3 3.1 0 4.3 3 3 6-2.3 4.6-9.3 9-9.3 9Z"/></svg>' },
+    { key:'growth',  name:'تنموي',
+      icon:'<svg viewBox="0 0 24 24" fill="none" stroke="#14200c" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l6-6 4 4 8-8"/><path d="M15 6h6v6"/></svg>' },
+    { key:'lit',     name:'أدبي',
+      icon:'<svg viewBox="0 0 24 24" fill="none" stroke="#14200c" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6.5c-1.6-1.3-4-2-6.5-2v12c2.5 0 4.9.7 6.5 2 1.6-1.3 4-2 6.5-2v-12c-2.5 0-4.9.7-6.5 2Z"/><path d="M12 6.5v12"/></svg>' },
+    { key:'fin',     name:'مالي',
+      icon:'<svg viewBox="0 0 24 24" fill="none" stroke="#14200c" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5v9M9.3 15c0 1.1 1.2 2 2.7 2s2.7-.7 2.7-1.8c0-2.7-5.4-1.3-5.4-4 0-1.1 1.2-1.8 2.7-1.8s2.7.7 2.7 1.6"/></svg>' },
+    { key:'edu',     name:'تعليمي',
+      icon:'<svg viewBox="0 0 24 24" fill="none" stroke="#14200c" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 8.5 12 4l10 4.5-10 4.5-10-4.5Z"/><path d="M6 10.7V16c0 1.4 2.7 2.5 6 2.5s6-1.1 6-2.5v-5.3"/><path d="M20.5 9v6"/></svg>' },
   ];
   const SKILL_STAGES = [24, 72, 100, 1000];
   const SKILL_HOUR_XP = 250;
@@ -1513,7 +1776,7 @@
     return Math.max(0, totalCoins(state.xp) - state.coinsSpent + (state.coinsAdjustment || 0));
   }
   function coinIconSvg(){
-    return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9 12h6M12 9v6"/></svg>';
+    return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="6" opacity="0.45"/><path d="M12 8.3l1.15 2.55 2.55 1.15-2.55 1.15L12 15.7l-1.15-2.55L8.3 12l2.55-1.15L12 8.3Z" fill="currentColor" stroke="none"/></svg>';
   }
 
   const SYN_GOAL_DAYS = 90;
@@ -1526,7 +1789,7 @@
   ];
   const PROJECT_MAX_TASKS = 3;
   const PROJECT_STEP_XP = 500; // XP reward for completing each project step
-  const PROJECT_CHART_COLORS = ['#48cda2', '#9eb1aa', '#7da394', '#6aa996', '#3f8f76', '#929e70', '#a1a58e', '#7da394'];
+  const PROJECT_CHART_COLORS = ['#8fd14f', '#b6e88a', '#6a9c3f', '#d97757', '#4c6b2f', '#7ecb4a', '#8aab5e', '#6a9c3f'];
   function ensureAchievements(){
     if(!state.achievements) state.achievements = [];
   }
@@ -1624,10 +1887,8 @@
     </div>`;
   }
 
-  function getRankIndex(xp){
-    for(let i=RANKS.length-1;i>=0;i--){ if(xp >= RANKS[i].min) return i; }
-    return 0;
-  }
+  // فواصل الآلاف — عشان الأرقام الكبيرة (بعد آلاف الـXP) تنقرأ بسهولة
+  function formatXp(n){ return Math.round(n).toLocaleString('en-US'); }
 
   function code(){
     const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
@@ -1673,7 +1934,23 @@
       return !!t && !!t.done;
     });
   }
-  function dailyTaskMax(){ return requiredMainTasksDone() ? MAX_QUEUE : 1; }
+  function ensureTaskListMode(){
+    if(!state) return;
+    if(state.taskListMode !== 'unlimited') state.taskListMode = 'main';
+  }
+  function dailyTaskMax(){
+    if(state && state.taskListMode === 'unlimited') return Infinity;
+    return requiredMainTasksDone() ? MAX_QUEUE : 1;
+  }
+  // في وضع "بلا حدود" تبقى المهمة المُنجزة ظاهرة (بعلامة صح) داخل القائمة
+  // ولا تُحذف تلقائيًا إلا بعد تغيّر اليوم (بعد الساعة 12 ليلًا)
+  function cleanupCompletedPending(){
+    if(!state || !Array.isArray(state.pending)) return;
+    const today = mainDayKey();
+    const before = state.pending.length;
+    state.pending = state.pending.filter(t => !(t.done && t.doneDayKey && t.doneDayKey !== today));
+    return state.pending.length !== before;
+  }
 
   async function saveState(){
     try{
@@ -1685,6 +1962,51 @@
       ]);
     }catch(e){ console.error('save failed', e); }
   }
+
+  // ---------- celebration screen ----------
+  const CELEBRATE_COLORS = ['#8fd14f','#a9dd6e','#d7edb0','#b6e88a','#4c6b2f','#eef2e3'];
+  function spawnConfetti(){
+    const wrap = document.getElementById('celebrate-confetti');
+    if(!wrap) return;
+    wrap.innerHTML = '';
+    const count = 46;
+    for(let i=0;i<count;i++){
+      const s = document.createElement('span');
+      const left = Math.random()*100;
+      const delay = Math.random()*0.35;
+      const duration = 2.2 + Math.random()*1.6;
+      const color = CELEBRATE_COLORS[Math.floor(Math.random()*CELEBRATE_COLORS.length)];
+      const size = 6 + Math.random()*6;
+      s.style.left = left+'%';
+      s.style.width = size+'px';
+      s.style.height = (size*1.6)+'px';
+      s.style.background = color;
+      s.style.animationDuration = duration+'s';
+      s.style.animationDelay = delay+'s';
+      s.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+      wrap.appendChild(s);
+    }
+  }
+  function showCelebration(title, sub, xpGain){
+    const overlay = document.getElementById('celebrate-overlay');
+    if(!overlay) return;
+    document.getElementById('celebrate-title').textContent = title || 'أحسنت!';
+    document.getElementById('celebrate-sub').textContent = sub || '';
+    const xpEl = document.getElementById('celebrate-xp');
+    if(xpGain){ xpEl.style.display='inline-block'; xpEl.textContent = '+' + xpGain + ' XP'; }
+    else { xpEl.style.display='none'; }
+    spawnConfetti();
+    overlay.classList.add('show');
+  }
+  function closeCelebration(){
+    const overlay = document.getElementById('celebrate-overlay');
+    if(!overlay) return;
+    overlay.classList.remove('show');
+    const wrap = document.getElementById('celebrate-confetti');
+    if(wrap) wrap.innerHTML = '';
+  }
+  document.getElementById('celebrate-close-btn').addEventListener('click', closeCelebration);
+  document.getElementById('celebrate-overlay').addEventListener('click', (e)=>{ if(e.target.id==='celebrate-overlay') closeCelebration(); });
 
   function computeStreak(tasks){
     if(!tasks.length) return 0;
@@ -1759,6 +2081,8 @@
     // Changing the radar maximum must never alter, clamp, or otherwise modify them.
     const totalCount=counts.reduce((sum,c)=>sum+c,0);
     const scores=counts.map(c=>totalCount ? Math.round((c/totalCount)*100) : 0);
+    // شبكة الرسم العنكبية تكبر وتصغر تلقائيًا حسب أعلى نسبة مئوية حالية.
+    const radarMax=Math.max(...scores, 1);
     const angle=i=>(-Math.PI/2)+(i*2*Math.PI/N);
     const pt=(i,r)=>({x:cx+Math.cos(angle(i))*r,y:cy+Math.sin(angle(i))*r});
     const poly=(r)=>TRACKS.map((_,i)=>{const p=pt(i,r);return `${p.x},${p.y}`}).join(' ');
@@ -1767,25 +2091,24 @@
     let html='';
     for(let level=1;level<=5;level++) html+=`<polygon class="radar-grid" points="${poly(R*level/5)}"/>`;
     TRACKS.forEach((t,i)=>{
-      const p=pt(i,R), box=pt(i,R+54);
-      const boxW=116, boxH=54;
+      const p=pt(i,R), box=pt(i,R+58);
+      const boxW=124, boxH=50;
       html+=`<line class="radar-axis" x1="${cx}" y1="${cy}" x2="${p.x}" y2="${p.y}"/>`;
       // Connector visually ties every stat box to its exact radar vertex.
       html+=`<line class="radar-label-connector" x1="${p.x}" y1="${p.y}" x2="${box.x}" y2="${box.y}"/>`;
       html+=`<g class="radar-label-group" data-radar-index="${i}" tabindex="0" role="button" aria-label="${t.name} ${scores[i]}%">`;
       html+=`<rect class="radar-label-box" x="${box.x-boxW/2}" y="${box.y-boxH/2}" width="${boxW}" height="${boxH}" rx="9"/>`;
-      html+=`<text class="radar-label" data-radar-index="${i}" x="${box.x}" y="${box.y-7}" text-anchor="middle" dominant-baseline="middle">${t.name}</text>`;
-      html+=`<text class="radar-value" data-radar-index="${i}" x="${box.x}" y="${box.y+15}" text-anchor="middle" dominant-baseline="middle">${scores[i]}%</text>`;
+      html+=`<text class="radar-label" data-radar-index="${i}" x="${box.x}" y="${box.y}" text-anchor="middle" dominant-baseline="middle">${t.name} <tspan class="radar-value">${scores[i]}%</tspan></text>`;
       html+=`</g>`;
     });
     html+=`<polygon class="radar-fill" points="${dataPoly}"/>`;
     TRACKS.forEach((t,i)=>{const p=pt(i,R*(scores[i]/radarMax)); html+=`<circle class="radar-point" data-radar-index="${i}" cx="${p.x}" cy="${p.y}" r="5"/>`;});
-    html+=`<circle cx="${cx}" cy="${cy}" r="4" fill="#48cda2" stroke="#1b222a" stroke-width="2"/>`;
+    html+=`<circle cx="${cx}" cy="${cy}" r="4" fill="#8fd14f" stroke="#19230f" stroke-width="2"/>`;
     svg.innerHTML=html;
 
     const show=(i,e)=>{
       const t=TRACKS[i], c=counts[i], sc=scores[i];
-      detail.innerHTML=`<strong style="color:#62d8b1">${t.name}</strong> — ${c} مهمة منجزة · ${sc}% من إجمالي المهام`;
+      detail && (detail.innerHTML=`<strong style="color:#a9dd6e">${t.name}</strong> — ${c} مهمة منجزة · ${sc}% من إجمالي المهام`);
       tooltip.innerHTML=`<strong>${t.name}</strong><br>${c} مهمة · ${sc}%`;
       const rect=wrap.getBoundingClientRect();
       const x=(e?.clientX||rect.left+rect.width/2)-rect.left;
@@ -1794,7 +2117,7 @@
       tooltip.style.top=Math.max(4,Math.min(rect.height-62,y-20))+'px';
       tooltip.classList.add('show');
       svg.querySelectorAll('.radar-point').forEach(p=>p.classList.toggle('active',p.dataset.radarIndex==i));
-      svg.querySelectorAll('.radar-label-box').forEach(b=>b.style.stroke=b.parentElement.dataset.radarIndex==i?'#62d8b1':'');
+      svg.querySelectorAll('.radar-label-box').forEach(b=>b.style.stroke=b.parentElement.dataset.radarIndex==i?'#a9dd6e':'');
     };
     const hide=()=>{
       tooltip.classList.remove('show');
@@ -1812,68 +2135,13 @@
     });
   }
 
-  const radarSlider=document.getElementById('radar-max-slider');
-  const customRadarMaxBtn=document.getElementById('custom-radar-max-btn');
-  function getRadarScores(){
-    if(!state) return [];
-    const counts=TRACKS.map(t=>state.tasks.filter(x=>x.trackKey===t.key).length);
-    const total=counts.reduce((sum,c)=>sum+c,0);
-    return counts.map(c=>total ? Math.round((c/total)*100) : 0);
-  }
-  function getRadarMaxRequired(){
-    return Math.max(0,...getRadarScores());
-  }
-  function updateRadarMax(value, options={}){
-    const parsed=Number(value);
-    const errorEl=document.getElementById('custom-radar-error');
-    if(!Number.isFinite(parsed) || parsed <= 0) return false;
-    const required=getRadarMaxRequired();
-    // Never apply a maximum below any existing track percentage.
-    if(parsed < required){
-      if(options.showError && errorEl){
-        errorEl.textContent='الحد الأقصى قليل جدًا، وازن الإحصائية ثم قلل.';
-        errorEl.classList.add('show');
-      }
-      return false;
-    }
-    if(errorEl) errorEl.classList.remove('show');
-    radarMax=parsed;
-    const v=document.getElementById('radar-max-value');
-    if(v) v.textContent=radarMax+'%';
-    if(radarSlider && radarMax >= 12.5 && radarMax <= 100) radarSlider.value=radarMax;
-    renderLifeRadar();
-    return true;
-  }
-  if(radarSlider){
-    radarSlider.addEventListener('input',()=>{
-      // Slider changes are also validated; invalid values simply do not apply.
-      updateRadarMax(radarSlider.value, {showError:false});
-      radarSlider.value=radarMax;
-    });
-  }
-  const customRadarOverlay=document.getElementById('custom-radar-overlay');
-  const customRadarInput=document.getElementById('custom-radar-max-input');
-  const cancelCustomRadarBtn=document.getElementById('cancel-custom-radar-btn');
-  const applyCustomRadarBtn=document.getElementById('apply-custom-radar-btn');
-  function openCustomRadar(){ if(!customRadarOverlay) return; if(customRadarInput) customRadarInput.value=radarMax; const err=document.getElementById('custom-radar-error'); if(err) err.classList.remove('show'); customRadarOverlay.classList.add('show'); setTimeout(()=>customRadarInput&&customRadarInput.focus(),50); }
-  function closeCustomRadar(){ if(customRadarOverlay) customRadarOverlay.classList.remove('show'); }
-  if(customRadarMaxBtn) customRadarMaxBtn.addEventListener('click',openCustomRadar);
-  if(cancelCustomRadarBtn) cancelCustomRadarBtn.addEventListener('click',closeCustomRadar);
-  if(applyCustomRadarBtn) applyCustomRadarBtn.addEventListener('click',()=>{
-    const value=customRadarInput.value.trim();
-    const parsed=Number(value);
-    if(!Number.isFinite(parsed)||parsed<=0){customRadarInput.focus();return;}
-    if(updateRadarMax(parsed,{showError:true})) closeCustomRadar();
-  });
-  if(customRadarInput) customRadarInput.addEventListener('keydown',e=>{if(e.key==='Enter') applyCustomRadarBtn.click(); if(e.key==='Escape') closeCustomRadar();});
-
   function render(){
     if(!state) return;
     ensureMainTasks();
     renderMainTasks();
     const xp = state.xp;
-    const idx = getRankIndex(xp);
-    const rank = RANKS[idx];
+    const lv = getLevelData(xp);
+    const rank = lv.rank;
     const initial = state.name.trim().charAt(0).toUpperCase() || '؟';
 
     document.getElementById('chip-name').textContent = state.name;
@@ -1881,57 +2149,66 @@
     document.getElementById('chip-avatar').textContent = initial;
     document.getElementById('status-avatar').textContent = initial;
     document.getElementById('status-name').textContent = state.name;
-    document.getElementById('status-rank').textContent = rank.name;
-    document.getElementById('stat-xp').textContent = xp;
-    document.getElementById('stat-streak').textContent = computeStreak(state.tasks);
+    document.getElementById('status-rank').textContent = `${rank.name} · المستوى ${lv.level}`;
+    document.getElementById('stat-xp').textContent = formatXp(xp);
+    const streakVal = computeStreak(state.tasks);
+    document.getElementById('stat-streak').textContent = streakVal;
+    const streakCellEl = document.getElementById('stat-streak-cell');
+    if(streakCellEl) streakCellEl.classList.toggle('active', streakVal > 0);
     document.getElementById('stat-tasks').textContent = state.tasks.length;
-    document.getElementById('badge-rank').textContent = rank.name;
-    document.getElementById('badge-stars').innerHTML = insigniaSvg(rank, '#48cda2');
+    document.getElementById('badge-rank').textContent = `${rank.name} — Lv.${lv.level}`;
+    document.getElementById('badge-stars').innerHTML = insigniaSvg(rank, '#8fd14f');
 
-    // ring
-    let pct, caption;
-    const isTopRank = idx === RANKS.length - 1;
-    if(isTopRank && xp >= rank.max){
-      pct = 100;
-      caption = `أعلى رتبة — ${rank.name}`;
-    } else {
-      const into = xp - rank.min;
-      const span = rank.max - rank.min;
-      pct = Math.min(100, Math.round((into/span)*100));
-      caption = isTopRank
-        ? `${xp - rank.min} / ${rank.max - rank.min} XP لاكتمال الرتبة`
-        : `${xp - rank.min} / ${rank.max - rank.min} XP حتى ${RANKS[idx+1].name}`;
-    }
+    // ring — نسبة التقدّم داخل المستوى الحالي (وليس داخل الرتبة الكاملة)
+    const pct = lv.pct;
+    const caption = `${formatXp(lv.into)} / ${formatXp(lv.span)} XP حتى المستوى ${lv.level + 1}`;
     const circumference = 352;
     const offset = circumference - (circumference * pct/100);
     document.getElementById('ring-progress').style.strokeDashoffset = offset;
     document.getElementById('ring-pct').textContent = pct + '%';
     document.getElementById('ring-caption').textContent = caption;
 
-    // rank rail
+    // rank rail — 10 رتب أساسية (100 مستوى)، وبعدها رُتب "أسطورة" تتجدّد للأبد
     const rail = document.getElementById('rank-rail');
-    rail.innerHTML = RANKS.map((r, i) => {
+    const baseRows = RANK_TIERS.map((t, i) => {
+      const range = tierXpRange(i);
       let cls = '';
-      if(i < idx) cls = 'done';
-      else if(i === idx) cls = 'active';
+      if(rank.tierIndex > i) cls = 'done';
+      else if(rank.tierIndex === i) cls = 'active';
       let fillPct = 0;
-      if(i < idx) fillPct = 100;
-      else if(i === idx) fillPct = (r.max===Infinity) ? 100 : Math.min(100, Math.round(((xp-r.min)/(r.max-r.min))*100));
-      const rangeLabel = r.max === Infinity ? `فوق ${r.min}` : `${r.min} – ${r.max}`;
+      if(rank.tierIndex > i) fillPct = 100;
+      else if(rank.tierIndex === i) fillPct = Math.min(100, Math.round(((xp - range.minXp)/(range.maxXp - range.minXp))*100));
       return `
         <div class="rank-node ${cls}">
           <div class="node-dot"></div>
           <div class="ins-row">
-            <div class="ins-name">${r.name}</div>
-            <div class="stars">${insigniaSvg(r, i<=idx ? '#3f8f76' : 'rgba(180,190,155,0.35)')}</div>
+            <div class="ins-name">${t.name}</div>
+            <div class="stars">${insigniaSvg({stars:i+1}, rank.tierIndex>=i ? '#4c6b2f' : 'rgba(151,183,106,0.35)')}</div>
           </div>
-          <div class="range">${rangeLabel} XP</div>
+          <div class="range">مستوى ${range.startLevel}–${range.endLevel} · ${formatXp(range.minXp)} – ${formatXp(range.maxXp)} XP</div>
           <div class="mini-bar"><div class="mini-fill" style="width:${fillPct}%"></div></div>
         </div>`;
     }).join('');
+    let legendaryRow = '';
+    if(rank.legendary){
+      const range = tierXpRange(rank.tierIndex);
+      const fillPct = Math.min(100, Math.round(((xp - range.minXp)/(range.maxXp - range.minXp))*100));
+      legendaryRow = `
+        <div class="rank-node active legendary">
+          <div class="node-dot"></div>
+          <div class="ins-row">
+            <div class="ins-name">${rank.name}</div>
+            <div class="stars">${insigniaSvg({stars:10}, '#8fd14f')}</div>
+          </div>
+          <div class="range">مستوى ${range.startLevel}–${range.endLevel} · ${formatXp(range.minXp)} – ${formatXp(range.maxXp)} XP</div>
+          <div class="mini-bar"><div class="mini-fill" style="width:${fillPct}%"></div></div>
+        </div>`;
+    }
+    rail.innerHTML = baseRows + legendaryRow;
 
     // caption under figure
-    document.getElementById('figure-caption').textContent =
+    const figCaptionEl = document.getElementById('figure-caption');
+    if(figCaptionEl) figCaptionEl.textContent =
       state.tasks.length ? `آخر مهمة: ${state.tasks[state.tasks.length-1].name}` : 'جاهز لاستلام المهمة القادمة';
 
     // tracks grid — stats only, based on the track chosen for each completed task
@@ -1994,14 +2271,32 @@
     renderStore();
     renderStoreTaskHistory();
 
+    // task list mode (main vs unlimited)
+    ensureTaskListMode();
+    if(cleanupCompletedPending()) saveState();
+    const isUnlimitedMode = state.taskListMode === 'unlimited';
+    document.querySelectorAll('.task-mode-tab').forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.taskMode === state.taskListMode);
+    });
+    const mainTasksPanelEl = document.getElementById('main-tasks-panel');
+    if(mainTasksPanelEl) mainTasksPanelEl.style.display = isUnlimitedMode ? 'none' : (currentMainPage === 'tasks' ? '' : 'none');
+    const taskListDescEl = document.getElementById('task-list-desc');
+    if(taskListDescEl){
+      taskListDescEl.textContent = isUnlimitedMode
+        ? 'وضع بلا حدود: لا توجد مهمات رئيسية، وتقدر تضيف أي عدد من المهام.'
+        : 'حد أقصى 1 مهمة يومية حتى إنجاز المهمات الرئيسية الثلاث الإلزامية، ثم يرتفع الحد إلى 3 مهام.';
+    }
+
     // queue state / cap (queue UI removed — kept as a no-op guard for older saved state)
     const pending = state.pending || [];
+    const capValue = dailyTaskMax();
+    const capLabel = Number.isFinite(capValue) ? capValue : '∞';
     const queueHintEl = document.getElementById('queue-hint');
-    if(queueHintEl) queueHintEl.textContent = `${pending.length} / ${dailyTaskMax()} مهام في القائمة`;
+    if(queueHintEl) queueHintEl.textContent = `${pending.length} / ${capLabel} مهام في القائمة`;
     const queueCapEl = document.getElementById('queue-cap-label');
-    if(queueCapEl) queueCapEl.textContent = `(${pending.length}/${dailyTaskMax()})`;
+    if(queueCapEl) queueCapEl.textContent = `(${pending.length}/${capLabel})`;
     const openBtn = document.getElementById('open-modal-btn');
-    if(openBtn) openBtn.disabled = pending.length >= dailyTaskMax();
+    if(openBtn) openBtn.disabled = pending.length >= capValue;
 
     // queue list
     const queueEl = document.getElementById('queue-list');
@@ -2010,26 +2305,28 @@
         queueEl.innerHTML = '<div class="log-empty">القائمة فاضية.</div>';
       } else {
         queueEl.innerHTML = pending.map(t => {
-          const isSpecial = t.diffKey === 'pivot';
           return `
           ${(() => {
             const sts = Array.isArray(t.subtasks) ? t.subtasks : [];
             const doneCount = sts.filter(st => st.done).length;
             const hasSubtasks = sts.length > 0;
+            const isDone = !!t.done;
+            const canComplete = !isDone && !(hasSubtasks && doneCount < sts.length);
             return `
-          <div class="queue-item ${hasSubtasks ? 'has-subtasks' : ''}">
+          <div class="queue-item ${hasSubtasks ? 'has-subtasks' : ''} ${isDone ? 'done' : ''}">
             <div class="left">
-              <div class="diff-chip" style="color:${isSpecial ? '#9eb1aa' : '#48cda2'}; border:1px solid ${isSpecial ? 'rgba(158,177,170,0.4)' : 'rgba(72,205,162,0.3)'};">${isSpecial ? ICON_BOLT : '+'+t.xp}</div>
+              <label class="task-check-box ${isDone ? 'checked' : ''}" title="${isDone ? 'أُنجزت' : (canComplete ? 'إنجاز' : 'أكمل المهام الفرعية أولًا')}">
+                <input type="checkbox" data-complete="${t.id}" ${isDone ? 'checked disabled' : ''} ${!canComplete && !isDone ? 'disabled' : ''}>
+              </label>
               <div class="info">
-                <div class="t">${escapeHtml(t.name)}${t.penaltyTask ? ' <span style="color:var(--silver-accent);font-size:10px;font-family:Cairo;">· مهمة عقاب</span>' : ''}</div>
+                <div class="t" style="${isDone ? 'text-decoration:line-through; opacity:.6;' : ''}">${escapeHtml(t.name)}${t.penaltyTask ? ' <span style="color:var(--silver-accent);font-size:10px;font-family:Cairo;">· مهمة عقاب</span>' : ''}</div>
                 <div class="d">${t.penaltyTask ? 'إتمامها يسترجع خصم العقوبة' : (t.trackName ? escapeHtml(t.trackName) + ' · ' : '') + escapeHtml(t.desc || t.diffName)}</div>
-                ${hasSubtasks ? `<div class="queue-progress">${doneCount}/${sts.length} مهام فرعية</div><div class="queue-subtasks">${sts.map((st,i) => `<label class="queue-subtask ${st.done ? 'done' : ''}"><input type="checkbox" data-subtask="${t.id}" data-subindex="${i}" ${st.done ? 'checked' : ''}><span>${escapeHtml(st.text)}</span></label>`).join('')}</div>` : ''}
+                ${hasSubtasks ? `<div class="queue-progress">${doneCount}/${sts.length} مهام فرعية</div><div class="queue-subtasks">${sts.map((st,i) => `<label class="queue-subtask ${st.done ? 'done' : ''}"><input type="checkbox" data-subtask="${t.id}" data-subindex="${i}" ${st.done ? 'checked' : ''} ${isDone ? 'disabled' : ''}><span>${escapeHtml(st.text)}</span></label>`).join('')}</div>` : ''}
               </div>
             </div>
             <div class="actions">
-              <button class="btn btn-complete" data-complete="${t.id}" ${hasSubtasks && doneCount < sts.length ? 'disabled title="أكمل المهام الفرعية أولًا"' : ''}>إنجاز</button>
-              ${!t.penaltyTask ? `<button class="btn btn-edit" data-edit-task="${t.id}">تعديل</button>` : ''}
-              <button class="btn btn-cancel" data-cancel="${t.id}">حذف</button>
+              ${(!t.penaltyTask && !isDone) ? `<button type="button" class="icon-btn icon-edit" data-edit-task="${t.id}" title="تعديل"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg></button>` : ''}
+              <button type="button" class="icon-btn icon-del" data-cancel="${t.id}" title="حذف"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg></button>
             </div>
           </div>`;
           })()}`;
@@ -2056,8 +2353,8 @@
         const timeStr = d.toLocaleDateString('ar', {day:'numeric', month:'short'}) + ' · ' + d.toLocaleTimeString('ar', {hour:'2-digit', minute:'2-digit'});
         const isPenalty = item.type === 'penalty';
         const chip = isPenalty ? (item.restored ? '✓' : '−'+item.amount) : (item.special ? ICON_BOLT : '+'+item.amount);
-        const chipColor = isPenalty ? (item.restored ? '#48cda2' : '#6aa996') : (item.special ? '#9eb1aa' : '#48cda2');
-        const chipBorder = isPenalty ? (item.restored ? 'rgba(72,205,162,0.4)' : 'rgba(255,93,122,0.4)') : (item.special ? 'rgba(158,177,170,0.4)' : 'rgba(72,205,162,0.3)');
+        const chipColor = isPenalty ? (item.restored ? '#8fd14f' : '#d97757') : (item.special ? '#b6e88a' : '#8fd14f');
+        const chipBorder = isPenalty ? (item.restored ? 'rgba(143,209,79,0.4)' : 'rgba(226,96,79,0.4)') : (item.special ? 'rgba(182,232,138,0.4)' : 'rgba(143,209,79,0.3)');
         return `
         <div class="log-item">
           <div class="left">
@@ -2068,7 +2365,7 @@
             </div>
           </div>
           <div class="meta">
-            <div class="xp" style="${isPenalty ? (item.restored ? 'color:#48cda2' : 'color:#6aa996') : ''}">${isPenalty ? (item.restored ? '+' : '−') : '+'}${item.amount} XP${isPenalty && item.restored ? ' مسترجع' : ''}</div>
+            <div class="xp" style="${isPenalty ? (item.restored ? 'color:#8fd14f' : 'color:#d97757') : ''}">${isPenalty ? (item.restored ? '+' : '−') : '+'}${item.amount} XP${isPenalty && item.restored ? ' مسترجع' : ''}</div>
             <div class="time">${timeStr}</div>
           </div>
         </div>`;
@@ -2123,7 +2420,7 @@
     let gridSvg = '';
     for(let g=0; g<=2; g++){
       const gy = padT + g*(h-padT-padB)/2;
-      gridSvg += `<line x1="${padL}" y1="${gy.toFixed(1)}" x2="${w-padR}" y2="${gy.toFixed(1)}" stroke="rgba(72,205,162,0.14)" stroke-width="1"/>`;
+      gridSvg += `<line x1="${padL}" y1="${gy.toFixed(1)}" x2="${w-padR}" y2="${gy.toFixed(1)}" stroke="rgba(143,209,79,0.14)" stroke-width="1"/>`;
     }
 
     const labelEvery = Math.ceil(DAYS/6);
@@ -2131,25 +2428,25 @@
     buckets.forEach((b,i) => {
       if(i % labelEvery === 0 || i === DAYS-1){
         const lbl = b.date.toLocaleDateString('ar', {day:'numeric', month:'short'});
-        labelsSvg += `<text x="${points[i].x.toFixed(1)}" y="${h-8}" font-size="8" fill="#7f8d96" text-anchor="middle">${lbl}</text>`;
+        labelsSvg += `<text x="${points[i].x.toFixed(1)}" y="${h-8}" font-size="8" fill="#93a17e" text-anchor="middle">${lbl}</text>`;
       }
     });
 
     const pointsSvg = points.map((p,i) => {
       const isLast = i === points.length-1;
-      return `<circle cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="${isLast?3.5:2}" fill="${isLast?'#48cda2':'#3f8f76'}"/>`;
+      return `<circle cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="${isLast?3.5:2}" fill="${isLast?'#8fd14f':'#4c6b2f'}"/>`;
     }).join('');
 
     chartEl.innerHTML = `
       <defs>
         <linearGradient id="chartFillGrad" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stop-color="rgba(72,205,162,0.35)"/>
-          <stop offset="100%" stop-color="rgba(72,205,162,0)"/>
+          <stop offset="0%" stop-color="rgba(143,209,79,0.35)"/>
+          <stop offset="100%" stop-color="rgba(143,209,79,0)"/>
         </linearGradient>
       </defs>
       ${gridSvg}
       <path d="${areaPath}" fill="url(#chartFillGrad)"/>
-      <path d="${linePath}" fill="none" stroke="#48cda2" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="${linePath}" fill="none" stroke="#8fd14f" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
       ${pointsSvg}
       ${labelsSvg}
     `;
@@ -2240,11 +2537,11 @@
     const linePath = points.map((p,i) => (i===0?'M':'L') + p.x.toFixed(1) + ' ' + p.y.toFixed(1)).join(' ');
     const dotsSvg = points.map((p,i) => {
       const isLast = i === points.length - 1;
-      return `<circle cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="${isLast?3:2}" fill="${isLast?'#48cda2':'#3f8f76'}"/>`;
+      return `<circle cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="${isLast?3:2}" fill="${isLast?'#8fd14f':'#4c6b2f'}"/>`;
     }).join('');
     return `
     <svg viewBox="0 0 ${W} ${H}" class="syn-chart-svg" preserveAspectRatio="none">
-      <path d="${linePath}" fill="none" stroke="#48cda2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="${linePath}" fill="none" stroke="#8fd14f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
       ${dotsSvg}
     </svg>
     <div class="syn-chart-caption">آخر يوم: ${values[values.length-1]} مهمة منجزة</div>`;
@@ -2297,7 +2594,7 @@
       : `
       <div class="syn-actions">
         <button class="btn add-task-btn btn-sm" type="button" data-syn-add-task="${s.id}">+ مهمة يومية</button>
-        <button class="btn add-task-btn btn-sm" type="button" data-syn-renew="${s.id}" style="background:linear-gradient(90deg, #3f8f76, #3e5e52);">تجديد اليوم</button>
+        <button class="btn add-task-btn btn-sm" type="button" data-syn-renew="${s.id}" style="background:linear-gradient(90deg, #4c6b2f, #253317);">تجديد اليوم</button>
       </div>`;
     const bottomRowHtml = s.completed
       ? `<div class="syn-bottom-row"><button class="btn syn-log-btn btn-sm" type="button" data-syn-log-toggle="${s.id}">السجل</button></div>`
@@ -2359,14 +2656,17 @@
       ? tasks.map(t => projectStepTaskHtml(projectId, step.id, t)).join('')
       : '<div class="log-empty" style="padding:8px 4px;font-size:11px;">لا توجد مهام لهذه الخطوة بعد.</div>';
     return `
-      <div class="project-step ${step.done ? 'done' : ''} ${unlocked ? 'unlocked' : 'locked'}" data-project-step="${step.id}">
-        <button class="project-step-xp" type="button" data-project-step-toggle="${step.id}" data-project-id="${projectId}" ${canComplete && unlocked ? '' : 'disabled'} aria-label="${step.done ? 'إلغاء إتمام المحطة' : 'إتمام المحطة'}">+${PROJECT_STEP_XP}<br><span style="font-size:8px;font-weight:600;">XP</span></button>
+      <div class="project-step ${step.done ? 'done' : ''} ${unlocked ? 'unlocked' : 'locked'} ${expandedProjectSteps.has(step.id) ? 'expanded' : ''}" data-project-step="${step.id}">
+        <button class="project-step-xp" type="button" data-project-step-toggle="${step.id}" data-project-id="${projectId}" ${canComplete && unlocked ? '' : 'disabled'} aria-label="${step.done ? 'إلغاء إتمام المحطة' : 'إتمام المحطة'}">+${PROJECT_STEP_XP} XP</button>
         <div class="project-step-content" style="direction:rtl;">
           <div class="project-step-head">
             <div>
               <div class="project-step-name">${escapeHtml(step.text)}</div>
               <div class="project-step-meta">${step.done ? 'تم إتمام المحطة' : (unlocked ? 'المحطة الحالية' : 'مقفلة حتى إتمام المحطة السابقة')}</div>
             </div>
+            <button class="project-step-expand-btn" type="button" data-project-step-expand="${step.id}" aria-label="فتح/إغلاق مهام الخطوة">
+              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
             <button class="project-step-delete" type="button" data-project-step-del="${step.id}" data-project-id="${projectId}" aria-label="حذف الخطوة">×</button>
           </div>
           <div class="project-step-tasks">${taskHtml}</div>
@@ -2392,7 +2692,7 @@
       <div class="project-section-title">خط سير المشروع</div>
       <button class="project-add-mini" type="button" data-project-add-step="${p.id}">+ إضافة محطة جديدة</button>
       <div class="project-steps-list">${stepsHtml}</div>
-      <button class="btn add-task-btn" type="button" data-project-complete="${p.id}" style="margin-top:14px; background:linear-gradient(90deg, #3f8f76, #3e5e52);">
+      <button class="btn add-task-btn" type="button" data-project-complete="${p.id}" style="margin-top:14px; background:linear-gradient(90deg, #4c6b2f, #253317);">
         <svg class="icon-inline" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg>
         إتمام المشروع
       </button>
@@ -2452,7 +2752,7 @@
     let gridSvg = '';
     for(let g=0; g<=2; g++){
       const gy = padT + g*(h-padT-padB)/2;
-      gridSvg += `<line x1="${padL}" y1="${gy.toFixed(1)}" x2="${w-padR}" y2="${gy.toFixed(1)}" stroke="rgba(72,205,162,0.14)" stroke-width="1"/>`;
+      gridSvg += `<line x1="${padL}" y1="${gy.toFixed(1)}" x2="${w-padR}" y2="${gy.toFixed(1)}" stroke="rgba(143,209,79,0.14)" stroke-width="1"/>`;
     }
 
     const dateBuckets = [];
@@ -2463,7 +2763,7 @@
       if(i % labelEvery === 0 || i === DAYS-1){
         const x = padL + i*xStep;
         const lbl = d.toLocaleDateString('ar', {day:'numeric', month:'short'});
-        labelsSvg += `<text x="${x.toFixed(1)}" y="${h-8}" font-size="8" fill="#7f8d96" text-anchor="middle">${lbl}</text>`;
+        labelsSvg += `<text x="${x.toFixed(1)}" y="${h-8}" font-size="8" fill="#93a17e" text-anchor="middle">${lbl}</text>`;
       }
     });
 
@@ -2486,23 +2786,30 @@
 
   // ---------- achievements ----------
   function shieldMiniIcon(){
-    return '<svg viewBox="0 0 24 24" fill="#9eb1aa"><path d="M12 2 4 5v6c0 5.2 3.4 9.4 8 11 4.6-1.6 8-5.8 8-11V5l-8-3Z"/></svg>';
+    return '<svg viewBox="0 0 24 24" fill="#b6e88a"><path d="M12 2 4 5v6c0 5.2 3.4 9.4 8 11 4.6-1.6 8-5.8 8-11V5l-8-3Z"/></svg>';
   }
   function achievementShieldSvg(){
     return `
-    <svg viewBox="0 0 100 116">
+    <svg viewBox="0 0 100 76">
       <defs>
         <linearGradient id="achGrad" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stop-color="#b8c5c1"/>
-          <stop offset="55%" stop-color="#9eb1aa"/>
-          <stop offset="100%" stop-color="#668579"/>
+          <stop offset="0%" stop-color="#d7edb0"/>
+          <stop offset="55%" stop-color="#b6e88a"/>
+          <stop offset="100%" stop-color="#93a17e"/>
         </linearGradient>
       </defs>
-      <path d="M50 4 L91 19 V52 C91 83 70 103 50 113 C30 103 9 83 9 52 V19 Z"
-            fill="url(#achGrad)" stroke="#486f62" stroke-width="3"/>
-      <path d="M50 12 L84 24 V52 C84 78 67 95 50 104 C33 95 16 78 16 52 V24 Z"
-            fill="none" stroke="rgba(255,255,255,0.35)" stroke-width="1.5"/>
+      <path d="M15.8 8 Q15.8 3 20.8 3 H79.2 Q84.2 3 84.2 8 V33 C84.2 52 68.3 64 50 71 C31.7 64 15.8 52 15.8 33 Z"
+            fill="url(#achGrad)" stroke="#35491f" stroke-width="2"/>
+      <path d="M22.5 12 Q22.5 9 25.8 9 H74.2 Q77.5 9 77.5 12 V33 C77.5 47 64.2 57 50 63 C35.8 57 22.5 47 22.5 33 Z"
+            fill="none" stroke="rgba(255,255,255,0.35)" stroke-width="1.2"/>
     </svg>`;
+  }
+  function achievementIconSvg(a){
+    if((a.type === 'skill' || a.type === 'skill-pro') && a.category){
+      const cat = SKILL_CATS.find(c => c.key === a.category);
+      if(cat) return cat.icon;
+    }
+    return '<svg viewBox="0 0 24 24" fill="none" stroke="#14200c" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg>';
   }
   function achievementBadgeHtml(a){
     const d = new Date(a.ts);
@@ -2511,7 +2818,7 @@
     <div class="ach-badge">
       <div class="ach-shield-wrap">
         ${achievementShieldSvg()}
-        <div class="ach-shield-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#34454b" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg></div>
+        <div class="ach-shield-icon">${achievementIconSvg(a)}</div>
       </div>
       <div class="ach-badge-name">${a.type === 'skill-pro' ? `احتراف "${escapeHtml(a.skillName)}"` : a.type === 'skill' ? `أتقن "${escapeHtml(a.skillName)}"` : a.type === 'project' ? `إتمام "${escapeHtml(a.projectName)}"` : `تغلَّبَ على ${escapeHtml(a.syndromeName)}`}</div>
       <div class="ach-badge-date">${dateStr}</div>
@@ -2556,9 +2863,9 @@
       const timeStr = d.toLocaleDateString('ar', {day:'numeric', month:'short'}) + ' · ' + d.toLocaleTimeString('ar', {hour:'2-digit', minute:'2-digit'});
       const special = item.diffKey === 'pivot';
       const chip = special ? ICON_BOLT : (item.xp >= 0 ? '+'+item.xp : '−'+Math.abs(item.xp));
-      const chipColor = special ? '#9eb1aa' : (item.xp >= 0 ? '#48cda2' : '#6aa996');
-      const chipBorder = special ? 'rgba(158,177,170,0.4)' : (item.xp >= 0 ? 'rgba(72,205,162,0.3)' : 'rgba(255,93,122,0.4)');
-      return `<div class="log-item"><div class="left"><div class="diff-chip" style="color:${chipColor}; border:1px solid ${chipBorder};">${chip}</div><div class="info"><div class="t">${escapeHtml(item.name)}</div><div class="d">${escapeHtml((item.trackName ? item.trackName + ' · ' : '') + (item.desc || item.diffName || ''))}</div></div></div><div class="meta"><div class="xp" style="${item.xp < 0 ? 'color:#6aa996' : ''}">${item.xp >= 0 ? '+' : '−'}${Math.abs(item.xp)} XP</div><div class="time">${timeStr}</div></div></div>`;
+      const chipColor = special ? '#b6e88a' : (item.xp >= 0 ? '#8fd14f' : '#d97757');
+      const chipBorder = special ? 'rgba(182,232,138,0.4)' : (item.xp >= 0 ? 'rgba(143,209,79,0.3)' : 'rgba(226,96,79,0.4)');
+      return `<div class="log-item"><div class="left"><div class="diff-chip" style="color:${chipColor}; border:1px solid ${chipBorder};">${chip}</div><div class="info"><div class="t">${escapeHtml(item.name)}</div><div class="d">${escapeHtml((item.trackName ? item.trackName + ' · ' : '') + (item.desc || item.diffName || ''))}</div></div></div><div class="meta"><div class="xp" style="${item.xp < 0 ? 'color:#d97757' : ''}">${item.xp >= 0 ? '+' : '−'}${Math.abs(item.xp)} XP</div><div class="time">${timeStr}</div></div></div>`;
     }).join('');
   }
 
@@ -2577,14 +2884,14 @@
       const timeStr = d.toLocaleDateString('ar', {day:'numeric', month:'short'}) + ' · ' + d.toLocaleTimeString('ar', {hour:'2-digit', minute:'2-digit'});
       const special = item.diffKey === 'pivot';
       const chip = special ? ICON_BOLT : (item.xp >= 0 ? '+'+item.xp : '−'+Math.abs(item.xp));
-      const chipColor = special ? '#9eb1aa' : (item.xp >= 0 ? '#48cda2' : '#6aa996');
-      const chipBorder = special ? 'rgba(158,177,170,0.4)' : (item.xp >= 0 ? 'rgba(72,205,162,0.3)' : 'rgba(255,93,122,0.4)');
+      const chipColor = special ? '#b6e88a' : (item.xp >= 0 ? '#8fd14f' : '#d97757');
+      const chipBorder = special ? 'rgba(182,232,138,0.4)' : (item.xp >= 0 ? 'rgba(143,209,79,0.3)' : 'rgba(226,96,79,0.4)');
       return `<div class="log-item">
         <div class="left">
           <div class="diff-chip" style="color:${chipColor}; border:1px solid ${chipBorder};">${chip}</div>
           <div class="info"><div class="t">${escapeHtml(item.name)}</div><div class="d">${escapeHtml((item.trackName ? item.trackName + ' · ' : '') + (item.desc || item.diffName || ''))}</div></div>
         </div>
-        <div class="meta"><div class="xp" style="${item.xp < 0 ? 'color:#6aa996' : ''}">${item.xp >= 0 ? '+' : '−'}${Math.abs(item.xp)} XP</div><div class="time">${timeStr}</div></div>
+        <div class="meta"><div class="xp" style="${item.xp < 0 ? 'color:#d97757' : ''}">${item.xp >= 0 ? '+' : '−'}${Math.abs(item.xp)} XP</div><div class="time">${timeStr}</div></div>
       </div>`;
     }).join('');
   }
@@ -2670,7 +2977,7 @@
     err.style.display='none';
 
     const newCode = code();
-    state = { name, code:newCode, xp:0, tasks:[], pending:[], mainTasks:[], mainTasksDay:mainDayKey(), penalties:[], skills:[], syndromes:[], achievements:[], habits:[], coinsSpent:0, purchases:[] };
+    state = { name, code:newCode, xp:0, tasks:[], pending:[], mainTasks:[], mainTasksDay:mainDayKey(), taskListMode:'main', penalties:[], skills:[], syndromes:[], achievements:[], habits:[], coinsSpent:0, purchases:[] };
     ensureSkills();
     ensureSyndromes();
     await saveState();
@@ -2748,7 +3055,6 @@
     trackSelectGrid.innerHTML = TRACKS.map(t => `
       <div class="diff-opt" data-key="${t.key}">
         <div class="name">${t.name}</div>
-        <div class="xp">${t.sub}</div>
       </div>`).join('');
     trackSelectGrid.querySelectorAll('.diff-opt').forEach(el => {
       el.addEventListener('click', () => {
@@ -2770,6 +3076,7 @@
     document.getElementById('add-subtask-btn').style.display='block';
     document.getElementById('add-subtask-btn').textContent='+ إضافة مهمة فرعية';
     document.getElementById('subtasks-count-label').textContent='0 / 3';
+    document.getElementById('subtasks-field-wrap').classList.remove('open');
     selectedDiff=null; selectedTrack=null; selectedMainSlot=null;
     diffGrid.querySelectorAll('.diff-opt').forEach(o=>o.classList.remove('selected'));
     trackSelectGrid.querySelectorAll('.diff-opt').forEach(o=>o.classList.remove('selected'));
@@ -2787,6 +3094,7 @@
     (task.subtasks||[]).slice(0,3).forEach((st,i)=>{document.getElementById('subtask-'+(i+1)).value=st.text||'';});
     if((task.subtasks||[]).length>1){document.getElementById('subtask-extra-fields').style.display='block';}
     if((task.subtasks||[]).length>2){document.getElementById('subtask-3').style.display='block';document.getElementById('add-subtask-btn').style.display='none';}
+    if((task.subtasks||[]).length>0){document.getElementById('subtasks-field-wrap').classList.add('open');}
     selectedDiff=task.diffKey||null; selectedTrack=task.trackKey||null;
     if(selectedDiff) diffGrid.querySelector(`[data-key="${selectedDiff}"]`)?.classList.add('selected');
     if(selectedTrack) trackSelectGrid.querySelector(`[data-key="${selectedTrack}"]`)?.classList.add('selected');
@@ -2829,6 +3137,7 @@
     subs.slice(0,3).forEach((st,i)=>{document.getElementById('subtask-'+(i+1)).value=st.text||'';});
     if(subs.length>1) document.getElementById('subtask-extra-fields').style.display='block';
     if(subs.length>2){document.getElementById('subtask-3').style.display='block';document.getElementById('add-subtask-btn').style.display='none';}
+    if(subs.length>0){document.getElementById('subtasks-field-wrap').classList.add('open');}
     document.querySelector('#modal-overlay h2').textContent='تعديل المهمة الرئيسية — '+(MAIN_TASKS[task.slotKey]?.label||'');
     document.getElementById('confirm-task-btn').textContent='حفظ التعديل';
     const diffField=diffGrid.closest('.field');
@@ -2838,6 +3147,10 @@
     document.getElementById('modal-overlay').classList.add('show');
   }
   function closeModal(){ document.getElementById('modal-overlay').classList.remove('show'); }
+
+  document.getElementById('subtasks-toggle-btn').addEventListener('click', () => {
+    document.getElementById('subtasks-field-wrap').classList.toggle('open');
+  });
 
   document.getElementById('add-subtask-btn').addEventListener('click', () => {
     const extra=document.getElementById('subtask-extra-fields'), s2=document.getElementById('subtask-2'), s3=document.getElementById('subtask-3');
@@ -2877,6 +3190,7 @@
       recordTask(task);
       state.xp += MAIN_XP;
       await saveState(); render();
+      showCelebration('أنجزت المهمة!', task.name || task.slotLabel || '', MAIN_XP);
       return;
     }
     const slot=e.target.closest('[data-main-slot]');
@@ -2950,6 +3264,22 @@
   });
 
   // ---------- queue: complete / cancel (event delegation) ----------
+  // في وضع "بلا حدود" تبقى المهمة في القائمة بعد إنجازها (بعلامة صح) حتى الساعة 12 ليلًا،
+  // أما في الوضع الافتراضي فتُحذف من القائمة فور إنجازها كالسابق
+  async function finishPendingTask(taskId){
+    const idx = state.pending.findIndex(t => t.id === taskId);
+    if(idx === -1) return;
+    const task = state.pending[idx];
+    if(task.done) return;
+    if(state.taskListMode === 'unlimited'){
+      task.done = true;
+      task.doneDayKey = mainDayKey();
+      await completePendingTask(task);
+    } else {
+      state.pending.splice(idx, 1);
+      await completePendingTask(task);
+    }
+  }
   async function completePendingTask(task){
     if(task.penaltyTask && task.penaltyId){
       const penalty = (state.penalties || []).find(p => p.id === task.penaltyId);
@@ -2970,6 +3300,7 @@
     task.ts = Date.now();
     recordTask(task);
     state.xp += task.xp;
+    showCelebration('أنجزت المهمة!', task.name || '', task.xp);
   }
 
   const queueListEl = document.getElementById('queue-list');
@@ -2982,31 +3313,27 @@
       if(!task || !Array.isArray(task.subtasks) || !task.subtasks[subIndex]) return;
       task.subtasks[subIndex].done = subtaskInput.checked;
       const allDone = task.subtasks.length > 0 && task.subtasks.every(st => st.done);
-      if(allDone){
-        const idx = state.pending.findIndex(t => t.id === taskId);
-        if(idx !== -1){
-          const [completedTask] = state.pending.splice(idx, 1);
-          await completePendingTask(completedTask);
-        }
+      if(allDone && !task.done){
+        await finishPendingTask(taskId);
       }
       await saveState();
       render();
       return;
     }
 
-    const completeId = e.target.dataset.complete;
-    const cancelId = e.target.dataset.cancel;
-    const editId = e.target.dataset.editTask;
+    const completeBtn = e.target.closest('[data-complete]');
+    const cancelBtn = e.target.closest('[data-cancel]');
+    const editBtn = e.target.closest('[data-edit-task]');
+    const completeId = completeBtn ? completeBtn.dataset.complete : null;
+    const cancelId = cancelBtn ? cancelBtn.dataset.cancel : null;
+    const editId = editBtn ? editBtn.dataset.editTask : null;
     if(editId){
       const task=state.pending.find(t=>t.id===editId);
       if(task){ editingTaskId=editId; fillTaskModal(task,'editTask'); }
       return;
     }
     if(completeId){
-      const idx = state.pending.findIndex(t => t.id === completeId);
-      if(idx === -1) return;
-      const [task] = state.pending.splice(idx, 1);
-      await completePendingTask(task);
+      await finishPendingTask(completeId);
       await saveState();
       render();
     } else if(cancelId){
@@ -3064,7 +3391,7 @@
   const mainNavItems = document.querySelectorAll('.app-nav-item[data-main-page]');
   const mainPageSections = {
     profile: ['profile-section'],
-    tasks: ['main-tasks-panel','task-list-panel','tracks-panel'],
+    tasks: ['task-mode-panel','main-tasks-panel','task-list-panel','tracks-panel'],
     progress: ['daily-progress-panel','progress-sections-panel'],
     store: ['dashboard-store-panel','task-history-panel']
   };
@@ -3100,6 +3427,11 @@
       const el = document.getElementById(id);
       if(el) el.style.display = '';
     });
+    // في وضع "بلا حدود" لا تظهر لوحة المهمات الرئيسية حتى لو كنا في صفحة المهام
+    if(page === 'tasks' && state && state.taskListMode === 'unlimited'){
+      const mtp = document.getElementById('main-tasks-panel');
+      if(mtp) mtp.style.display = 'none';
+    }
     mainNavItems.forEach(btn => btn.classList.toggle('active', btn.dataset.mainPage === page));
     if(scroll && showDashboard) window.scrollTo({top:0, behavior:'smooth'});
   }
@@ -3110,6 +3442,60 @@
       [habitsView, skillsView, syndromesView, projectsView, storeView].forEach(v => { if(v) v.style.display='none'; });
       applyMainPage(btn.dataset.mainPage, true, true);
     });
+  });
+
+  // تبديل وضع قائمة المهام: المهمات الرئيسية (الافتراضي) أو بلا حدود — يفتح شاشة تأكيد أولًا
+  const taskModeConfirmOverlay = document.getElementById('task-mode-confirm-overlay');
+  const taskModeConfirmTitle = document.getElementById('task-mode-confirm-title');
+  const taskModeConfirmText = document.getElementById('task-mode-confirm-text');
+  const taskModeConfirmWarn = document.getElementById('task-mode-confirm-warn');
+  let pendingTaskMode = null;
+  const TASK_MODE_CONFIRM_COPY = {
+    main: {
+      title: 'الانتقال إلى المهمات الرئيسية؟',
+      text: 'راح تظهر لوحة المهمات الرئيسية الثلاث من جديد، ويرجع حد قائمة المهام كما كان (1 ثم 3 بعد إنجازها).',
+      warn: 'تنبيه: كل المهام الموجودة حاليًا في القائمة راح تُحذف نهائيًا ولا يمكن استرجاعها.'
+    },
+    unlimited: {
+      title: 'الانتقال إلى وضع بلا حدود؟',
+      text: 'راح تختفي لوحة المهمات الرئيسية، ويصير بإمكانك إضافة أي عدد من المهام بدون أي حد.',
+      warn: 'تنبيه: كل المهام الموجودة حاليًا في القائمة راح تُحذف نهائيًا ولا يمكن استرجاعها.'
+    }
+  };
+
+  function openTaskModeConfirm(mode){
+    pendingTaskMode = mode;
+    const copy = TASK_MODE_CONFIRM_COPY[mode];
+    taskModeConfirmTitle.textContent = copy.title;
+    taskModeConfirmText.textContent = copy.text;
+    if(taskModeConfirmWarn) taskModeConfirmWarn.textContent = copy.warn || '';
+    taskModeConfirmOverlay.classList.add('show');
+  }
+  function closeTaskModeConfirm(){
+    pendingTaskMode = null;
+    taskModeConfirmOverlay.classList.remove('show');
+  }
+
+  document.getElementById('task-mode-tabs').addEventListener('click', (e) => {
+    const btn = e.target.closest('[data-task-mode]');
+    if(!btn || !state) return;
+    const mode = btn.dataset.taskMode === 'unlimited' ? 'unlimited' : 'main';
+    if(state.taskListMode === mode) return;
+    openTaskModeConfirm(mode);
+  });
+
+  document.getElementById('cancel-task-mode-btn').addEventListener('click', closeTaskModeConfirm);
+  taskModeConfirmOverlay.addEventListener('click', (e) => { if(e.target === taskModeConfirmOverlay) closeTaskModeConfirm(); });
+
+  document.getElementById('confirm-task-mode-btn').addEventListener('click', async () => {
+    if(!pendingTaskMode || !state){ closeTaskModeConfirm(); return; }
+    // الانتقال بين صفحات المهام (الرئيسية / بلا حدود) يحذف كل مهام الصفحة الحالية
+    state.pending = [];
+    state.taskListMode = pendingTaskMode;
+    closeTaskModeConfirm();
+    render();
+    applyMainPage('tasks', false, false);
+    await saveState();
   });
 
   const skillsView = document.getElementById('skills-view');
@@ -3170,7 +3556,6 @@
   document.getElementById('open-projects-view-btn').addEventListener('click', openProjectsView);
   document.getElementById('projects-back-btn').addEventListener('click', closeProjectsView);
   document.getElementById('open-store-view-btn').addEventListener('click', openStoreView);
-  document.getElementById('store-back-btn').addEventListener('click', closeStoreView);
 
   // ---------- penalty ----------
   const penaltyOverlay = document.getElementById('penalty-overlay');
@@ -3248,7 +3633,7 @@
     let ok = true;
     if(!reason){ document.getElementById('penalty-reason-err').style.display='block'; ok=false; }
     if(penaltyTaskEnabled && !penaltyTaskName){ document.getElementById('penalty-task-err').style.display='block'; ok=false; }
-    if(penaltyTaskEnabled && (state.pending || []).length >= MAX_QUEUE){
+    if(penaltyTaskEnabled && (state.pending || []).length >= dailyTaskMax()){
       document.getElementById('penalty-task-err').textContent='قائمة المهام ممتلئة. احذف أو أنجز مهمة أولًا.';
       document.getElementById('penalty-task-err').style.display='block';
       ok=false;
@@ -3369,6 +3754,7 @@
         id: 'ach' + Date.now() + '_' + (taskCounter++),
         type: 'skill',
         skillName: skill.name,
+        category: skill.category,
         ts: Date.now()
       });
     }
@@ -3379,6 +3765,7 @@
         id: 'ach' + Date.now() + '_' + (taskCounter++),
         type: 'skill-pro',
         skillName: skill.name,
+        category: skill.category,
         ts: Date.now()
       });
     }
@@ -3393,6 +3780,7 @@
     // update the UI immediately — don't make the button wait on the network/storage save
     render();
     saveState();
+    showCelebration('ساعات جديدة!', `سجّلت ${n} ساعة في "${skill.name}"`, xpGain);
   });
 
   document.getElementById('skills-list').addEventListener('click', (e) => {
@@ -3588,6 +3976,15 @@
     const addStepBtn = e.target.closest('[data-project-add-step]');
     if(addStepBtn){
       openProjectStepModal(addStepBtn.dataset.projectAddStep);
+      return;
+    }
+
+    const expandStepBtn = e.target.closest('[data-project-step-expand]');
+    if(expandStepBtn){
+      const stepId = expandStepBtn.dataset.projectStepExpand;
+      if(expandedProjectSteps.has(stepId)) expandedProjectSteps.delete(stepId);
+      else expandedProjectSteps.add(stepId);
+      render();
       return;
     }
 
