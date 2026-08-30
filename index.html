@@ -126,7 +126,8 @@
   .privacy-note{font-size:11px; color:var(--muted); margin-top:16px; line-height:1.7; opacity:.7;}
 
   /* ---------- Main navigation (navigation only; original design preserved) ---------- */
-  body{padding-bottom:86px;}
+  /* الحشوة السفلية مخصّصة فقط لوجود قائمة التنقّل داخل التطبيق (ليست موجودة في شاشة تسجيل الدخول) */
+  body.app-active{padding-bottom:86px;}
   .app-bottom-nav{position:fixed;z-index:45;left:50%;bottom:12px;transform:translateX(-50%);width:min(760px,calc(100vw - 24px));display:grid;grid-template-columns:repeat(3,1fr);gap:5px;padding:7px;border:1px solid rgba(130,195,195,.18);border-radius:20px;background:rgba(8,16,20,.96);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);box-shadow:0 18px 45px rgba(0,0,0,.42),0 0 0 1px rgba(127,216,211,.035);}
   .app-nav-item{border:0;background:transparent;color:var(--muted);min-height:58px;border-radius:14px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;font-family:'Tajawal',sans-serif;font-size:10.5px;font-weight:700;cursor:pointer;transition:background .15s,color .15s,transform .12s;}
   .app-nav-item:hover{color:var(--text);background:rgba(255,255,255,.035)}
@@ -134,7 +135,7 @@
   .app-nav-item.active{color:var(--olive-accent);background:linear-gradient(180deg,rgba(127,216,211,.13),rgba(127,216,211,.045));box-shadow:inset 0 0 0 1px rgba(127,216,211,.14)}
   .app-nav-icon{width:23px;height:23px;display:grid;place-items:center}.app-nav-icon svg{width:21px;height:21px}
   .app-nav-item.active .app-nav-icon svg{filter:drop-shadow(0 0 6px rgba(127,216,211,.45))}
-  @media(max-width:560px){body{padding-bottom:82px}.app-bottom-nav{bottom:7px;border-radius:18px;padding:5px}.app-nav-item{min-height:56px;font-size:9.5px}.app-nav-icon{width:22px;height:22px}#dashboard-view,#habits-view,#skills-view,#syndromes-view,#projects-view{padding-bottom:125px}}
+  @media(max-width:560px){body.app-active{padding-bottom:82px}.app-bottom-nav{bottom:7px;border-radius:18px;padding:5px}.app-nav-item{min-height:56px;font-size:9.5px}.app-nav-icon{width:22px;height:22px}#dashboard-view,#habits-view,#skills-view,#syndromes-view,#projects-view{padding-bottom:125px}}
 
   /* ---------- APP ---------- */
   #app{display:none; position:relative; z-index:2; max-width:1180px; margin:0 auto; padding:18px 18px 60px;}
@@ -218,6 +219,30 @@
   .settings-action-btn.danger .sa-icon{color:var(--olive-light);}
   .settings-saved-tag{font-size:11px; color:var(--olive-accent); opacity:0; transition:opacity .25s; margin-top:6px;}
   .settings-saved-tag.show{opacity:1;}
+
+  /* ---------- avatar adjust (crop/zoom before insert) ---------- */
+  .avatar-crop-stage{
+    width:220px; height:220px; margin:14px auto 6px; border-radius:50%; overflow:hidden;
+    position:relative; background:#0a161c; border:2px solid var(--olive-accent);
+    cursor:grab; touch-action:none; box-shadow:0 0 0 4px rgba(127,216,211,0.10);
+  }
+  .avatar-crop-stage.dragging{cursor:grabbing;}
+  .avatar-crop-stage img{position:absolute; top:0; left:0; user-select:none; -webkit-user-drag:none; pointer-events:none;}
+  .avatar-crop-hint{text-align:center; font-size:11.5px; color:var(--muted); margin-bottom:14px;}
+  .avatar-zoom-row{display:flex; align-items:center; gap:10px; padding:0 4px;}
+  .avatar-zoom-row svg{flex-shrink:0; color:var(--muted);}
+  .avatar-zoom-row input[type="range"]{
+    flex:1; -webkit-appearance:none; appearance:none; height:4px; border-radius:4px;
+    background:var(--line); outline:none;
+  }
+  .avatar-zoom-row input[type="range"]::-webkit-slider-thumb{
+    -webkit-appearance:none; width:18px; height:18px; border-radius:50%;
+    background:var(--olive-accent); cursor:pointer; box-shadow:0 0 8px rgba(127,216,211,0.5);
+  }
+  .avatar-zoom-row input[type="range"]::-moz-range-thumb{
+    width:18px; height:18px; border-radius:50%; border:none;
+    background:var(--olive-accent); cursor:pointer; box-shadow:0 0 8px rgba(127,216,211,0.5);
+  }
 
   #app{position:relative;}
   .habit-item{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 4px;border-bottom:1px solid var(--line);}
@@ -1433,6 +1458,27 @@
 
     <div class="modal-actions">
       <button class="btn btn-ghost" id="close-settings-btn">إغلاق</button>
+    </div>
+  </div>
+</div>
+
+<!-- ================= AVATAR ADJUST (crop/zoom before insert) ================= -->
+<div class="modal-overlay" id="avatar-adjust-overlay">
+  <div class="modal">
+    <h2>تعديل ظهور الصورة</h2>
+    <p class="sub">اسحب الصورة لتحريكها وحرّك الشريط للتكبير قبل إدراجها.</p>
+    <div class="avatar-crop-stage" id="avatar-crop-stage">
+      <img id="avatar-crop-img" alt="">
+    </div>
+    <div class="avatar-crop-hint">اسحب داخل الدائرة لتحريك الصورة</div>
+    <div class="avatar-zoom-row">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="10" r="6"/><path d="m21 21-4.3-4.3"/></svg>
+      <input type="range" id="avatar-zoom-range" min="1" max="3" step="0.01" value="1">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/><path d="M11 8v6M8 11h6"/></svg>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" id="cancel-avatar-adjust-btn">إلغاء</button>
+      <button class="btn btn-primary" id="confirm-avatar-adjust-btn">إدراج الصورة</button>
     </div>
   </div>
 </div>
@@ -3134,6 +3180,7 @@
   function enterApp(){
     loginScreen.style.display='none';
     app.style.display='block';
+    document.body.classList.add('app-active');
     render();
   }
 
@@ -3169,42 +3216,122 @@
     render();
     await saveState();
     settingsSavedTag.classList.add('show');
-    setTimeout(() => settingsSavedTag.classList.remove('show'), 1800);
+    setTimeout(() => {
+      settingsSavedTag.classList.remove('show');
+      closeSettingsModal();
+      // الرجوع للشاشة الرئيسية بعد الحفظ
+      ['habits-view','skills-view','syndromes-view','projects-view'].forEach(id => {
+        const v = document.getElementById(id);
+        if(v) v.style.display = 'none';
+      });
+      applyMainPage('profile', true, true);
+    }, 700);
   });
 
   // ---------- avatar photo ----------
-  function readAndResizeImage(file, maxSize, callback){
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      const img = new Image();
-      img.onload = () => {
-        let w = img.width, h = img.height;
-        if(w > h){ if(w > maxSize){ h = Math.round(h * maxSize / w); w = maxSize; } }
-        else{ if(h > maxSize){ w = Math.round(w * maxSize / h); h = maxSize; } }
-        const canvas = document.createElement('canvas');
-        canvas.width = w; canvas.height = h;
-        const ctx = canvas.getContext('2d');
-        ctx.drawImage(img, 0, 0, w, h);
-        callback(canvas.toDataURL('image/jpeg', 0.85));
-      };
-      img.src = e.target.result;
-    };
-    reader.readAsDataURL(file);
+  const avatarFileInput = document.getElementById('avatar-file-input');
+  document.getElementById('remove-avatar-btn').addEventListener('click', async () => {
+    delete state.avatarImage;
+    render();
+    await saveState();
+  });
+
+  // ---------- avatar adjust modal (crop/zoom preview before insert) ----------
+  const avatarAdjustOverlay = document.getElementById('avatar-adjust-overlay');
+  const avatarCropStage = document.getElementById('avatar-crop-stage');
+  const avatarCropImg = document.getElementById('avatar-crop-img');
+  const avatarZoomRange = document.getElementById('avatar-zoom-range');
+  const AVATAR_STAGE_SIZE = 220; // px — matches .avatar-crop-stage width/height, and the output canvas size
+
+  let avatarNatW = 0, avatarNatH = 0, avatarBaseScale = 1, avatarZoom = 1;
+  let avatarOffX = 0, avatarOffY = 0;
+  let avatarDragging = false, avatarDragStartX = 0, avatarDragStartY = 0, avatarDragOffX = 0, avatarDragOffY = 0;
+
+  function avatarDisplayDims(){
+    const scale = avatarBaseScale * avatarZoom;
+    return { w: avatarNatW * scale, h: avatarNatH * scale };
+  }
+  function clampAvatarOffsets(w, h){
+    avatarOffX = Math.min(0, Math.max(AVATAR_STAGE_SIZE - w, avatarOffX));
+    avatarOffY = Math.min(0, Math.max(AVATAR_STAGE_SIZE - h, avatarOffY));
+  }
+  function applyAvatarTransform(){
+    const { w, h } = avatarDisplayDims();
+    clampAvatarOffsets(w, h);
+    avatarCropImg.style.width = w + 'px';
+    avatarCropImg.style.height = h + 'px';
+    avatarCropImg.style.transform = `translate(${avatarOffX}px, ${avatarOffY}px)`;
   }
 
-  const avatarFileInput = document.getElementById('avatar-file-input');
+  function openAvatarAdjustModal(dataUrl){
+    avatarCropImg.src = dataUrl;
+    avatarCropImg.onload = () => {
+      avatarNatW = avatarCropImg.naturalWidth;
+      avatarNatH = avatarCropImg.naturalHeight;
+      avatarBaseScale = Math.max(AVATAR_STAGE_SIZE / avatarNatW, AVATAR_STAGE_SIZE / avatarNatH);
+      avatarZoom = 1;
+      avatarZoomRange.value = 1;
+      const { w, h } = avatarDisplayDims();
+      avatarOffX = (AVATAR_STAGE_SIZE - w) / 2;
+      avatarOffY = (AVATAR_STAGE_SIZE - h) / 2;
+      applyAvatarTransform();
+      avatarAdjustOverlay.classList.add('show');
+    };
+  }
+  function closeAvatarAdjustModal(){
+    avatarAdjustOverlay.classList.remove('show');
+    avatarCropImg.removeAttribute('src');
+  }
+
   avatarFileInput.addEventListener('change', (e) => {
     const file = e.target.files && e.target.files[0];
     if(!file) return;
-    readAndResizeImage(file, 240, async (dataUrl) => {
-      state.avatarImage = dataUrl;
-      render();
-      await saveState();
-    });
+    const reader = new FileReader();
+    reader.onload = (ev) => openAvatarAdjustModal(ev.target.result);
+    reader.readAsDataURL(file);
     e.target.value = '';
   });
-  document.getElementById('remove-avatar-btn').addEventListener('click', async () => {
-    delete state.avatarImage;
+
+  avatarCropStage.addEventListener('pointerdown', (e) => {
+    avatarDragging = true;
+    avatarCropStage.classList.add('dragging');
+    avatarDragStartX = e.clientX; avatarDragStartY = e.clientY;
+    avatarDragOffX = avatarOffX; avatarDragOffY = avatarOffY;
+    avatarCropStage.setPointerCapture(e.pointerId);
+  });
+  avatarCropStage.addEventListener('pointermove', (e) => {
+    if(!avatarDragging) return;
+    avatarOffX = avatarDragOffX + (e.clientX - avatarDragStartX);
+    avatarOffY = avatarDragOffY + (e.clientY - avatarDragStartY);
+    applyAvatarTransform();
+  });
+  function endAvatarDrag(){ avatarDragging = false; avatarCropStage.classList.remove('dragging'); }
+  avatarCropStage.addEventListener('pointerup', endAvatarDrag);
+  avatarCropStage.addEventListener('pointercancel', endAvatarDrag);
+  avatarCropStage.addEventListener('pointerleave', () => { if(avatarDragging) endAvatarDrag(); });
+
+  avatarZoomRange.addEventListener('input', () => {
+    const before = avatarDisplayDims();
+    const cx = (AVATAR_STAGE_SIZE / 2 - avatarOffX) / before.w;
+    const cy = (AVATAR_STAGE_SIZE / 2 - avatarOffY) / before.h;
+    avatarZoom = parseFloat(avatarZoomRange.value);
+    const after = avatarDisplayDims();
+    avatarOffX = AVATAR_STAGE_SIZE / 2 - cx * after.w;
+    avatarOffY = AVATAR_STAGE_SIZE / 2 - cy * after.h;
+    applyAvatarTransform();
+  });
+
+  document.getElementById('cancel-avatar-adjust-btn').addEventListener('click', closeAvatarAdjustModal);
+  avatarAdjustOverlay.addEventListener('click', (e) => { if(e.target === avatarAdjustOverlay) closeAvatarAdjustModal(); });
+
+  document.getElementById('confirm-avatar-adjust-btn').addEventListener('click', async () => {
+    const canvas = document.createElement('canvas');
+    canvas.width = AVATAR_STAGE_SIZE; canvas.height = AVATAR_STAGE_SIZE;
+    const ctx = canvas.getContext('2d');
+    const { w, h } = avatarDisplayDims();
+    ctx.drawImage(avatarCropImg, avatarOffX, avatarOffY, w, h);
+    state.avatarImage = canvas.toDataURL('image/jpeg', 0.85);
+    closeAvatarAdjustModal();
     render();
     await saveState();
   });
@@ -3582,7 +3709,9 @@
       if(h){
         const now=Date.now();
         state.pending.push({...JSON.parse(JSON.stringify(h)), id:'t'+now+'_'+(taskCounter++), createdTs:now, startedTs:now, subtasks:(h.subtasks||[]).map(st=>({...st,id:'st'+now+'_'+(taskCounter++),done:false}))});
-        await saveState(); render();
+        await saveState();
+        closeHabitsView();
+        applyMainPage('tasks', true, true);
       }
     } else if(edit){
       const h=state.habits.find(x=>x.id===edit.dataset.editHabit);
