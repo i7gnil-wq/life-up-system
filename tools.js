@@ -51,6 +51,7 @@ document.addEventListener('app:render', function () {
   const frameSvg = document.getElementById('focus-frame-svg');
   const frameBg = frameSvg.querySelector('.frame-bg');
   const frameFg = document.getElementById('focus-frame-fg');
+  const frameClipRect = document.getElementById('focus-frame-clip-rect');
   let frameLen = 0;
 
   function layoutFrame() {
@@ -66,6 +67,15 @@ document.addEventListener('app:render', function () {
       rect.setAttribute('rx', r);
       rect.setAttribute('ry', r);
     });
+    // نفس حدود الإطار بالضبط (بدون توسعة) — أي جزء من الشريط المضيء
+    // (خصوصًا طرف الخط الدائري stroke-linecap) يتجاوز الزاوية الدائرية
+    // ينحجب هنا بدل ما يبرز خارج المستطيل بشكل غير متناسق
+    frameClipRect.setAttribute('x', inset);
+    frameClipRect.setAttribute('y', inset);
+    frameClipRect.setAttribute('width', Math.max(0, w - sw));
+    frameClipRect.setAttribute('height', Math.max(0, h - sw));
+    frameClipRect.setAttribute('rx', r);
+    frameClipRect.setAttribute('ry', r);
     frameLen = frameFg.getTotalLength();
     frameFg.style.strokeDasharray = frameLen;
     renderProgress();
