@@ -51,6 +51,7 @@ document.addEventListener('app:render', function () {
   const frameSvg = document.getElementById('focus-frame-svg');
   const frameBg = frameSvg.querySelector('.frame-bg');
   const frameFg = document.getElementById('focus-frame-fg');
+  const frameFgGlow = document.getElementById('focus-frame-fg-glow');
   const frameClipRect = document.getElementById('focus-frame-clip-rect');
   let frameLen = 0;
 
@@ -59,7 +60,7 @@ document.addEventListener('app:render', function () {
     if (!w || !h) return; // لسا مخفي، ما نقدر نقيس
     frameSvg.setAttribute('viewBox', '0 0 ' + w + ' ' + h);
     const sw = 2.5, inset = sw / 2, r = 14;
-    [frameBg, frameFg].forEach(rect => {
+    [frameBg, frameFg, frameFgGlow].forEach(rect => {
       rect.setAttribute('x', inset);
       rect.setAttribute('y', inset);
       rect.setAttribute('width', Math.max(0, w - sw));
@@ -67,9 +68,9 @@ document.addEventListener('app:render', function () {
       rect.setAttribute('rx', r);
       rect.setAttribute('ry', r);
     });
-    // نفس حدود الإطار بالضبط (بدون توسعة) — أي جزء من الشريط المضيء
-    // (خصوصًا طرف الخط الدائري stroke-linecap) يتجاوز الزاوية الدائرية
-    // ينحجب هنا بدل ما يبرز خارج المستطيل بشكل غير متناسق
+    // حدود الإطار بالضبط — تُستخدم فقط لحجب توهّج frame-fg-glow (الشعاع
+    // المموّه) عند تجاوزه الزاوية الدائرية للخارج. الشريط الصلب frame-fg
+    // نفسه غير مقصوص إطلاقًا، فيبقى ممتلئ بعرضه الكامل بكل موضع
     frameClipRect.setAttribute('x', inset);
     frameClipRect.setAttribute('y', inset);
     frameClipRect.setAttribute('width', Math.max(0, w - sw));
@@ -78,6 +79,7 @@ document.addEventListener('app:render', function () {
     frameClipRect.setAttribute('ry', r);
     frameLen = frameFg.getTotalLength();
     frameFg.style.strokeDasharray = frameLen;
+    frameFgGlow.style.strokeDasharray = frameLen;
     renderProgress();
   }
   window.addEventListener('resize', () => { if (focusView.style.display !== 'none') layoutFrame(); });
@@ -154,7 +156,9 @@ document.addEventListener('app:render', function () {
   function renderProgress() {
     if (!frameLen) return;
     const pct = totalSeconds > 0 ? (totalSeconds - remaining) / totalSeconds : 0;
-    frameFg.style.strokeDashoffset = frameLen * (1 - pct);
+    const offset = frameLen * (1 - pct);
+    frameFg.style.strokeDashoffset = offset;
+    frameFgGlow.style.strokeDashoffset = offset;
   }
   function stopTimer() {
     clearInterval(intervalId);
@@ -190,5 +194,6 @@ document.addEventListener('app:render', function () {
   });
 
   frameFg.style.strokeDashoffset = 0;
+  frameFgGlow.style.strokeDashoffset = 0;
   renderTimer();
 })();
