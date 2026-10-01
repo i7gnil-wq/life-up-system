@@ -60,7 +60,7 @@
     let gridSvg = '';
     for(let g=0; g<=2; g++){
       const gy = padT + g*(h-padT-padB)/2;
-      gridSvg += `<line x1="${padL}" y1="${gy.toFixed(1)}" x2="${w-padR}" y2="${gy.toFixed(1)}" stroke="rgba(127,216,211,0.14)" stroke-width="1"/>`;
+      gridSvg += `<line x1="${padL}" y1="${gy.toFixed(1)}" x2="${w-padR}" y2="${gy.toFixed(1)}" stroke="rgba(0,224,255,0.14)" stroke-width="1"/>`;
     }
 
     const labelEvery = Math.ceil(DAYS/6);
@@ -68,25 +68,25 @@
     buckets.forEach((b,i) => {
       if(i % labelEvery === 0 || i === DAYS-1){
         const lbl = b.date.toLocaleDateString('ar', {day:'numeric', month:'short'});
-        labelsSvg += `<text x="${points[i].x.toFixed(1)}" y="${h-8}" font-size="8" fill="#7fa0a3" text-anchor="middle">${lbl}</text>`;
+        labelsSvg += `<text x="${points[i].x.toFixed(1)}" y="${h-8}" font-size="8" fill="#8a9199" text-anchor="middle">${lbl}</text>`;
       }
     });
 
     const pointsSvg = points.map((p,i) => {
       const isLast = i === points.length-1;
-      return `<circle cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="${isLast?3.5:2}" fill="${isLast?'#7fd8d3':'#2f6b68'}"/>`;
+      return `<circle cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="${isLast?3.5:2}" fill="${isLast?'#00e0ff':'#0e7490'}"/>`;
     }).join('');
 
     chartEl.innerHTML = `
       <defs>
         <linearGradient id="chartFillGrad" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stop-color="rgba(127,216,211,0.35)"/>
-          <stop offset="100%" stop-color="rgba(127,216,211,0)"/>
+          <stop offset="0%" stop-color="rgba(0,224,255,0.35)"/>
+          <stop offset="100%" stop-color="rgba(0,224,255,0)"/>
         </linearGradient>
       </defs>
       ${gridSvg}
       <path d="${areaPath}" fill="url(#chartFillGrad)"/>
-      <path d="${linePath}" fill="none" stroke="#7fd8d3" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="${linePath}" fill="none" stroke="#00e0ff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
       ${pointsSvg}
       ${labelsSvg}
     `;
@@ -392,11 +392,11 @@
     const linePath = points.map((p,i) => (i===0?'M':'L') + p.x.toFixed(1) + ' ' + p.y.toFixed(1)).join(' ');
     const dotsSvg = points.map((p,i) => {
       const isLast = i === points.length - 1;
-      return `<circle cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="${isLast?3:2}" fill="${isLast?'#7fd8d3':'#2f6b68'}"/>`;
+      return `<circle cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="${isLast?3:2}" fill="${isLast?'#00e0ff':'#0e7490'}"/>`;
     }).join('');
     return `
     <svg viewBox="0 0 ${W} ${H}" class="syn-chart-svg" preserveAspectRatio="none">
-      <path d="${linePath}" fill="none" stroke="#7fd8d3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="${linePath}" fill="none" stroke="#00e0ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
       ${dotsSvg}
     </svg>
     <div class="syn-chart-caption">آخر يوم: ${values[values.length-1]} مهمة منجزة</div>`;
@@ -449,7 +449,7 @@
       : `
       <div class="syn-actions">
         <button class="btn add-task-btn btn-sm" type="button" data-syn-add-task="${s.id}">+ مهمة يومية</button>
-        <button class="btn add-task-btn btn-sm" type="button" data-syn-renew="${s.id}" style="background:linear-gradient(90deg, #2f6b68, #16303a);">تجديد اليوم</button>
+        <button class="btn add-task-btn btn-sm" type="button" data-syn-renew="${s.id}" style="background:linear-gradient(90deg, #0e7490, #0b3a45);">تجديد اليوم</button>
       </div>`;
     const bottomRowHtml = s.completed
       ? `<div class="syn-bottom-row"><button class="btn syn-log-btn btn-sm" type="button" data-syn-log-toggle="${s.id}">السجل</button></div>`
@@ -548,7 +548,7 @@
       <div class="project-section-title">خط سير المشروع</div>
       <button class="project-add-mini" type="button" data-project-add-step="${p.id}">+ إضافة محطة جديدة</button>
       <div class="project-steps-list">${stepsHtml}</div>
-      <button class="btn add-task-btn" type="button" data-project-complete="${p.id}" style="margin-top:14px; background:linear-gradient(90deg, #2f6b68, #16303a);">
+      <button class="btn add-task-btn" type="button" data-project-complete="${p.id}" style="margin-top:14px; background:linear-gradient(90deg, #0e7490, #0b3a45);">
         <svg class="icon-inline" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg>
         إتمام المشروع
       </button>
@@ -608,7 +608,7 @@
     let gridSvg = '';
     for(let g=0; g<=2; g++){
       const gy = padT + g*(h-padT-padB)/2;
-      gridSvg += `<line x1="${padL}" y1="${gy.toFixed(1)}" x2="${w-padR}" y2="${gy.toFixed(1)}" stroke="rgba(127,216,211,0.14)" stroke-width="1"/>`;
+      gridSvg += `<line x1="${padL}" y1="${gy.toFixed(1)}" x2="${w-padR}" y2="${gy.toFixed(1)}" stroke="rgba(0,224,255,0.14)" stroke-width="1"/>`;
     }
 
     const dateBuckets = [];
@@ -619,7 +619,7 @@
       if(i % labelEvery === 0 || i === DAYS-1){
         const x = padL + i*xStep;
         const lbl = d.toLocaleDateString('ar', {day:'numeric', month:'short'});
-        labelsSvg += `<text x="${x.toFixed(1)}" y="${h-8}" font-size="8" fill="#7fa0a3" text-anchor="middle">${lbl}</text>`;
+        labelsSvg += `<text x="${x.toFixed(1)}" y="${h-8}" font-size="8" fill="#8a9199" text-anchor="middle">${lbl}</text>`;
       }
     });
 

@@ -81,12 +81,12 @@
     });
     html+=`<polygon class="radar-fill" points="${dataPoly}"/>`;
     TRACKS.forEach((t,i)=>{const p=pt(i,R*(scores[i]/radarMax)); html+=`<circle class="radar-point" data-radar-index="${i}" cx="${p.x}" cy="${p.y}" r="5"/>`;});
-    html+=`<circle cx="${cx}" cy="${cy}" r="4" fill="#7fd8d3" stroke="#0d1b21" stroke-width="2"/>`;
+    html+=`<circle cx="${cx}" cy="${cy}" r="4" fill="#00e0ff" stroke="#0a0c0d" stroke-width="2"/>`;
     svg.innerHTML=html;
 
     const show=(i,e)=>{
       const t=TRACKS[i], c=counts[i], sc=scores[i];
-      detail && (detail.innerHTML=`<strong style="color:#8fe6df">${t.name}</strong> — ${c} مهمة منجزة · ${sc}% من إجمالي المهام`);
+      detail && (detail.innerHTML=`<strong style="color:#6df0ff">${t.name}</strong> — ${c} مهمة منجزة · ${sc}% من إجمالي المهام`);
       tooltip.innerHTML=`<strong>${t.name}</strong><br>${c} مهمة · ${sc}%`;
       const rect=wrap.getBoundingClientRect();
       const x=(e?.clientX||rect.left+rect.width/2)-rect.left;
@@ -95,7 +95,7 @@
       tooltip.style.top=Math.max(4,Math.min(rect.height-62,y-20))+'px';
       tooltip.classList.add('show');
       svg.querySelectorAll('.radar-point').forEach(p=>p.classList.toggle('active',p.dataset.radarIndex==i));
-      svg.querySelectorAll('.radar-label-box').forEach(b=>b.style.stroke=b.parentElement.dataset.radarIndex==i?'#8fe6df':'');
+      svg.querySelectorAll('.radar-label-box').forEach(b=>b.style.stroke=b.parentElement.dataset.radarIndex==i?'#6df0ff':'');
     };
     const hide=()=>{
       tooltip.classList.remove('show');
@@ -143,7 +143,7 @@
     if(streakCellEl) streakCellEl.classList.toggle('active', streakVal > 0);
     document.getElementById('stat-tasks').textContent = state.tasks.length;
     document.getElementById('badge-rank').textContent = `${rank.name} — Lv.${lv.level}`;
-    document.getElementById('badge-stars').innerHTML = insigniaSvg(rank, '#7fd8d3');
+    document.getElementById('badge-stars').innerHTML = insigniaSvg(rank, '#00e0ff');
 
     // ring — نسبة التقدّم داخل المستوى الحالي (وليس داخل الرتبة الكاملة)
     const pct = lv.pct;
@@ -169,7 +169,7 @@
           <div class="node-dot"></div>
           <div class="ins-row">
             <div class="ins-name">${t.name}</div>
-            <div class="stars">${insigniaSvg({stars:i+1}, rank.tierIndex>=i ? '#7fd8d3' : 'rgba(130,195,195,0.35)')}</div>
+            <div class="stars">${insigniaSvg({stars:i+1}, rank.tierIndex>=i ? '#00e0ff' : 'rgba(170,178,186,0.35)')}</div>
           </div>
           <div class="range">مستوى ${range.startLevel}–${range.endLevel} · ${formatXp(range.minXp)} – ${formatXp(range.maxXp)} XP</div>
           <div class="mini-bar"><div class="mini-fill" style="width:${fillPct}%"></div></div>
@@ -184,7 +184,7 @@
           <div class="node-dot"></div>
           <div class="ins-row">
             <div class="ins-name">${rank.name}</div>
-            <div class="stars">${insigniaSvg({stars:10}, '#7fd8d3')}</div>
+            <div class="stars">${insigniaSvg({stars:10}, '#00e0ff')}</div>
           </div>
           <div class="range">مستوى ${range.startLevel}–${range.endLevel} · ${formatXp(range.minXp)} – ${formatXp(range.maxXp)} XP</div>
           <div class="mini-bar"><div class="mini-fill" style="width:${fillPct}%"></div></div>
@@ -245,8 +245,8 @@
         const timeStr = d.toLocaleDateString('ar', {day:'numeric', month:'short'}) + ' · ' + d.toLocaleTimeString('ar', {hour:'2-digit', minute:'2-digit'});
         const isPenalty = item.type === 'penalty';
         const chip = isPenalty ? (item.restored ? '✓' : '−'+item.amount) : (item.special ? ICON_BOLT : '+'+item.amount);
-        const chipColor = isPenalty ? (item.restored ? '#7fd8d3' : '#d97757') : (item.special ? '#bdf0ea' : '#7fd8d3');
-        const chipBorder = isPenalty ? (item.restored ? 'rgba(127,216,211,0.4)' : 'rgba(226,96,79,0.4)') : (item.special ? 'rgba(189,240,234,0.4)' : 'rgba(127,216,211,0.3)');
+        const chipColor = isPenalty ? (item.restored ? '#00e0ff' : '#d97757') : (item.special ? '#c0c6cc' : '#00e0ff');
+        const chipBorder = isPenalty ? (item.restored ? 'rgba(0,224,255,0.4)' : 'rgba(226,96,79,0.4)') : (item.special ? 'rgba(192,198,204,0.4)' : 'rgba(0,224,255,0.3)');
         return `
         <div class="log-item">
           <div class="left">
@@ -257,7 +257,7 @@
             </div>
           </div>
           <div class="meta">
-            <div class="xp" style="${isPenalty ? (item.restored ? 'color:#7fd8d3' : 'color:#d97757') : ''}">${isPenalty ? (item.restored ? '+' : '−') : '+'}${item.amount} XP${isPenalty && item.restored ? ' مسترجع' : ''}</div>
+            <div class="xp" style="${isPenalty ? (item.restored ? 'color:#00e0ff' : 'color:#d97757') : ''}">${isPenalty ? (item.restored ? '+' : '−') : '+'}${item.amount} XP${isPenalty && item.restored ? ' مسترجع' : ''}</div>
             <div class="time">${timeStr}</div>
           </div>
         </div>`;
@@ -267,20 +267,20 @@
 
   // ---------- achievements ----------
   function shieldMiniIcon(){
-    return '<svg viewBox="0 0 24 24" fill="#bdf0ea"><path d="M12 2 4 5v6c0 5.2 3.4 9.4 8 11 4.6-1.6 8-5.8 8-11V5l-8-3Z"/></svg>';
+    return '<svg viewBox="0 0 24 24" fill="#c0c6cc"><path d="M12 2 4 5v6c0 5.2 3.4 9.4 8 11 4.6-1.6 8-5.8 8-11V5l-8-3Z"/></svg>';
   }
   function achievementShieldSvg(){
     return `
     <svg viewBox="0 0 100 76">
       <defs>
         <linearGradient id="achGrad" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stop-color="#d3f3ef"/>
-          <stop offset="55%" stop-color="#bdf0ea"/>
-          <stop offset="100%" stop-color="#7fa0a3"/>
+          <stop offset="0%" stop-color="#d9dde1"/>
+          <stop offset="55%" stop-color="#c0c6cc"/>
+          <stop offset="100%" stop-color="#8a9199"/>
         </linearGradient>
       </defs>
       <path d="M15.8 8 Q15.8 3 20.8 3 H79.2 Q84.2 3 84.2 8 V33 C84.2 52 68.3 64 50 71 C31.7 64 15.8 52 15.8 33 Z"
-            fill="url(#achGrad)" stroke="#1f3d3a" stroke-width="2"/>
+            fill="url(#achGrad)" stroke="#3a4046" stroke-width="2"/>
       <path d="M22.5 12 Q22.5 9 25.8 9 H74.2 Q77.5 9 77.5 12 V33 C77.5 47 64.2 57 50 63 C35.8 57 22.5 47 22.5 33 Z"
             fill="none" stroke="rgba(255,255,255,0.35)" stroke-width="1.2"/>
     </svg>`;
@@ -290,7 +290,7 @@
       const cat = SKILL_CATS.find(c => c.key === a.category);
       if(cat) return cat.icon;
     }
-    return '<svg viewBox="0 0 24 24" fill="none" stroke="#0b1f1e" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg>';
+    return '<svg viewBox="0 0 24 24" fill="none" stroke="#031013" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg>';
   }
   function achievementBadgeHtml(a){
     const d = new Date(a.ts);
@@ -344,8 +344,8 @@
       const timeStr = d.toLocaleDateString('ar', {day:'numeric', month:'short'}) + ' · ' + d.toLocaleTimeString('ar', {hour:'2-digit', minute:'2-digit'});
       const special = item.diffKey === 'pivot';
       const chip = special ? ICON_BOLT : (item.xp >= 0 ? '+'+item.xp : '−'+Math.abs(item.xp));
-      const chipColor = special ? '#bdf0ea' : (item.xp >= 0 ? '#7fd8d3' : '#d97757');
-      const chipBorder = special ? 'rgba(189,240,234,0.4)' : (item.xp >= 0 ? 'rgba(127,216,211,0.3)' : 'rgba(226,96,79,0.4)');
+      const chipColor = special ? '#c0c6cc' : (item.xp >= 0 ? '#00e0ff' : '#d97757');
+      const chipBorder = special ? 'rgba(192,198,204,0.4)' : (item.xp >= 0 ? 'rgba(0,224,255,0.3)' : 'rgba(226,96,79,0.4)');
       return `<div class="log-item">
         <div class="left">
           <div class="diff-chip" style="color:${chipColor}; border:1px solid ${chipBorder};">${chip}</div>

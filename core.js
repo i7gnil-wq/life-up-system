@@ -158,17 +158,17 @@
 
   const SKILL_CATS = [
     { key:'digital', name:'رقمي',
-      icon:'<svg viewBox="0 0 24 24" fill="none" stroke="#0b1f1e" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="12" rx="1.6"/><path d="M8 20h8M12 16v4"/></svg>' },
+      icon:'<svg viewBox="0 0 24 24" fill="none" stroke="#031013" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="12" rx="1.6"/><path d="M8 20h8M12 16v4"/></svg>' },
     { key:'health',  name:'صحّي',
-      icon:'<svg viewBox="0 0 24 24" fill="none" stroke="#0b1f1e" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20s-7-4.4-9.3-9C1.4 8 2.6 5 5.7 5c1.9 0 3.3 1.1 4 2.3.7-1.2 2.1-2.3 4-2.3 3.1 0 4.3 3 3 6-2.3 4.6-9.3 9-9.3 9Z"/></svg>' },
+      icon:'<svg viewBox="0 0 24 24" fill="none" stroke="#031013" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20s-7-4.4-9.3-9C1.4 8 2.6 5 5.7 5c1.9 0 3.3 1.1 4 2.3.7-1.2 2.1-2.3 4-2.3 3.1 0 4.3 3 3 6-2.3 4.6-9.3 9-9.3 9Z"/></svg>' },
     { key:'growth',  name:'تنموي',
-      icon:'<svg viewBox="0 0 24 24" fill="none" stroke="#0b1f1e" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l6-6 4 4 8-8"/><path d="M15 6h6v6"/></svg>' },
+      icon:'<svg viewBox="0 0 24 24" fill="none" stroke="#031013" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l6-6 4 4 8-8"/><path d="M15 6h6v6"/></svg>' },
     { key:'lit',     name:'أدبي',
-      icon:'<svg viewBox="0 0 24 24" fill="none" stroke="#0b1f1e" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6.5c-1.6-1.3-4-2-6.5-2v12c2.5 0 4.9.7 6.5 2 1.6-1.3 4-2 6.5-2v-12c-2.5 0-4.9.7-6.5 2Z"/><path d="M12 6.5v12"/></svg>' },
+      icon:'<svg viewBox="0 0 24 24" fill="none" stroke="#031013" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6.5c-1.6-1.3-4-2-6.5-2v12c2.5 0 4.9.7 6.5 2 1.6-1.3 4-2 6.5-2v-12c-2.5 0-4.9.7-6.5 2Z"/><path d="M12 6.5v12"/></svg>' },
     { key:'fin',     name:'مالي',
-      icon:'<svg viewBox="0 0 24 24" fill="none" stroke="#0b1f1e" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5v9M9.3 15c0 1.1 1.2 2 2.7 2s2.7-.7 2.7-1.8c0-2.7-5.4-1.3-5.4-4 0-1.1 1.2-1.8 2.7-1.8s2.7.7 2.7 1.6"/></svg>' },
+      icon:'<svg viewBox="0 0 24 24" fill="none" stroke="#031013" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5v9M9.3 15c0 1.1 1.2 2 2.7 2s2.7-.7 2.7-1.8c0-2.7-5.4-1.3-5.4-4 0-1.1 1.2-1.8 2.7-1.8s2.7.7 2.7 1.6"/></svg>' },
     { key:'edu',     name:'تعليمي',
-      icon:'<svg viewBox="0 0 24 24" fill="none" stroke="#0b1f1e" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 8.5 12 4l10 4.5-10 4.5-10-4.5Z"/><path d="M6 10.7V16c0 1.4 2.7 2.5 6 2.5s6-1.1 6-2.5v-5.3"/><path d="M20.5 9v6"/></svg>' },
+      icon:'<svg viewBox="0 0 24 24" fill="none" stroke="#031013" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 8.5 12 4l10 4.5-10 4.5-10-4.5Z"/><path d="M6 10.7V16c0 1.4 2.7 2.5 6 2.5s6-1.1 6-2.5v-5.3"/><path d="M20.5 9v6"/></svg>' },
   ];
   const SKILL_STAGES = [24, 72, 100, 1000];
   const SKILL_HOUR_XP = 250;
@@ -187,7 +187,7 @@
   ];
   const PROJECT_MAX_TASKS = 3;
   const PROJECT_STEP_XP = 500; // XP reward for completing each project step
-  const PROJECT_CHART_COLORS = ['#7fd8d3', '#bdf0ea', '#3f9c94', '#d97757', '#2f6b68', '#6fdccf', '#4a9d95', '#3f9c94'];
+  const PROJECT_CHART_COLORS = ['#00e0ff', '#c0c6cc', '#8a9199', '#d97757', '#0e7490', '#a9b0b7', '#5fb8c9', '#8a9199'];
   function ensureAchievements(){
     if(!state.achievements) state.achievements = [];
   }
@@ -355,7 +355,7 @@
   }
 
   // ---------- celebration screen ----------
-  const CELEBRATE_COLORS = ['#7fd8d3','#8fe6df','#d3f3ef','#bdf0ea','#2f6b68','#eaf4f3'];
+  const CELEBRATE_COLORS = ['#00e0ff','#6df0ff','#d9dde1','#c0c6cc','#0e7490','#e8eaed'];
   function spawnConfetti(){
     const wrap = document.getElementById('celebrate-confetti');
     if(!wrap) return;
@@ -730,7 +730,7 @@
     const canvas = document.createElement('canvas');
     canvas.width = AVATAR_STAGE_SIZE; canvas.height = AVATAR_STAGE_SIZE;
     const ctx = canvas.getContext('2d');
-    ctx.fillStyle = '#0a161c';
+    ctx.fillStyle = '#070809';
     ctx.fillRect(0, 0, AVATAR_STAGE_SIZE, AVATAR_STAGE_SIZE);
     const { w, h } = avatarDisplayDims();
     // نفس ترتيب تحويل المعاينة: يدور حول مركز الصورة المعروضة حاليًا ثم لا حاجة لإزاحة إضافية
